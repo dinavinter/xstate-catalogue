@@ -1,0 +1,34 @@
+
+
+
+# SignUp Form
+
+Multi-step forms are a staple of many CRUD apps - especially where the entity being created is complex. State machines handle sequences like these exceptionally well.
+
+I've chosen to model this form as an internet banking payment. On the first page, you choose the beneficiary you'd like to pay, and the amount to pay them. On the second, you confirm the date.
+
+I've also chosen to model the form events as only `SUBMIT` events. For this machine, we assume that the data submitted in these events has been validated in the frontend. For a multi-step form with Async Validation, see [this machine](/machines/multi-step-form-with-validation).
+
+## Collecting Data
+
+We start in the <State>draft</State> state. When the user submits the form via <Event>SUBMIT</Event>, we enter the <State>submittingInteraction</State> state and the signup info is saved to context: <Context stringify>signupInfo</Context>.
+
+## Submitting the data
+
+When we're in <State>submitting</State> state, we need to make an async call to the interaction API to update our resource with the client intention to subscribe .
+
+If the interaction is successfully submitted, the <Service>submitInteraction</Service> service sends back the <Event>CONFIRM</Event> event. That then gets saved into context under <Context stringify>confirmInfo</Context>, and we're ready to go to <State>confirming</State>.
+
+If the API fails, the service sends back <Event>error.platform.submitInteraction</Event>, which saves an <Context>errorMessage</Context> into context. The user can then <Event>RETRY</Event> if they like.
+ 
+## Confirming
+
+In <State>confirming</State>, we show all the information they've entered in one page to ensure that they've entered it correctly. They can go <Event>BACK</Event> if need be.
+
+## Submitting
+
+If they're happy, they can <Event>CONFIRM</Event> and we enter the <State>confirming.submitting</State> state. This fires off the <Service>confirmInteraction</Service> service.
+
+On <Event>error.platform.confirmInteraction</Event>, we head back to <State>confirming.idle</State> with the error message captured in context: <Context>errorMessage</Context>.
+
+But on <Event>done.invoke.confirmInteraction</Event>, we head to our final state of <State>complete</State>. Here, you could add an entry/exit event to take the user somewhere else.
