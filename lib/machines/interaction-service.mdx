@@ -1,0 +1,30 @@
+
+
+# User Interaction Service
+
+Interaction service is responsible for collecting user interactions and manage their states.
+
+Interaction entity states lifecycle is dependent on user input and the interaction config.
+
+Default states are:
+
+## Draft
+
+We start in the <State>draft</State> state. this state represents a template of the interaction, it created before the user submission. 
+ 
+## Interaction Submission
+
+When the user submits the form via <Event >SUBMIT</Event>, we enter the <State>created</State> state and the signup info is saved to context: <Context stringify>input</Context>.
+ 
+## Interaction Confirmation
+
+In the <State>created</State> state, we are waiting for additional confirmation from the client before projecting the data to the account attributes.
+When the user confirms the interaction VIA <Event>CONFIRM</Event> we are entering the <State>verified</State> state . 
+ 
+## Account Projection
+
+In the <State>verified</State> state, we use the <Service>projection</Service> service to takes the account attributes from the interaction's <Context stringify>input</Context> and projecting it into the account attributes. 
+On <Event>error.platform.project-interaction</Event>, we head back to <State>verified</State> with the error message captured in context: <Context>errorMessage</Context>.
+But on <Event>done.invoke.project-interaction</Event>, we head to our final state of <State>completed</State>. 
+ 
+ <WholeContext />
