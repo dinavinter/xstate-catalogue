@@ -15,6 +15,10 @@ export interface MDXMetadata {
     eventPayloads?: {
         [eventType: string]: any;
     };
+    
+    api?: {
+        [eventType: string]: string;
+    }
 }
 
 export const State = (props: { children: string }) => {
@@ -79,7 +83,7 @@ export const API = (props: { children: string }) => {
         <div>
             <button
                 onClick={() => {
-                    flyChildren(<><OpenApi spec={children}></OpenApi></>);
+                    flyChildren(()=> <OpenApi spec={children} />,`${children} API` );
 
                 }}
                 // To override prose

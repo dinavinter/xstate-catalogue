@@ -39,6 +39,7 @@
     "@react-aria/visually-hidden": "^3.2.1",
     "@react-stately/list": "^3.2.2",
     "@react-stately/overlays": "^3.1.1",
+    "@stoplight/elements": "^7.3.7",
     "@tailwindcss/jit": "^0.1.4",
     "@tailwindcss/typography": "^0.4.0",
     "@types/node": "^14.14.35",

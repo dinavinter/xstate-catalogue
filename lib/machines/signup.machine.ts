@@ -59,7 +59,7 @@ interface DateInfo {
 
 export type SighUpFormMachineEvent =
     | {
-    type: 'BACK';
+    type: 'AUTHORIZE';
 }
     | InteractionStateEvent
     | CONFIRM
@@ -101,6 +101,7 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
         },
         states: {
             draft: {
+                
                 on: {
                     SUBMIT: {
                         target: 'submitting',
@@ -116,66 +117,69 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
                         target: 'draft',
                         actions: 'assignErrorMessageToContext',
                     } ,
+
+                    onDone: {
+                        target: 'pending_confirmation',
+                        actions: 'assignInteractionStateToContext',
+                    } ,
+
+                }
                  
-
-
-                },
-                on: {
-                    BACK: {
-                        target: 'draft',
-                    },
-                    CONFIRM: {
-                        target: 'confirming',
-                        actions: ['assignDateToContext'],
-                    },
-                },
-
             },
             pending_confirmation: {
                 id: 'pending_confirmation',
-                invoke: {
-                    src: ''
-                },
                 on: {
-                    BACK: {
-                        target: 'draft',
-                    },
-                    CONFIRM: {
-                        target: 'confirming',
-                        actions: ['assignDateToContext'],
-                    },
+                    AUTHORIZE: {actions: "authorize"},
+                   SUBMIT:
+
+                        {
+                            target: "submiting"
+                        }
+
+
                 },
+                type: "compound",
+
+                states: {
+                    idle: {},
+                    submiting: {
+
+                        on: {
+                            '': [
+                                {
+                                    target: "otp_verify",
+                                    cond: "not_authorized"
+                                },
+                                {
+                                    target: "submit",
+                                    cond: "authorized"
+                                }
+                            ]
+                        }
+
+                    },
+
+                    otp_verify: {
+                        invoke: [{src: "otp_verify"}],
+                        onDone:  'confirming'
+
+                       
+                    },
+                    
+                
+            }
             },
             confirming: {
-                onDone: {
-                    target: 'success',
-                },
-                initial: 'idle',
-                states: {
-                    
-                    idle: {
-                        exit: ['clearErrorMessage'],
-                        on: {
-                            SUBMIT: 'submitting',
-                            BACK: {
-                                target: '#pending_confirmation',
-                            },
-                        },
+                invoke: {
+                    src: 'confirmInteraction',
+                    onDone: {
+                        target: 'success',
                     },
-                    submitting: {
-                        invoke: {
-                            src: 'confirmInteraction',
-                            onDone: {
-                                target: 'complete',
-                            },
-                            onError: {
-                                target: 'idle',
-                                actions: 'assignErrorMessageToContext',
-                            },
-                        },
+                    onError: {
+                        target: 'idle',
+                        actions: 'assignErrorMessageToContext',
                     },
-                    complete: {type: 'final'},
-                },
+                }
             },
             success: {
                 type: 'final',
@@ -200,6 +204,7 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
                  const state = await context.refs.submitInteraction(event.info);
                 send(state.event); 
             },
+            
         },
         actions: {
             assignDateToContext: assign((context, event) => {
@@ -227,7 +232,24 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
             }),
             clearErrorMessage: assign((context, event) =>  {return {
                 errorMessage: undefined,
-            }}),
+
+                authorize: assign({
+                    auth: (context) => true,
+                }),
+                submit: send("SUBMIT"),
+                logout: assign({
+                    auth: (context) => false,
+                })
+            }}) 
+            ,
+            guards: {
+                authorized: (context) =>
+                    context.auth,
+                not_authorized:
+                    (context) =>
+                        !context.auth,
+
+            }
         },
     },
 );
