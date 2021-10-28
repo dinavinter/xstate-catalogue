@@ -1,0 +1,24 @@
+properties:
+  channel:
+    type: string
+discriminator:
+  propertyName: channel
+  mapping:
+    email: .\EmailSchema.yaml
+    sms: .\SmsSchema.yaml
+allOf:
+  - anyOf:
+      - $ref: .\EmailSchema.yaml
+      - $ref: .\SmsSchema.yaml
+x-examples:
+  email-channel:
+    channel: email
+    identity:
+      email: a@mail.com
+    newsletter: true
+    deals: true
+  phone-channel:
+    channel: phone
+    identity:
+      phonenumber: '056999999'
+    newsletter: true

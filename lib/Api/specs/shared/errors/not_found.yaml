@@ -1,0 +1,11 @@
+description: Resource not found
+content:
+  application/json:
+    schema:
+      allOf:
+        - $ref: .\basic-error.yaml
+        - type: object
+          properties:
+            code:
+              enum:
+                - 403

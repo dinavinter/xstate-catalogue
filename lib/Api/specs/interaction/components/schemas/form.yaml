@@ -1,0 +1,39 @@
+$schema: "http://json-schema.org/draft-07/hyper-schema#" 
+description: >-
+  HTMLForm represents a HTML Form. The container can work with both HTTP Form
+  and JSON requests
+properties:
+  action:
+    description: >-
+      Action should be used as the form action URL `<form action="{{ .Action }}"
+      method="post">`.
+    type: string
+  method:
+    description: Method is the form method (e.g. POST)
+    type: string
+  properties:
+    type: object
+    properties:
+      name:
+        type: string
+
+required:
+  - action
+  - method
+type: object
+
+defenitions:
+  type: object
+  properties:
+    class:
+      type: array
+      items:
+        type: string
+    actions:
+      type: array
+      items:
+        $ref: '#/definitions/Action'
+    links:
+      type: array
+      items:
+        $ref: '#/definitions/Link'

@@ -1,0 +1,225 @@
+openapi: 3.1.0
+info:
+  title: Communication Interaction
+  description: Api specification for manges customer interactions.
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: https://{gigya-domain}/interactions/v1/{interaction}
+    variables:
+      gigya-domain:
+        default: accounts.gigya.com
+        description: Customer ID assigned by the service provider
+      interaction:
+        default: 'sign-up'
+        enum:
+          - 'sign-up'
+          - 'order'
+components:
+  schemas:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    identity-email:
+      type: object
+      properties:
+        identity:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+            - email
+    identity-phone:
+      type: object
+      properties:
+        identity:
+          type: object
+          properties:
+            phonrnumber:
+              type: string
+          required:
+            - phonrnumber
+    SchemaDefinition:
+      properties:
+        channel:
+          type: string
+      discriminator:
+        propertyName: channel
+        mapping:
+          email: '#/components/schemas/EmailSchema'
+          sms: '#/components/schemas/SmsSchema'
+      allOf:
+        - anyOf:
+            - $ref: '#/components/schemas/EmailSchema'
+            - $ref: '#/components/schemas/SmsSchema'
+      x-examples:
+        email-channel:
+          channel: email
+          identity:
+            email: a@mail.com
+          newsletter: true
+          deals: true
+        phone-channel:
+          channel: phone
+          identity:
+            phonenumber: '056999999'
+          newsletter: true
+    EmailSchema:
+      allOf:
+        - $ref: '#/components/schemas/identity-email'
+        - type: object
+          properties:
+            'newsletter':
+              type: boolean
+              title: Newsletter
+            'deals':
+              type: boolean
+              title: Deals
+      type: object
+    SmsSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/identity-phone'
+        - type: object
+          properties:
+            'newsletter':
+              type: boolean
+              title: Newsletter
+    Interaction:
+      properties:
+        interactionId:
+          type: string
+        transactionId:
+          type: string
+  securitySchemes:
+    oAuth2Confirm:    # <---- arbitrary name
+      type: oauth2
+      description: This API uses OAuth with the implicit grant flow.
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            interaction:confirm:  confirm interaction
+security:
+  - oAuth2Confirm:
+      - interaction:confirm
+
+
+paths:
+  /schema:
+    summary: Interaction Schema
+    get:
+      operationId: InteractionSchema
+      description: 'schema'
+      summary: Interaction Schema
+      responses:
+        '200':
+          description: Submit form schema
+          content:
+            application/json:
+              schema:
+                type: object
+                example: /signup-form.json
+
+  /create:
+    summary: Communications Interaction
+    post:
+      summary: Submit customer intent details.
+      operationId: SubmitInteraction
+      description: 'Submit interaction form'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaDefinition'
+            examples:
+              email-channel:
+                value:
+                  channel: email
+                  identity:
+                    email: email@mail.com
+                  newsletter: true
+                  deals: true
+              phone-channel:
+                value:
+                  channel: sms
+                  identity:
+                    phonenumber: 0543332123
+                  newsletter: true
+      responses:
+        '201':
+          description: Submit form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interaction'
+          links:
+            InteractionLink:
+              operationId: ConfirmInteraction
+              parameters:
+                interactionId: '$response.body#/interactionId'
+              description: A uuid to confirm the intraction and update the account
+
+  /{interactionId}/confirm:
+    put:
+      security:
+        - oAuth2Confirm:
+            - interaction:confirm
+      summary: Transition interaction state to confirmed.
+      operationId: ConfirmInteraction
+      description: Commit the interaction and update the account.
+      parameters:
+        - in: path
+          name: interactionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok, account updated with specfic transction details.
+        '401':
+          description: Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_uri:
+                    type: string
+                    example: urn:transaction:bwc4JK-ESC0w8acc191e-Y1LTC2
+                  expires_in:
+                    type: integer
+                    example: 60
+          links:
+            AuthorizationRequest:
+              operationId: AuthorizationRequest
+              parameters:
+                request_uri: '$response.body#/request_uri'
+              description: A uuid to commit the transaction and update the account
+
+  /oauth/authorize/{request_uri}:
+    post:
+      operationId: AuthorizationRequest
+      summary: Authorization request.
+      parameters:
+        - in: path
+          name: request_uri
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Token created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  expires_in:
+                    type: integer
+                    example: 60
+
+tags: []

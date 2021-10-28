@@ -1,0 +1,40 @@
+openapi: 3.1.0
+info:
+  title: Subscriptions Managment
+  description: Api specification for manges subscriptions.
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: https://{gigya-domain}/admin/subscriptions/v1
+    variables:
+      gigya-domain:
+        default: accounts.gigya.com
+        enum:
+          - accounts.gigya.com
+          - accounts.eu1.gigya.com
+          - accounts.au1.gigya.com
+        description: giya domains
+components:
+  securitySchemes:
+    oAuth2:
+      type: oauth2
+      description: This API uses OAuth with the application or admin cedentials.
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            subscription:mng: Subscription Managment
+security:
+  - oAuth2:
+      - subscription:mng
+paths:
+  /template:
+    $ref: paths\template.yaml
+  /template/{subscriptionId}:
+    $ref: paths\template@{subscriptionId}.yaml
+  /template/{subscriptionId}/fields:
+    $ref: paths\template@{subscriptionId}@fields.yaml
+  /template/{subscriptionId}/fields/{fieldId}:
+    $ref: paths\template@{subscriptionId}@fields@{fieldId}.yaml
+tags: []

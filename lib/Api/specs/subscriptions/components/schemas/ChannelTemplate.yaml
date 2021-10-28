@@ -1,0 +1,10 @@
+allOf:
+  - $ref: .\StringTemplate.yaml
+  - properties:
+      enum:
+        type: array
+        items:
+          type: string
+          enum:
+            - sms
+            - email

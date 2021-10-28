@@ -1,0 +1,7 @@
+allOf:
+  - $ref: .\FieldTemplate.yaml
+  - properties:
+      type:
+        type: string
+        enum:
+          - boolean

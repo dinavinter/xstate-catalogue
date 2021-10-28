@@ -20,6 +20,7 @@ import {
     Service,
     State,
     WholeContext,
+    API
 } from '../../lib/MachineHelpers';
 import {metadata, MetadataItem} from '../../lib/metadata';
 import {useCopyToClipboard} from '../../lib/useCopyToClipboard';
@@ -111,7 +112,7 @@ const MachinePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
     return (
         <>
             <Head>
-                <title>{props.meta.title} | XState Catalogue</title>
+                <title>{props.meta.title} | API as a State</title>
             </Head>
             <FlyPaneProvider>
 
@@ -267,6 +268,7 @@ const ShowMachinePage = (props: {
                                             Service,
                                             Context,
                                             WholeContext,
+                                            API
                                         }}
                                     >
                                         <props.mdxDoc></props.mdxDoc>
@@ -419,6 +421,19 @@ const SideBar = (props: { machine: StateMachine<any, any, any> }) => {
                     </ul>
                 </div>
             )}
+            <div className="space-y-3">
+                <h2 className="text-base font-semibold tracking-tighter text-gray-500">
+                    API
+                </h2>
+                <ul className="space-y-3">
+                    
+                            <li key={`API: interaction`}>
+                                <API>interaction</API>
+                            </li>
+                        
+                </ul>
+            </div>
+            
         </div>
     );
 };

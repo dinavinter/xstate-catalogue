@@ -1,0 +1,54 @@
+{
+  "type": "interaction-pending",
+  "id": "interaction:Id",
+  "class": "interaction-pending",
+  "properties": {
+    "id": "id",
+    "template": "signup",
+    "channel": "johnxxxx@xxxxple.com",
+    "status": "pending"
+  },
+  "actions": [
+    {
+      "name": "polling",
+      "class": [
+        "polling"
+      ],
+      "type": "application/json",
+      "kind": "poll",
+      "href": "/authenticate/email/link-wait",
+      "method": "GET"
+    },
+    {
+      "name": "resend",
+      "class": [
+        "form"
+      ],
+      "type": "application/json",
+      "kind": "poll",
+      "href": "/authenticate/email/resend",
+      "method": "GET"
+    },
+    {
+      "name": "cancel",
+      "class": [
+        "form"
+      ],
+      "title": "Restart the process",
+      "href": "/authenticate/email/cancel",
+      "method": "GET"
+    }
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "href": "interactions/{template}/{id}"
+      
+    },
+    {
+      "rel": "pingback",
+      "href": "/authenticate/email/link-wait"
+      
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+post:
+  operationId: AuthorizationRequest
+  summary: Authorization request.
+  parameters:
+    - in: path
+      name: request_uri
+      required: true
+      schema:
+        type: string
+  responses:
+    '201':
+      description: Token created.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+              expires_in:
+                type: integer
+                example: 60

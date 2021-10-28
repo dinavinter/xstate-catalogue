@@ -1,0 +1,3 @@
+additionalProperties:
+  $ref: .\FieldTemplate.yaml
+maxProperties: 5

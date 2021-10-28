@@ -1,0 +1,14 @@
+type: object
+required:
+  - message
+  - code
+  - requestId
+properties:
+  message:
+    type: string
+  callId:
+    type: string
+  code:
+    type: integer
+    minimum: 100
+    maximum: 600

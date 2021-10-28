@@ -1,0 +1,40 @@
+{
+  "$id": "https://schema.example.com/interesting-stuff",
+  "$schema": "http://json-schema.org/draft-07/hyper-schema#",
+  "base": "/interactions/", 
+  "required": ["class"],
+  "allOf": [
+    {
+      "$ref": "./SignUpSchema.yaml"
+    },
+    {
+      "properties": { 
+        "class": {
+          "type": "string",
+          "enum": ["signup"]
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    }
+  ],
+ 
+  "links": [
+    {
+      "rel": "self",
+      "href": "interactions/{class}/{id}",
+      "templateRequired": ["id"],
+      "targetSchema": {"$ref": "#"},
+      "submissionSchema":   {
+        "type": "string",
+        "contentMediaType": "application/json"
+      },
+      
+      "hrefSchema": {
+        
+        "$ref": "../schemas/SignUpSchema.yaml"
+      }
+    } 
+  ]
+}

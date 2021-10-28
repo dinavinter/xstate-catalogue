@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: Communication Interaction
+  description: Api specification for manges customer interactions.
+  version: '1.0'
+servers:
+  - url: https://{gigya-domain}/interactions/v1/{interaction}
+    variables:
+      gigya-domain:
+        default: accounts.gigya.com
+        enum:
+          - accounts.eu1.gigya.com
+          - accounts.au1.gigya.com
+        description: giya domains
+      interaction:
+        default: sign-up
+        enum:
+          - sign-up
+          - order
+components:
+  securitySchemes:
+    oAuth2Confirm:
+      type: oauth2
+      description: This API uses OAuth with the implicit grant flow.
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            interaction:confirm: confirm interaction
+security:
+  - oAuth2Confirm:
+      - interaction:confirm
+paths:
+  /options:
+    $ref: paths\options.yaml 
+  /:
+    $ref: paths\post.yaml
+  /{interactionId}/confirm:
+    $ref: paths\{interactionId}@confirm.yaml
+  /oauth/authorize/{request_uri}:
+    $ref: paths\oauth@authorize@{request_uri}.yaml
+    
+tags: []

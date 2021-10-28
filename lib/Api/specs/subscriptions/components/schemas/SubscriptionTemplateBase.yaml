@@ -1,0 +1,5 @@
+properties:
+  subscribed:
+    $ref: .\BooleanTemplate.yaml
+  channel:
+    $ref: .\ChannelTemplate.yaml

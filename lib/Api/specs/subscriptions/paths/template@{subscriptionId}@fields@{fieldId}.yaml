@@ -1,0 +1,49 @@
+put:
+  operationId: UpdateSubscriptionField
+  description: Updates the specifys subscription field.
+  summary: Updates the specifys subscription field.
+  parameters:
+    - in: path
+      name: subscriptionId
+      example: newslatter
+    - in: path
+      name: fieldId
+      example: frequency
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\FieldTemplate.yaml
+  responses:
+    '200':
+      description: Add subscription field
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\FieldReference.yaml
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '404':
+      $ref: ..\..\shared\errors\not_found.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml
+get:
+  operationId: GetSubscriptionField
+  description: Gets the specified subscription field.
+  summary: Gets the specified subscription field.
+  parameters:
+    - in: path
+      name: subscriptionId
+      example: newslatter
+    - in: path
+      name: fieldId
+      example: frequency
+  responses:
+    '200':
+      description: Subscription field template
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\FieldTemplate.yaml

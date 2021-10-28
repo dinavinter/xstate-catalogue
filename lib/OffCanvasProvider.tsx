@@ -5,8 +5,9 @@ import {Interpreter} from "xstate";
 import {useSelector} from "@xstate/react";
 
 export const FlyPaneContext = React.createContext<{
-    flyJson 
-}>({flyJson: (j)=>alert(JSON.stringify(j))} );
+    flyJson ,
+    flyChildren
+}>({flyJson: (j)=>alert(JSON.stringify(j)), flyChildren: (j)=>alert()} );
 
 export function  useFlyPane(){
     return useContext(FlyPaneContext);
@@ -35,22 +36,31 @@ const Pretty = ({json}) => {
 export function FlyPaneProvider({children}) {
     const [show, setShow] = useState(false);
     const [json, setJson] = useState({});
+    const [child, setChild] = useState({});
+    const [header, setHeader] = useState({});
 
     const handleClose = () => setShow(false);
-    const showJson = (json) =>{
+    const showJson = (json, header) =>{
+        setChild(null);
+
         setJson(json);
+        setShow(true);
+    } 
+const showChildren = (child, header) =>{
+         setChild(child);
+         setChild(header);
         setShow(true);
     } 
 
     return (
-        <FlyPaneContext.Provider value={{flyJson: showJson }}>
+        <FlyPaneContext.Provider value={{flyJson: showJson, flyChildren: showChildren }}>
             {children}
             <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Offcanvas</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                     <Pretty  json={json} />
+                    {child || <Pretty  json={json} />} 
                 </Offcanvas.Body>
             </Offcanvas >
           

@@ -1,0 +1,42 @@
+description: >-
+  This object represents a signup to a newsletter flow flow. A login flow is initiated at the
+  "Initiate signup API / Browser Flow" 
+properties:
+  id:
+    $ref: .\UUID.yaml
+  issued_at:
+    description: IssuedAt is the time (UTC) when the flow started.
+    format: date-time
+    type: string
+  messages:
+    $ref: .\uiTexts.yaml
+  methods:
+    additionalProperties:
+      $ref: .\loginFlowMethod.yaml
+    description: >-
+      List of login methods
+
+
+      This is the list of available login methods with their required form
+      fields, such as `identifier` and `password`
+
+      for the password login method. This will also contain error messages such
+      as "password can not be empty".
+    type: object
+  request_url:
+    description: >-
+      RequestURL is the initial URL that was requested from Ory Kratos. It can
+      be used
+
+      to forward information contained in the URL's path or query for example.
+    type: string
+  type:
+    $ref: .\Type.yaml
+required:
+  - id
+  - expires_at
+  - issued_at
+  - request_url
+  - methods
+title: Login Flow
+type: object

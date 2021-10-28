@@ -1,0 +1,7 @@
+content:
+  application/json:
+    schema:
+      items:
+        $ref: ..\schemas\Identity.yaml
+      type: array
+description: A list of identities.

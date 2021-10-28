@@ -1,0 +1,8 @@
+type: object
+allOf:
+  - $ref: .\identity-phone.yaml
+  - type: object
+    properties:
+      newsletter:
+        type: boolean
+        title: Newsletter

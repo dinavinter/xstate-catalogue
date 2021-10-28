@@ -1,0 +1,42 @@
+put:
+  security:
+    - oAuth2Confirm:
+        - interaction:confirm
+  summary: Transition interaction state to confirmed.
+  operationId: ConfirmInteraction
+  description: Commit the interaction and update the account.
+  parameters:
+    - in: path
+      name: interactionId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Ok, account updated with specfic transction details.
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+      description: Access token is missing or invalid.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              request_uri:
+                type: string
+                example: urn:transaction:bwc4JK-ESC0w8acc191e-Y1LTC2
+              expires_in:
+                type: integer
+                example: 60
+      links:
+        AuthorizationRequest:
+          operationId: AuthorizationRequest
+          parameters:
+            request_uri: $response.body#/request_uri
+          description: A uuid to commit the transaction and update the account
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml

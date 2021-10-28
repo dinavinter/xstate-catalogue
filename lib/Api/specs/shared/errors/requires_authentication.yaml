@@ -1,0 +1,5 @@
+description: Requires authentication
+content:
+  application/json:
+    schema:
+      $ref: .\basic-error.yaml

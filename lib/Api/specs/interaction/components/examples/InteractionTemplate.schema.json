@@ -1,0 +1,29 @@
+{
+  "type": "interaction-signup",
+  "class": "interaction-signup",
+  "properties": {
+    "template": "signup",
+    "status": "draft"
+  },
+  "actions": [
+    {
+      "name": "submit",
+      "class": [
+        "form"
+      ],
+      "title": "Submit",
+      "href": "/interaction/signup",
+      "method": "POST",
+      "fields": {
+        "$ref": "../schemas/SignUpSchema.yaml"
+      }
+    }
+  ],
+  "links": [
+    {
+      "self": {
+        "href": "/interaction/signup"
+      }
+    }
+  ]
+}

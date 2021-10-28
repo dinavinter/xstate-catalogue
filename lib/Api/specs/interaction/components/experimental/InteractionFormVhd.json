@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "id": "",
+  "$schema": "http://json-schema.org/draft-07/hyper-schema#",
+  "base": "https://api.example.com/",
+
+  "properties": {
+    "links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "type": "string"
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "interaction"
+        },
+        "id": {
+          "type": "number"
+        },
+        "attributes": {
+          "type": "object",
+          "$ref": "./SignUpSchema.yaml" 
+        }
+      }
+    }
+  },
+  "links": [{
+    "rel": "self",
+    "href": "{+submit_href}",
+    "templateRequired": ["submit_href"],
+    "templatePointers": {
+      "submit_href": "/links/self"
+    },
+    "targetHints": {
+      "allow": ["POST"],
+      "accept-patch": ["application/vnd.api+json"]
+    },
+    "targetSchema": { "$ref": "#/properties/data" }
+  }]
+}

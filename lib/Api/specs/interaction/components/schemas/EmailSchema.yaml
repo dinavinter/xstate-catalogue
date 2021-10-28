@@ -1,0 +1,11 @@
+allOf:
+  - $ref: .\identity-email.yaml
+  - type: object
+    properties:
+      newsletter:
+        type: boolean
+        title: Newsletter
+      deals:
+        type: boolean
+        title: Deals
+type: object

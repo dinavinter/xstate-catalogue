@@ -1,0 +1,6 @@
+description: |-
+  This object represents a signup to a newsletter template response. 
+content:
+  application/problem+json:
+    schema:
+      $ref: ..\schemas\Error.yaml

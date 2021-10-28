@@ -1,0 +1,8 @@
+properties:
+  type:
+    type: string
+    enum:
+      - string
+      - boolean
+      - integer
+      - number

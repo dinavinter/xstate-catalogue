@@ -1,0 +1,17 @@
+properties:
+  name:
+    type: string
+    example: newslatter
+  fields:
+    type: object
+    allOf:
+      - $ref: .\SubscriptionTemplateBase.yaml
+      - $ref: .\CustomTemplate.yaml
+      - properties:
+          subscribed:
+            $ref: .\BooleanTemplate.yaml
+          channel:
+            $ref: .\ChannelTemplate.yaml
+    additionalProperties:
+      $ref: .\FieldTemplate.yaml
+    maxProperties: 5

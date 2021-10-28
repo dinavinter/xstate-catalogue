@@ -6,7 +6,10 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head></Head>
+        <Head>
+          <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+
+        </Head>
         <body>
           <Main />
           <NextScript />

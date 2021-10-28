@@ -1,0 +1,368 @@
+openapi: 3.1.0
+
+info:
+  title: Subscriptions Managment
+  description: Api specification for manges subscriptions.
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: https://{gigya-domain}/admin/subscriptions/v1
+    variables:
+      gigya-domain:
+        default: accounts.gigya.com
+        enum:
+          - accounts.gigya.com
+          - accounts.eu1.gigya.com
+          - accounts.au1.gigya.com
+        description: giya domains
+  
+components:
+  schemas:
+    FieldTemplate:
+      properties:
+        type:
+          type: string
+          enum: [ string, boolean, integer, number ]
+    BooleanTemplate:
+      allOf:
+        - $ref: '#/components/schemas/FieldTemplate'
+        - properties:
+            type:
+              type: string
+              enum: [ boolean ]
+    StringTemplate:
+      allOf:
+        - $ref: '#/components/schemas/FieldTemplate'
+        - properties:
+            type:
+              type: string
+              enum: [ string ]  
+    ChannelTemplate:
+      allOf:
+        - $ref: '#/components/schemas/StringTemplate'
+        - properties:
+            enum:
+              type: array
+              items:
+                type: string
+                enum: [ sms, email ]
+                
+    SubscriptionTemplateBase:
+      properties:
+        subscribed:
+          $ref: '#/components/schemas/BooleanTemplate'
+        channel:
+          $ref: '#/components/schemas/ChannelTemplate'
+
+    CustomTemplate:
+      additionalProperties:
+        $ref: '#/components/schemas/FieldTemplate'
+      maxProperties: 5
+                    
+    SubscriptionTemplate:
+      properties:
+        name: 
+          type: string
+          example: newslatter
+        fields:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/SubscriptionTemplateBase'
+            - $ref: '#/components/schemas/CustomTemplate'
+            - properties:
+                subscribed:
+                  $ref: '#/components/schemas/BooleanTemplate'
+                channel:
+                  $ref: '#/components/schemas/ChannelTemplate'
+          additionalProperties:
+            $ref: '#/components/schemas/FieldTemplate'
+          maxProperties: 5
+          
+    SubscriptionReference:
+      properties:
+        subscriptionId:
+          type: string
+          example: newslatter#09
+    
+    FieldReference:
+      properties:
+        fieldId:
+          type: string
+          example: channel
+          
+    basic-error:
+      type: object
+      required:
+        - message
+        - code
+        - requestId
+      properties:
+        message:
+          type: string
+        callId:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+
+  responses:
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/basic-error'
+              - type: object
+                properties:
+                  code:
+                     enum:
+                      - 403
+            
+    bad_request:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/basic-error"
+            
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/basic-error"
+            
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/basic-error" 
+            
+    service_unavailable:
+      description: Service unavailable
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/basic-error'
+              - type: object
+                properties:
+                  code:
+                    enum:
+                      - 503
+ 
+  securitySchemes:
+    oAuth2: 
+      type: oauth2
+      description: This API uses OAuth with the application or admin cedentials.
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            subscription:mng: Subscription Managment
+security:
+  - oAuth2:
+      - subscription:mng
+
+
+paths:
+  /template:
+    summary: Create Subscription Template
+    post:
+      summary: Create subscription template.
+      operationId: CreateSubscription
+      description: 'Create subscription template'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionTemplate'
+      responses:        
+         '201':
+          description: "Subscription template was created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionReference'            
+          links:
+            get:
+              operationId: GetSubscriptionTemplate
+              parameters:
+                subscriptionId: '$response.body#/subscriptionId'
+              description: Gets subscription definition.
+              
+            update:
+              operationId: UpdateSubscription
+              parameters:
+                subscriptionId: '$response.body#/subscriptionId'
+              description:  Updates subscription definition.
+              
+         '400':
+           "$ref": "#/components/responses/bad_request"
+         '403':
+           "$ref": "#/components/responses/forbidden"
+         '401':
+           "$ref": "#/components/responses/requires_authentication"
+         '503':
+           "$ref": "#/components/responses/service_unavailable"
+
+  /template/{subscriptionId}:
+    get: 
+      operationId: GetSubscriptionTemplate
+      summary: Gets subscription definition
+      parameters:
+        - in: path
+          name: subscriptionId
+          example: newslatter
+      responses:
+        '200':
+          description: "Subscription template"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionReference'
+        '404':
+          "$ref": "#/components/responses/not_found"
+        '403':
+          "$ref": "#/components/responses/forbidden"
+        '401':
+          "$ref": "#/components/responses/requires_authentication"
+        '503':
+          "$ref": "#/components/responses/service_unavailable"
+    put:
+      summary: Updates subscription template.
+      operationId: UpdateSubscription
+      description: 'Update subscription template'
+      parameters:
+        - in: path
+          name: subscriptionId
+          example: newslatter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionTemplate'
+      responses:
+        '200':
+          description: "Subscription template was updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionReference'
+          links:
+            subscriptionLinks:
+              operationId: GetSubscriptionTemplate
+              parameters:
+                subscriptionId: '$response.body#/subscriptionId'
+              description: A refrence to the specific subscription template.
+        '400':
+          "$ref": "#/components/responses/bad_request"
+        '403':
+          "$ref": "#/components/responses/forbidden"
+        '401':
+          "$ref": "#/components/responses/requires_authentication"
+        '503':
+          "$ref": "#/components/responses/service_unavailable"
+
+
+  /template/{subscriptionId}/fields:
+    post:
+      operationId: CreateSubscriptionField
+      summary: Create Subscription Field
+      parameters:
+        - in: path
+          name: subscriptionId
+          example: newslatter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldTemplate'      
+      responses:
+        '201':
+          description: "Add subscription field"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldReference'
+          links:
+            updateSubscriptionField:
+              operationId: UpdateSubscriptionField
+              parameters:
+                fieldId: '$response.body#/fieldId'
+                subscriptionId: '$request.path#/subscriptionId'
+              description: Updates the specifys subscription field.
+            getSubscriptionField:
+              operationId: UpdateSubscriptionField
+              parameters:
+                fieldId: '$response.body#/fieldId'
+                subscriptionId: '$request.path#/subscriptionId'
+              description: Updates the specifys subscription field.
+
+        '400':
+          "$ref": "#/components/responses/bad_request"
+        '404':
+          "$ref": "#/components/responses/not_found"
+        '403':
+          "$ref": "#/components/responses/forbidden"
+        '401':
+          "$ref": "#/components/responses/requires_authentication"
+        '503':
+          "$ref": "#/components/responses/service_unavailable"
+
+  /template/{subscriptionId}/fields/{fieldId}:
+    put:
+      operationId: UpdateSubscriptionField
+      description: Updates the specifys subscription field.
+      summary: Updates the specifys subscription field.
+      parameters:
+        - in: path
+          name: subscriptionId
+          example: newslatter
+        - in: path
+          name: fieldId
+          example: frequency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldTemplate'
+      responses:
+        '200':
+          description: "Add subscription field"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldReference'
+        '404':
+          "$ref": "#/components/responses/not_found"
+        '403':
+          "$ref": "#/components/responses/forbidden"
+        '401':
+          "$ref": "#/components/responses/requires_authentication"
+        '503':
+          "$ref": "#/components/responses/service_unavailable"
+    get:
+      operationId: GetSubscriptionField
+      description: Gets the specified subscription field.      
+      summary: Gets the specified subscription field.
+      parameters:
+        - in: path
+          name: subscriptionId
+          example: newslatter
+        - in: path
+          name: fieldId
+          example: frequency
+      responses:
+        '200':
+          description: "Subscription field template"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldTemplate'
+
+tags: [ ]

@@ -1,0 +1,44 @@
+{
+  "class": [ "interaction" ],
+  "properties": {
+    "id": "string" 
+    
+  },
+  "entities": [
+    {
+      "class": [ "items", "collection" ],
+      "rel": [ "http://acme.com/rels/pay-invoice" ],
+      "href": "https://api.acme.com/invoices/093b941d/payment_attempts"
+    }
+  ],
+  "actions": [
+    {
+      "name": "submit",
+      "title": "Submit",
+      "href": "/interactions/payment_attempts",
+      "type": "application/json",
+
+      "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "$ref": "./SignUpSchema.yaml"
+      }
+    },
+    {
+      "name": "pay-invoice",
+      "title": "Pay Invoice",
+      "method": "POST",
+      "href": "https://api.acme.com/invoices/093b941d/payment_attempts",
+      "type": "application/json",
+      "fields": [
+        { "name": "interaction_id", "type": "hidden", "value": "42" },
+        { "name": "amount", "type": "number" },
+        { "name": "stripe_token", "type": "text" }
+      ]
+    }
+  ],
+  "links": [
+    { "rel": [ "self" ], "href": "http://api.acme.com/invoices/093b941d" },
+    { "rel": [ "previous" ], "href": "http://api.acme.com/invoices/a46c437c" },
+    { "rel": [ "next" ], "href": "http://api.acme.com/invoices/ca0e7f36" }
+  ]
+}

@@ -1,0 +1,86 @@
+summary: Communications Interaction
+post:
+  summary: Submit customer intent details.
+  operationId: SubmitInteraction
+  description: Submit interaction form
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\SignUpSchema.yaml
+        examples:
+          email-channel:
+            value:
+              channel: email
+              identity:
+                email: email@mail.com
+              newsletter: true
+              deals: true
+          phone-channel:
+            value:
+              channel: sms
+              identity:
+                phonenumber: 543332123
+              newsletter: true
+  responses:
+    '201':
+      description: Submit form
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Interaction.yaml
+          examples:
+            signup-interaction-ok:
+              summary: Represents a signup to a newsletter flow entry point.
+              value:
+                properties:
+                  template: signup
+                  state: created
+                links:
+                  - rel: confirm
+                    href: /interaction/confirm/{interactionId} 
+                    type: application/json
+                    method: POST
+
+      links:
+        InteractionLink:
+          operationId: ConfirmInteraction
+          parameters:
+            interactionId: $response.body#/interactionId
+          description: A uuid to confirm the intraction and update the account
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '401':
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ..\components\schemas\Interaction.yaml
+              - $ref: ..\..\shared\errors\basic-error.yaml
+          examples:
+            signup-interaction-ok:
+              summary: Represents a signup to a newsletter pending to authentication.
+              value:
+                properties:
+                  interactionId: #0023232
+                  message*:  Authentication Required  
+                  callId: #dsdfafsdsa
+                  code*: 401
+                  template: signup
+                  state: created
+                links:
+                  - rel: otp
+                    href: /authenticate/email/otp
+                    type: application/json
+                    method: POST 
+                  - rel: confirm
+                    href: /interaction/confirm/{interactionId}
+                    type: application/json
+                    method: POST
+
+
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml

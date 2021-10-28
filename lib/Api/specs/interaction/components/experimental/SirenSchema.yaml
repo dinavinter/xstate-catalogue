@@ -1,0 +1,136 @@
+RootResponse:
+  type: object
+  allOf:
+    - $ref: '#/definitions/Entity'
+    - properties:
+        properties:
+          $ref: '#/definitions/RootProperties'
+RootProperties:
+  type: object
+  properties:
+    name:
+      type: string
+# Siren base models
+Entity:
+  type: object
+  properties:
+    class:
+      type: array
+      items:
+        type: string
+    entities:
+      type: array
+      items:
+        $ref: '#/definitions/SubEntity'
+    actions:
+      type: array
+      items:
+        $ref: '#/definitions/Action'
+    links:
+      type: array
+      items:
+        $ref: '#/definitions/Link'
+SubEntity:
+  type: object
+  properties:
+    href:
+      type: string
+    rel:
+      type: array
+      items:
+        type: string
+    class:
+      type: array
+      items:
+        type: string
+    properties:
+      type: object
+    entities:
+      type: array
+      items:
+        $ref: '#/definitions/SubEntity'
+    actions:
+      type: array
+      items:
+        $ref: '#/definitions/Action'
+    links:
+      type: array
+      items:
+        $ref: '#/definitions/Link'
+Action:
+  type: object
+  required:
+    - name
+    - href
+  properties:
+    class:
+      type: array
+      items:
+        type: string
+    name:
+      type: string
+    method:
+      type: string
+    href:
+      type: string
+    title:
+      type: string
+    type:
+      type: string
+    fields:
+      type: array
+      items:
+        $ref: '#/definitions/Field'
+Field:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+    type:
+      type: string
+      enum:
+        - hidden
+        - text
+        - search
+        - tel
+        - url
+        - email
+        - password
+        - datetime
+        - date
+        - month
+        - week
+        - time
+        - datetime-local
+        - number
+        - range
+        - color
+        - checkbox
+        - radio
+        - file
+    title:
+      type: string
+    value:
+      type: string
+Link:
+  type: object
+  required:
+    - rel
+    - href
+  properties:
+    class:
+      type: array
+      items:
+        type: string
+    title:
+      type: string
+    rel:
+      type: array
+      items:
+        type: string
+    href:
+      type: string
+    type:
+      type: string

@@ -4,6 +4,7 @@ import {Interpreter} from 'xstate';
 import {Card, Collapse, Col, Row, Toast} from "react-bootstrap";
 import {BsPrefixRefForwardingComponent} from "react-bootstrap/helpers";
 import {useFlyPane} from "./OffCanvasProvider";
+import {OpenApi} from "./Api/api";
 
 export const MachineHelpersContext = React.createContext<{
     service: Interpreter<any, any, any>;
@@ -66,6 +67,33 @@ function ToastProvider({Body, Control, json, timeout = 3000}) {
     );
 }
 
+export const API = (props: { children: string }) => {
+    const context = useContext(MachineHelpersContext);
+    const {flyChildren} = useFlyPane();
+
+    const [state, send] = useService(context.service);
+
+    const {children, ...event} = props;
+
+    return (
+        <div>
+            <button
+                onClick={() => {
+                    flyChildren(<><OpenApi spec={children}></OpenApi></>);
+
+                }}
+                // To override prose
+                style={{margin: 0}}
+            >
+                {children}
+            </button>
+          </div>
+
+)
+    ;
+};
+
+
 export const Event = (props: { children: string }) => {
     const context = useContext(MachineHelpersContext);
     const {flyJson} = useFlyPane();
@@ -83,7 +111,7 @@ export const Event = (props: { children: string }) => {
     return (
         <button
             onClick={() => {
-                flyJson(eventData);
+                flyJson(eventData, eventData.Type);
                 send({
                     ...defaultEvent,
                     ...event,
@@ -111,7 +139,7 @@ export const Event = (props: { children: string }) => {
         ))}
       </span>
         </button>
- 
+
 
     );
 };
