@@ -5,7 +5,8 @@ export default  {
             info: {
                 channel: "sms",
                 identity: {
-                    "phonenumber": 543332123
+                    "phonenumber": 543332123,
+                    uuid: "userA"
                 },
                 "newsletter": true
             },
