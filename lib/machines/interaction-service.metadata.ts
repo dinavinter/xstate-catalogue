@@ -12,7 +12,7 @@ export default  {
         },
         CONFIRM: {
             info: {
-                info: "OTP",
+                auth: "OTP",
             },
         },
     }
