@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "interaction-service": {
+    title: "interaction-service",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   "signup": {
     title: "signup",
     icon: "PlaylistAddCheckOutlined",

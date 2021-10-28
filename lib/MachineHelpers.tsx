@@ -42,14 +42,14 @@ export const Event = (props: { children: string }) => {
   const [state, send] = useService(context.service);
 
   const { children, ...event } = props;
-
   const defaultEvent = context.metadata?.eventPayloads?.[props.children] || {};
+  
 
   return (
     <button
       className="text-left"
       onClick={() => {
-        send({
+       send({
           ...defaultEvent,
           ...event,
           type: props.children,

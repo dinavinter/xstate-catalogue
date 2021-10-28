@@ -36,6 +36,15 @@ const useGetImports = (slug: string, deps: any[]) => {
     } = await import(`../../lib/machines/${slug}.machine.ts`);
 
     const mdxDoc = await import(`../../lib/machines/${slug}.mdx`);
+    // console.log( mdxDoc);
+    // console.log( mdxDoc.default.metadata);
+
+      try {
+       const mdxDocMetadata = await import(`../../lib/machines/${slug}.metadata.ts`);
+      mdxDoc.metadata=mdxDocMetadata.default;
+       console.log( mdxDoc.metadata);
+     }catch (e){
+      console.log(e)   }
 
     setImports({
       machine: machineImport.default,
