@@ -1,6 +1,7 @@
 import * as x from "xsfp";
 import {State, assign} from "xstate";
 import {SighUpFormMachineContext, SighUpInfo} from "./signup-xfp.machine";
+import {ConfirmInfo} from "./interactionService";
 
 
 const templateStore = {
@@ -9,10 +10,7 @@ const templateStore = {
     }
 };
 
-interface ConfirmInfo {
-    [key: string]: any;
 
-}
 
 export interface InteractionServiceMachineContext {
     metadata: any,
@@ -57,48 +55,12 @@ const interactionServiceMachine = x.createMachine<InteractionServiceMachineConte
         }
     }),
     x.states(
-        x.state('draft', x.data({template: templateStore.get('sighUp')}), x.on("SUBMIT", "created", assignSighUpInfo)),
+        x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "created", assignSighUpInfo)),
         x.state('created', x.on("CONFIRM", "verified", assignConfirmInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
     )
 );
-
-const stateService = {
-    getState: async (d) => {
-        return await d()
-    }, setState: async (state) => {
-        console.log(state)
-    }
-};
-
-
-export const signUpService = async (context, stateService) => {
-
-    const currentValue = await stateService.getState(
-        () => interactionServiceMachine.initialState
-    )
-    const state = interactionServiceMachine.resolveState(State.create(currentValue));
-
-    return {
-        template: (): Promise<State<any>> => {
-            return Promise.resolve(state);
-        },
-        submit: async (input: SighUpInfo): Promise<State<any>> => {
-            return transition({type: "SUBMIT", info: input});
-        },
-        confirm: async (input: ConfirmInfo): Promise<State<any>> => {
-            return transition({type: "CONFIRM", info: input});
-        }
-    }
-
-    async function transition(event: InteractionServiceMachineEvent) {
-        const transitioned = interactionServiceMachine.transition(state, event);
-        await stateService.setState(transitioned);
-        return transitioned;
-
-    }
-}
 
 
 export default interactionServiceMachine;

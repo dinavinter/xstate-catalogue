@@ -70,8 +70,17 @@ const liteAuthenticationService = (next, onError) => x.states(
 );
 
 const authorizationService = (next, onError) => x.states(
-     x.state('token', tokenService(next, 'authentication')),
+    x.state('authorization', x.always(
+        x.transition('authentication'), 
+        guard((context, event) =>  event.data?.require_authn ),
+        // this will run only if the "require_authn" guard above is false
+        x.transition('token'),
+        guard((context, event) => !context.auth?.access_token),
+        // this will run only if the "access_token" guard above is false 
+        'token',
+    )),
     x.state('authentication', loginService('token', onError)),
+    x.state('token', tokenService(next, 'authentication')),
 );
 
 
@@ -80,22 +89,25 @@ const intentService = (next, onError) => x.invoke('post-intent', x.onDone(next, 
         return {
             auth_provider: event.data?.auth_provider,
             authorization_request: event.data?.authorization_request,
-            intent_token: event.data?.intent_token
-        }
+            intent_token: event.data?.intent_token,
+         }
     },
 
     intent_id: (context, event) => event.data?.id
-})), x.onError(onError));
-
+})), x.onError(onError) );
+ 
 
 const requireAuthorization = () => false;
 
-const assignSighUpInfo = x.assign({input: (context, event) => event.data});
+const assignInput = x.assign({input: (context, event) => event.data});
 const assignTemplate = x.assign({
     metadata: (context, event) => event?.data?.metadata,
     authorization: (context, event) => event?.data?.authorization || requireAuthorization
 });
-
+const assignMetadata = x.assign({
+    metadata: (context, event) => event?.data?.metadata,
+    authorization: (context, event) => event?.data?.authorization || requireAuthorization
+});
 const submittingService = (next, error) =>
     x.states(
         x.state('lookup', lookupService(`#submit.intent`, error)),
@@ -108,8 +120,8 @@ const interactionFormMachine = x.createMachine<InteractionFormMachineContext,
     InteractionFormMachineEvent>(
     x.id('sighUpForm'),
     x.states(
-        x.state('idle', x.on("TEMPLATE", "draft", assignTemplate)),
-        x.state('draft', x.on("SUBMIT", "submitting", assignSighUpInfo)),
+        x.state('loading', x.on("METADATA", "draft", assignMetadata)),
+        x.state('draft', x.on("SUBMIT", "submitting", assignInput)),
         x.state('submitting', submittingService('#success', '#error')),
         x.state('success', x.id("success")),
         x.state('error', x.id("error")),
