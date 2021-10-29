@@ -5,7 +5,7 @@ import {SighUpFormMachineContext, SighUpInfo} from "./signup-xfp.machine";
 
 const templateStore = {
     get: async (d) => {
-        return import ("../schemas/SignUpTemplateSchema.json")
+        return {schema: await import ("../schemas/SignUpTemplateSchema.json")}
     }
 };
 
@@ -55,11 +55,11 @@ const interactionServiceMachine = x.createMachine<InteractionServiceMachineConte
             }
 
         }
-    }), 
+    }),
     x.states(
         x.state('draft', x.data({template: templateStore.get('sighUp')}), x.on("SUBMIT", "created", assignSighUpInfo)),
         x.state('created', x.on("CONFIRM", "verified", assignConfirmInfo)),
-        x.state('verified', x.invoke('projection' ,x.id('project-interaction'), x.onDone('completed') )),
+        x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
     )
 );
