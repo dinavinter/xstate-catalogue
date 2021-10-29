@@ -26,8 +26,12 @@ const otp = x.states(
 
 
 const tokenService = (next, onError) => x.invoke('token', x.onDone(next, x.assign({
-        access_token: (context, e) => e.data?.access_token,
-        authorization_details: (context, e) => e.data?.authorization_details
+        token: (context, e) => {
+            return {
+                access_token: e.data?.access_token,
+                authorization_details: e.data?.authorization_details
+            }
+        }
     })),
     x.onError(onError, x.assign({
         error: (context, e) => e.data?.errorCode,
@@ -36,36 +40,54 @@ const tokenService = (next, onError) => x.invoke('token', x.onDone(next, x.assig
     })));
 
 const loginService = (next, onError) => x.invoke('login', x.onDone(next, x.assign({
-        code: (context, e) => e.data?.code,
+        auth: (context, event) => {
+            return {
+                ...context.auth,
+                login_token: event.data?.login_token
+            }
+        }
+    })),
+    x.onError(onError, x.assign({
+        error: (context, e) => e.data?.errorCode,
+        message: (context, e) => e.data?.errorMessage
+    })));
+const lookupService = (next, onError) => x.invoke('lookup', x.onDone(next, x.assign({
+        lookup_token: (context, e) => e.data?.token,
     })),
     x.onError(onError, x.assign({
         error: (context, e) => e.data?.errorCode,
         message: (context, e) => e.data?.errorMessage
     })));
 
-
 const authenticationService = (next, onError) => x.states(
     x.state('login', loginService('token', onError)),
     x.state('token', tokenService(next, 'login'))
 )
 
-const authorizationService = (authorized, notAuthorized) =>
-    x.always(
-        x.transition(
-            authorized,
-            x.effect((context, event) => {
-            }),
-            x.guard((context, event) => context.authorization(context.input)),
-        ),
-        notAuthorized);
+const liteAuthenticationService = (next, onError) => x.states(
+    x.state('lookup', lookupService('token', onError)),
+    x.state('token', tokenService(next, onError))
+);
+
+const authorizationService = (next, onError) => x.states(
+     x.state('token', tokenService(next, 'authentication')),
+    x.state('authentication', loginService('token', onError)),
+);
+
 
 const intentService = (next, onError) => x.invoke('post-intent', x.onDone(next, x.assign({
-    auth: (context, event) => event.data?.auth,
-    authorization_request: (context, event) => event.data?.authorization_request,
+    auth: (context, event) => {
+        return {
+            auth_provider: event.data?.auth_provider,
+            authorization_request: event.data?.authorization_request,
+            intent_token: event.data?.intent_token
+        }
+    },
+
     intent_id: (context, event) => event.data?.id
 })), x.onError(onError));
 
- 
+
 const requireAuthorization = () => false;
 
 const assignSighUpInfo = x.assign({input: (context, event) => event.data});
@@ -74,21 +96,21 @@ const assignTemplate = x.assign({
     authorization: (context, event) => event?.data?.authorization || requireAuthorization
 });
 
-const submittingService = (next, error) => 
-        x.states(
-            x.state('authorization', authorizationService('#submit.execution', `#submit.intent`)),
-            x.state('intent', x.id(`submit.intent`), intentService(`#submit.authentication`, error)),
-            x.state('authentication', x.id(`submit.authentication`), authenticationService('#submit.execution', error)),
-            x.state('execution', x.id(`submit.execution`), x.invoke('post-interaction', x.onDone(next), x.onError(error))),
-        ) ;
+const submittingService = (next, error) =>
+    x.states(
+        x.state('lookup', lookupService(`#submit.intent`, error)),
+        x.state('intent', x.id(`submit.intent`), intentService(`#submit.authorization`, error)),
+        x.state('authorization', x.id(`submit.authorization`), authorizationService('#submit.execution', `#submit.intent`)),
+        x.state('execution', x.id(`submit.execution`), x.invoke('post-interaction', x.onDone(next), x.onError(error))),
+    );
 
 const interactionFormMachine = x.createMachine<InteractionFormMachineContext,
     InteractionFormMachineEvent>(
     x.id('sighUpForm'),
     x.states(
-        x.state('draft', x.on("TEMPLATE", "loaded", assignTemplate)),
-        x.state('loaded', x.on("SUBMIT", "submitting", assignSighUpInfo)),
-        x.state('submitting', submittingService( '#success', '#error')),
+        x.state('idle', x.on("TEMPLATE", "draft", assignTemplate)),
+        x.state('draft', x.on("SUBMIT", "submitting", assignSighUpInfo)),
+        x.state('submitting', submittingService('#success', '#error')),
         x.state('success', x.id("success")),
         x.state('error', x.id("error")),
     )
