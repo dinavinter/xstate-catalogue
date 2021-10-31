@@ -5,6 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+
     "generate": "plop --plopfile ./plop/plopfile.js",
     "postinstall": "patch-package"
   },
