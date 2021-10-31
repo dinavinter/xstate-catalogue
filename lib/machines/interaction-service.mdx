@@ -9,14 +9,16 @@ Interaction entity states lifecycle is dependent on user input and the interacti
 Default states are:
 
 ## Draft
-
+API - GET /signup/metadata
 We start in the <State>draft</State> state. this state represents a template of the interaction, it created before the user submission. 
  
 ## Interaction Submission
+<API>interaction</API>  API path: POST /signup/intent
 
 When the user submits the form via <Event >SUBMIT</Event>, we enter the <State>created</State> state and the signup info is saved to context: <Context stringify>input</Context>.
  
 ## Interaction Confirmation
+<API>interaction</API> API path: POST /signup/{interactionId}/confirm
 
 In the <State>created</State> state, we are waiting for additional confirmation from the client before projecting the data to the account attributes.
 When the user confirms the interaction VIA <Event>CONFIRM</Event> we are entering the <State>verified</State> state . 
@@ -27,4 +29,6 @@ In the <State>verified</State> state, we use the <Service>projection</Service> s
 On <Event>error.platform.project-interaction</Event>, we head back to <State>verified</State> with the error message captured in context: <Context>errorMessage</Context>.
 But on <Event>done.invoke.project-interaction</Event>, we head to our final state of <State>completed</State>. 
  
+ <CurrentState />
  <WholeContext />
+ <Spec>interaction</Spec>
