@@ -28,17 +28,18 @@ post:
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\Interaction.yaml
+            $ref: ..\components\schemas\form.yaml
           examples:
             signup-interaction-ok:
-              summary: Represents a signup to a newsletter flow entry point.
+              summary: Customer intent submitted successfully.
               value:
                 properties:
                   template: signup
                   state: created
+                  interactionId: 7800232
                 links:
                   - rel: confirm
-                    href: /interaction/confirm/{interactionId} 
+                    href: /{interactionId}/confirm/
                     type: application/json
                     method: POST
 
@@ -63,7 +64,7 @@ post:
               summary: Represents a signup to a newsletter pending to authentication.
               value:
                 properties:
-                  interactionId: #0023232
+                  interactiwwonId: #0023232
                   message*:  Authentication Required  
                   callId: #dsdfafsdsa
                   code*: 401
@@ -75,7 +76,7 @@ post:
                     type: application/json
                     method: POST 
                   - rel: confirm
-                    href: /interaction/confirm/{interactionId}
+                    href: /{interactionId}/confirm
                     type: application/json
                     method: POST
 

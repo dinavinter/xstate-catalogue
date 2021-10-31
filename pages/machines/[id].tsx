@@ -20,7 +20,7 @@ import {
     Service,
     State,
     WholeContext,
-    API
+    API, CurrentState, Spec
 } from '../../lib/MachineHelpers';
 import {metadata, MetadataItem} from '../../lib/metadata';
 import {useCopyToClipboard} from '../../lib/useCopyToClipboard';
@@ -268,7 +268,9 @@ const ShowMachinePage = (props: {
                                             Service,
                                             Context,
                                             WholeContext,
-                                            API
+                                            API,
+                                            CurrentState,
+                                            Spec
                                         }}
                                     >
                                         <props.mdxDoc></props.mdxDoc>

@@ -1,4 +1,4 @@
-summary: Interaction Form
+summary: Interaction Form Metadaa
 get:
   operationId: InteractionForm
   description: Interaction Form Options
@@ -11,12 +11,7 @@ get:
           schema:
             type: object
             $ref: ..\components\schemas\form.yaml 
-          links:
-            - rel:
-                - self
-              href: /interaction/signup
-              method: POST
-              targetSchema: { $ref: ..\components\schemas\SignUpSchema.yaml }  
+          
           examples:
               signup-interaction-json:
                 summary: Represents a signup to a newsletter flow entry point.
@@ -24,12 +19,16 @@ get:
                   properties:
                     template: signup
                     state: draft
-                    method: POST                  
                   links:
-                    - rel: edit-form 
-                      href: /interaction/signup
+                    - rel: intent 
+                      href: /signup
                       method: POST
                       targetSchema: { $ref: ..\components\schemas\SignUpSchema.yaml }
+                    - rel: confirm
+                      href: /signup/{interactionId}/confirm
+                      method: POST
+                      templateRequired:
+                        - interactionId
                     - rel: lookup
                       href: /auth/lookup/{channel}/token
                       templateRequired:

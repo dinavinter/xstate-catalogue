@@ -1,0 +1,19 @@
+type: object
+required:
+  - rel
+  - href
+properties:
+  class:
+    type: array
+    items:
+      type: string
+  title:
+    type: string
+  rel:
+    type: array
+    items:
+      type: string
+  href:
+    type: string
+  type:
+    type: string

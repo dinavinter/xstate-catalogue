@@ -70,7 +70,18 @@ function ToastProvider({Body, Control, json, timeout = 3000}) {
         </Row>
     );
 }
+export const Spec = (props: { children: string }) => {
+ 
+    const {children } = props;
 
+    return (
+        <div>
+            <OpenApi spec={children} />
+        </div>
+
+    )
+        ;
+};
 export const API = (props: { children: string }) => {
     const context = useContext(MachineHelpersContext);
     const {flyChildren} = useFlyPane();
@@ -189,6 +200,30 @@ export const Context = (props: { children: string; stringify?: boolean }) => {
     );
 };
 
+export const CurrentState = () => {
+    const context = useContext(MachineHelpersContext);
+    const jsonState = useSelector(context.service, (state) => {
+        return JSON.stringify({value: state.value, activities: state.activities}, null, 2);
+    });
+    const jsonContextRef = useRef(null);
+    useEffect(() => {
+        // @ts-ignore
+        const hljs: any = window.hljs;
+        if (hljs) {
+            hljs.highlightBlock(jsonContextRef.current);
+        }
+    }, [jsonContextRef, jsonState]);
+    return (
+        <pre>
+       <h6> Current State</h6> 
+      <code ref={jsonContextRef} className="json">
+        {jsonState}
+      </code>
+    </pre>
+    );
+};
+
+
 export const WholeContext = () => {
     const context = useContext(MachineHelpersContext);
     const jsonContext = useSelector(context.service, (state) => {
@@ -204,6 +239,8 @@ export const WholeContext = () => {
     }, [jsonContextRef, jsonContext]);
     return (
         <pre>
+       <h6> Context</h6> 
+
       <code ref={jsonContextRef} className="json">
         {jsonContext}
       </code>

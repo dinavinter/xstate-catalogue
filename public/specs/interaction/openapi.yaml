@@ -31,10 +31,10 @@ security:
   - oAuth2Confirm:
       - interaction:confirm
 paths:
-  /options:
-    $ref: paths\options.yaml 
-  /:
-    $ref: paths\post.yaml
+  /metadata:
+    $ref: paths\metadata.yaml 
+  /intent:
+    $ref: paths\intent.yaml
   /{interactionId}/confirm:
     $ref: paths\{interactionId}@confirm.yaml
   /oauth/authorize/{request_uri}:
