@@ -1,5 +1,5 @@
 import * as x from "xsfp";
- 
+
 
 const tokenService = (next, onError) => x.invoke('token', x.onDone(next, x.assign({
         token: (context, e) => {
@@ -15,18 +15,14 @@ const tokenService = (next, onError) => x.invoke('token', x.onDone(next, x.assig
         ticket: (context, e) => e.data?.ticket
     })));
 
-const loginService = (next, onError) => x.invoke('login', x.onDone(next, x.assign({
-        auth: (context, event) => {
+const loginService = (next, onError) => x.on('LOGGED-IN', next, x.assign({
+        identity: (context, event) => {
             return {
-                ...context.auth,
-                login_token: event.data?.login_token
+                ...context.identity,
+                id_token: event.data?.id_token
             }
         }
-    })),
-    x.onError(onError, x.assign({
-        error: (context, e) => e.data?.errorCode,
-        message: (context, e) => e.data?.errorMessage
-    })));
+    }) );
 
 const lookupService = (next, onError) => x.invoke('lookup', x.onDone(next, x.assign({
         identity: (context, e) => {
@@ -38,7 +34,7 @@ const lookupService = (next, onError) => x.invoke('lookup', x.onDone(next, x.ass
         message: (context, e) => e.data?.errorMessage
     })));
 
- 
+
 const assignAuthorizationDetails = x.assign(
     {
         auth: (context, event) => {
@@ -74,28 +70,14 @@ const assignActions = x.assign({
 });
 
 const intentService = (next, onError) => x.invoke('intent', x.onDone(next, followActions), x.onError(onError));
-
-const intentState = x.state('post',
-    x.id("submitting.post"),
-    x.on("AUTH-LITE", '#authentication.lite'),
-    x.on("AUTH-OTP", '#authentication.otp'),
-    x.on("submitting.SUCCESS", "#success"),
-);
-
-
-const requireAuthorization = () => false;
-
+ 
 const assignInput = x.assign({
     input: (context, event) => event.input,
     identity: (context, event) => event.input.identity
 });
-const assignTemplate = x.assign({
-    metadata: (context, event) => event?.data?.metadata,
-    authorization: (context, event) => event?.data?.authorization || requireAuthorization
-});
+
 const assignMetadata = x.assign({
-    metadata: (context, event) => event?.metadata,
-    authorization: (context, event) => event?.authorization || requireAuthorization
+    metadata: (context, event) => event?.metadata
 });
 const submittingService = (next, error) =>
     x.states(
@@ -189,5 +171,7 @@ const interactionFormMachine = x.createMachine(
         }
     }
 });
+
+
 
 export default interactionFormMachine;

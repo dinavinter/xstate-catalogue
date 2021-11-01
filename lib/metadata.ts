@@ -12,8 +12,8 @@ export const metadata: Record<string, MetadataItem> = {
     icon: "PlaylistAddCheckOutlined",
     version: "0.1.0",
   },
-  "interaction-form": {
-    title: "interaction-form",
+  "interaction-oauth": {
+    title: "interaction-oauth",
     icon: "PlaylistAddCheckOutlined",
     version: "0.1.0",
   },

@@ -4,7 +4,8 @@ import {Interpreter} from 'xstate';
 import {Card, Collapse, Col, Row, Toast} from "react-bootstrap";
 import {BsPrefixRefForwardingComponent} from "react-bootstrap/helpers";
 import {useFlyPane} from "./OffCanvasProvider";
-import {OpenApi} from "./Api/api";
+import {ElementOpenApi, OpenApi} from "./Api/api";
+import {OpenApiBuilder, OpenAPIObject} from "openapi3-ts";
 
 export const MachineHelpersContext = React.createContext<{
     service: Interpreter<any, any, any>;
@@ -15,10 +16,12 @@ export interface MDXMetadata {
     eventPayloads?: {
         [eventType: string]: any;
     };
-    
+
     api?: {
-        [eventType: string]: string;
-    }
+        [service: string]: (context, event) => OpenAPIObject ;
+    };
+
+    services: {}
 }
 
 export const State = (props: { children: string }) => {
@@ -70,13 +73,14 @@ function ToastProvider({Body, Control, json, timeout = 3000}) {
         </Row>
     );
 }
+
 export const Spec = (props: { children: string }) => {
- 
-    const {children } = props;
+
+    const {children} = props;
 
     return (
         <div>
-            <OpenApi spec={children} />
+            <OpenApi spec={children}/>
         </div>
 
     )
@@ -94,7 +98,7 @@ export const API = (props: { children: string }) => {
         <div>
             <button
                 onClick={() => {
-                    flyChildren(()=> <OpenApi spec={children} />,`${children} API` );
+                    flyChildren(() => <OpenApi spec={children}/>, `${children} API`);
 
                 }}
                 // To override prose
@@ -102,10 +106,10 @@ export const API = (props: { children: string }) => {
             >
                 {children}
             </button>
-          </div>
+        </div>
 
-)
-    ;
+    )
+        ;
 };
 
 
@@ -260,9 +264,20 @@ export const Service = (props: { children: string }) => {
         );
         return isCurrentlyInvoked;
     });
+    const apiMetadata = context.metadata?.api?.[props.children] ;
+    const {flyChildren} = useFlyPane();
+
+    const [state, send] = useService(context.service);
+
+    const {children, ...event} = props;
+
 
     return (
         <span
+            onClick={() => {
+                apiMetadata && flyChildren(() => <ElementOpenApi api={apiMetadata(context)}/>, `${children} API`);
+
+            }}
             className={`font-mono inline-flex flex-wrap font-bold text-sm px-2 py-1 transition-colors relative ${
                 isCurrentlyInvoked
                     ? `bg-blue-100 text-blue-800`

@@ -55,7 +55,7 @@ const showChildren = (child, header="") =>{
     return (
         <FlyPaneContext.Provider value={{flyJson: showJson, flyChildren: showChildren }}>
             {children}
-            <Offcanvas className="h-full overflow-y-scroll" show={show} onHide={handleClose}  backdrop={true}>
+            <Offcanvas scroll={true} className="h-full overflow-y-scroll" show={show} onHide={handleClose}  backdrop={true}>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title> <span>{header}</span></Offcanvas.Title>
                 </Offcanvas.Header>
