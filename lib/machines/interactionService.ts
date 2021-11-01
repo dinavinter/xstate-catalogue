@@ -1,12 +1,11 @@
 import {State, interpret} from "xstate";
  import interactionServiceMachine, {InteractionServiceMachineEvent} from "./interaction-service.machine";
 import {EmailSchema, SmsSchema} from "../Api/SignUpInteraction";
-import value from "micromark/lib/constant/types";
-
+ 
 const stateService = {
-    getState: async (d) => {
-        return await d()
-    }, setState: async (state) => {
+    getState: async (id) => {
+        return  null  
+    }, setState: async (id,state) => {
         console.log(state)
     }
 };
@@ -18,7 +17,7 @@ export type SighUpInfo = EmailSchema | SmsSchema;
 
 export const interactionService =   (stateService ) => {
 
-
+ 
     return {
         template: async (): Promise<State<any>> => { 
             return  await currentState();
@@ -32,17 +31,17 @@ export const interactionService =   (stateService ) => {
          }
     }
     
-    async function currentState(){
-        const currentValue = await stateService.getState(
-            
+    async function currentState(  ){
+        const currentValue = await stateService.getState( 
         ) ||interactionServiceMachine.initialState;
         return   interactionServiceMachine.resolveState(State.create(currentValue));
 
     }
 
-    async function transition(event: InteractionServiceMachineEvent) {
-        const transitioned = interactionServiceMachine.transition(await currentState(), event);
-        await stateService.setState(transitioned);
+    async function transition( event: InteractionServiceMachineEvent) {
+        
+        const transitioned = interactionServiceMachine.transition(await currentState( ), event);
+        await stateService.setState(  transitioned);
         return transitioned;
 
     }
@@ -58,7 +57,7 @@ function toSiren(state, annotate = {}) {
     const current =  service.state;
     return {
         class: service.id,
-        title: current.meta.title || (service.machine.meta && service.machine.meta.title) || current.id,
+        title: current.meta.title || (service.machine.meta && service.machine.meta.title) || service.id,
         properties: current.context,
         links: [
             {
@@ -84,10 +83,12 @@ function toSiren(state, annotate = {}) {
             }
             const { fields, ...rest} = ((meta.on||{})[event] || [])
             if (Array.isArray(fields) || service.machine.transition(current, event).changed) {
+                const link =service.machine.meta .links[event.toLowerCase()];
+                const href= link && link(service.machine.context, service.machine.meta)
                 let action = {
                     name: event,
                     class: "event", 
-                    href: annotate.href && annotate.href(event),
+                    href: href,
                     method: "PUT",
                     fields: (fields||[]).map(field => {
                         return Object.keys(field).reduce((field, key) => {

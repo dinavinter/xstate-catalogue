@@ -1,8 +1,7 @@
 import * as x from "xsfp";
-import {State, assign} from "xstate";
-import {SighUpFormMachineContext, SighUpInfo} from "./signup-xfp.machine";
+import {  SighUpInfo} from "./signup-xfp.machine";
 import {ConfirmInfo} from "./interactionService";
-
+  
 
 const templateStore = {
     get: async (d) => {
@@ -11,11 +10,11 @@ const templateStore = {
 };
 
 
-
 export interface InteractionServiceMachineContext {
     metadata: any,
     input?: SighUpInfo;
     confirmInfo?: ConfirmInfo;
+    id?: string;
 }
 
 
@@ -35,32 +34,34 @@ type SUBMIT =
     }
 
 
-const assignSighUpInfo = x.assign({input: (context, event) => event.info});
+const assignSighUpInfo = x.assign({input: (context, event) => event.info, id: (context, event) => Math.random()});
 const assignConfirmInfo = x.assign({confirmInfo: (context, event) => event.info});
 
+const annotateHref = (path) => (context, meta) => `/interactions/sighUp/v1${context?.id && `/${context?.id}`}/${path}`;
 
 const interactionServiceMachine = x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
-    x.id('sighUp'),
+    x.id('interaction-service#sighUp'),
     x.meta({
-        metadata: {
             interaction: 'sighUp',
-            basePath: '/interactions/v1',
+            basePath: '/interactions/sighUp/v1',
+            annotateHref: (path) => (context, meta) => `/interactions/sighUp/v1${context.id && `/${context.id}`}/${path}`,
             links: {
-                template: '/template',
-                submit: '/submit',
-                confirm: '/confirm',
+                self: annotateHref(''),
+                template: annotateHref('template'),
+                submit: annotateHref('submit'),
+                confirm: annotateHref('confirm'),
                 authorization: '/oauth/authorize'
             }
 
+
         }
-    }),
+    ),
     x.states(
         x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
         x.state('intent', x.on("CONFIRM", "verified", assignConfirmInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
     )
-    
 );
 
 
