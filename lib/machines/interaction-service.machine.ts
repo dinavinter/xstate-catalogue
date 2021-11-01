@@ -41,7 +41,7 @@ const assignConfirmInfo = x.assign({confirmInfo: (context, event) => event.info}
 
 const interactionServiceMachine = x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
     x.id('sighUp'),
-    x.context({
+    x.meta({
         metadata: {
             interaction: 'sighUp',
             basePath: '/interactions/v1',
@@ -55,11 +55,12 @@ const interactionServiceMachine = x.createMachine<InteractionServiceMachineConte
         }
     }),
     x.states(
-        x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "created", assignSighUpInfo)),
-        x.state('created', x.on("CONFIRM", "verified", assignConfirmInfo)),
+        x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
+        x.state('intent', x.on("CONFIRM", "verified", assignConfirmInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
     )
+    
 );
 
 
