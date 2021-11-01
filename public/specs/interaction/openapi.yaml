@@ -35,6 +35,8 @@ paths:
     $ref: paths\metadata.yaml 
   /intent:
     $ref: paths\intent.yaml
+  /:
+    $ref: paths\post.yaml    
   /{interactionId}/confirm:
     $ref: paths\{interactionId}@confirm.yaml
   /oauth/authorize/{request_uri}:

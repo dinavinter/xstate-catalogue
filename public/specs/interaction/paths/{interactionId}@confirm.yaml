@@ -13,14 +13,14 @@ post:
         type: string
   responses:
     '200':
-      description: Ok, account updated with specfic transction details.
+      description: Ok, account updated with specfic interaction details.
       content:
         application/json:
           schema:
             $ref: ..\components\schemas\form.yaml
           examples:  
             signup-interaction-verified:
-              summary: Customer intent submitted successfully.
+              summary: Customer interaction submitted successfully.
               value:
                 properties:
                   template: signup

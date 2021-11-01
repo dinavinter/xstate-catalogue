@@ -1,19 +1,20 @@
 summary: Communications Interaction
 post:
-  summary: Submit customer intent details.
-  operationId: SubmitInteraction
-  description: Submit interaction form
+  summary: Submit interaction details as intent
+  operationId: SubmitInteractionIntention
+  description: Submit interaction form as intent
   requestBody:
     content:
       application/json:
         schema:
-          $ref: ..\components\schemas\SignUpSchema.yaml
+          $ref: ..\components\schemas\SignUpSchema.yaml  
         examples:
           email-channel:
             value:
               channel: email
               identity:
                 email: email@mail.com
+                lookup_token: aToken
               newsletter: true
               deals: true
           phone-channel:
@@ -21,10 +22,18 @@ post:
               channel: sms
               identity:
                 phonenumber: 543332123
+                lookup_token: aToken               
               newsletter: true
+    links:
+      ConfirmInteraction:
+        operationId: ConfirmInteraction
+        parameters:
+          interactionId: $response.body#/interactionId
+        description: Confirm Interaction State.
+
   responses:
     '201':
-      description: Submit form
+      description: Customer intent submitted successfully.
       content:
         application/json:
           schema:
@@ -35,7 +44,7 @@ post:
               value:
                 properties:
                   template: signup
-                  state: created
+                  state: verified
                   interactionId: 7800232
                 links:
                   - rel: confirm
@@ -48,39 +57,9 @@ post:
           operationId: ConfirmInteraction
           parameters:
             interactionId: $response.body#/interactionId
-          description: A uuid to confirm the intraction and update the account
+          description: Confirm interaction.
     '400':
-      $ref: ..\..\shared\errors\bad_request.yaml
-    '401':
-      description: Requires authentication
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: ..\components\schemas\Interaction.yaml
-              - $ref: ..\..\shared\errors\basic-error.yaml
-          examples:
-            signup-interaction-ok:
-              summary: Represents a signup to a newsletter pending to authentication.
-              value:
-                properties:
-                  interactiwwonId: #0023232
-                  message*:  Authentication Required  
-                  callId: #dsdfafsdsa
-                  code*: 401
-                  template: signup
-                  state: created
-                links:
-                  - rel: otp
-                    href: /authenticate/email/otp
-                    type: application/json
-                    method: POST 
-                  - rel: confirm
-                    href: /{interactionId}/confirm
-                    type: application/json
-                    method: POST
-
-
+      $ref: ..\..\shared\errors\bad_request.yaml  
     '403':
       $ref: ..\..\shared\errors\forbidden.yaml
     '503':
