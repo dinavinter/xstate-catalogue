@@ -1,7 +1,5 @@
-import {assign, createMachine, Sender} from "xstate";
 import * as x from "xsfp";
-import {guard} from "xsfp";
-
+ 
 
 const tokenService = (next, onError) => x.invoke('token', x.onDone(next, x.assign({
         token: (context, e) => {
@@ -29,34 +27,31 @@ const loginService = (next, onError) => x.invoke('login', x.onDone(next, x.assig
         error: (context, e) => e.data?.errorCode,
         message: (context, e) => e.data?.errorMessage
     })));
+
 const lookupService = (next, onError) => x.invoke('lookup', x.onDone(next, x.assign({
-        lookup_token: (context, e) => e.data?.aToken,
+        identity: (context, e) => {
+            return {lookup_token: e.data?.aToken, ...context.identity || {}}
+        },
     })),
     x.onError(onError, x.assign({
         error: (context, e) => e.data?.errorCode,
         message: (context, e) => e.data?.errorMessage
     })));
 
-const authenticationService = (next, onError) => x.states(
-    x.state('login', loginService('token', onError)),
-    x.state('token', tokenService(next, 'login'))
-)
-
-const liteAuthenticationService = (next, onError) => x.states(
-    x.state('lookup', lookupService('token', onError)),
-    x.state('token', tokenService(next, onError))
-);
-const assignAuthorizationDetails =x.assign(
+ 
+const assignAuthorizationDetails = x.assign(
     {
-        authorization_details: (context, event) => event.authorization_details
+        auth: (context, event) => {
+            return {
+                authorization_details: event.authorization_details,
+                request_uri: (context, event) => event.request_uri,
+            }
+        }
     });
 
 const authorizationService = (next, onError) => x.states(
-    x.state('authorization', 
-        x.on("AUTHENTICATE", 'authentication', x.assign(
-            {
-                authorization_details: (context, event) => event.authorization_details
-            })),
+    x.state('authorization',
+        x.on("AUTHENTICATE", 'authentication', assignAuthorizationDetails),
         x.on("TOKEN", 'token', assignAuthorizationDetails),
     ),
     x.state('authentication', loginService('token', onError)),
@@ -64,13 +59,16 @@ const authorizationService = (next, onError) => x.states(
 );
 
 
-let followActions =  x.send((context, event) => {
+let followActions = x.send((context, event) => {
         return event.data?.actions?.filter(a => a.class === "event.auto")[0].properties;
     }
 );
-const assignActions=x.assign({
+const assignActions = x.assign({
     intent: (context, event) => {
-        return event.data?.actions?.filter(a => a.class === "event.auto").reduce((a, v) => ({ ...a, [v.name]: v.properties}), {});
+        return event.data?.actions?.filter(a => a.class === "event.auto").reduce((a, v) => ({
+            ...a,
+            [v.name]: v.properties
+        }), {});
 
     }
 });
@@ -87,7 +85,10 @@ const intentState = x.state('post',
 
 const requireAuthorization = () => false;
 
-const assignInput = x.assign({input: (context, event) => event.input});
+const assignInput = x.assign({
+    input: (context, event) => event.input,
+    identity: (context, event) => event.input.identity
+});
 const assignTemplate = x.assign({
     metadata: (context, event) => event?.data?.metadata,
     authorization: (context, event) => event?.data?.authorization || requireAuthorization
@@ -124,23 +125,25 @@ const interactionFormMachine = x.createMachine(
             actions: [
                 {
                     class: "event.auto",
-                    name:'authorization',
+                    name: 'authorization',
                     properties: {
                         state: "authorization",
                         type: "AUTHENTICATE",
                         request_uri: "instead of details",
                         authorization_details: [{
-                            "type": "setAccountInfo",
-                            "locations": [
+                            type: "setAccountInfo",
+                            locations: [
                                 "/accounts.setAccountInfo"
                             ],
-                            "max_age": 360,
-                            "acr_values": "urn:gigya:otp:sms",
-                            "claims": {
+                            identity: context.identity,
+                            max_age: 360,
+                            acr_values: `urn:gigya:otp:${context.channel}`,
+                            claims: {
                                 profile: {...event.profile},
                                 preferences: {...event.preferences},
                                 uid: null,
-                                request_sig: null
+                                request_sig: null,
+
                             }
                         }]
                     },
@@ -152,33 +155,31 @@ const interactionFormMachine = x.createMachine(
         token: (context, event) => {
             console.log(context.authorization_details)
             return Promise.resolve({
+                access_token: "2YotnFZFEjr1zCsicMWpAA",
+                token_type: "example",
+                expires_in: 3600,
+                authorization_details: context.auth.authorization_details.map(details => {
+                    return {
+                        ...details,
+                        claims: {
+                            ...details.claims,
+                            uid: "uid-541235",
+                            request_sig: {
+                                nonce: '<nonce>',
+                                timestamp: '<current unix-time>',
+                                sig: '<signature>'
+                            }
+                        }
+
+                    }
+                }),
                 actions: [
                     {
                         class: "event.auto",
                         properties: {
-                            state: "execute", 
+                            state: "execute",
                             type: "POST",
-                            access_token: "2YotnFZFEjr1zCsicMWpAA",
-                            token_type: "example",
-                            expires_in: 3600,
-                            authorization_details: [{
-                                "type": "setAccountInfo",
-                                "locations": [
-                                    "/accounts.setAccountInfo"
-                                ],
-                                "max_age": 360,
-                                "acr_values": "urn:gigya:otp:sms",
-                                "claims": {
-                                    profile: {...event.profile},
-                                    preferences: {...event.preferences},
-                                    uid: "uid-541235",
-                                    request_sig: {
-                                        nonce: '<nonce>',
-                                        timestamp: '<current unix-time>',
-                                        sig: '<signature>'
-                                    }
-                                }
-                            }]
+                            href: "/accounts.setAccountInfo"
                         },
 
                     }
