@@ -1,7 +1,7 @@
 import * as x from "xsfp";
-import {  SighUpInfo} from "./signup-xfp.machine";
+import {SighUpInfo} from "./signup-xfp.machine";
 import {ConfirmInfo} from "./interactionService";
-  
+
 
 const templateStore = {
     get: async (d) => {
@@ -38,30 +38,31 @@ const assignSighUpInfo = x.assign({input: (context, event) => event.info, id: (c
 const assignConfirmInfo = x.assign({confirmInfo: (context, event) => event.info});
 
 const annotateHref = (path) => (context, meta) => `/interactions/sighUp/v1${context?.id && `/${context?.id}`}/${path}`;
-const interactionServiceMachine =( id)=> x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
-    x.id(`interaction-service#sighUp#${id}`),
+export const machineCreator = (appName, defaultSchema) => x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
+    x.id(`interaction-service#${appName}`),
     x.context({
-        metadata:  {
-            appName: 'sighUp',
-            schema:  "/specs/interaction/components/schemas/SignUpSchema.yaml",
+        metadata: {
+            appName: appName,
+            schema: defaultSchema,
+
         }
     }),
     x.meta({
             interaction: 'sighUp',
-            basePath: '/interactions/sighUp/v1',
-            
-            annotateHref: (path) => (context, meta) => `/interactions/sighUp/v1${context.id && `/${context.id}`}/${path}`,
+            basePath: `/interactions/${appName}/v1`,
+            href: ( id, path) =>  `/interactions/${appName}/v1${id && `/${id}`}${path && `/${path}`}`,
+
             links: {
-                self: annotateHref(''),
+                self: `/interactions/${appName}/v1`,
                 template: annotateHref('template'),
                 submit: annotateHref('submit'),
                 confirm: annotateHref('confirm'),
                 authorization: '/oauth/authorize'
-            } 
+            }
         }
     ),
     x.states(
-        x.state('draft', x.context({template:  templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
+        x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
         x.state('intent', x.on("CONFIRM", "verified", assignConfirmInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
@@ -69,4 +70,4 @@ const interactionServiceMachine =( id)=> x.createMachine<InteractionServiceMachi
 );
 
 
-export default interactionServiceMachine("");
+export default machineCreator("sighUp", '/specs/interaction/components/schemas/SignUpSchema.yaml');

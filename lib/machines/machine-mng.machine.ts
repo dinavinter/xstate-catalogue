@@ -1,4 +1,4 @@
-import {assign, createMachine, Sender, Machine, AnyEventObject} from "xstate";
+import {assign, createMachine, Sender, Machine, AnyEventObject, actions} from "xstate";
 import * as x from "xsfp";
 import {createStateApp} from "../stateApp/xstateApp";
 import interactionServiceMachine from "./interaction-service.machine";
@@ -34,11 +34,19 @@ const pushApp = x.assign({
 
 let id = 0;
 var stateApp = createStateApp(() => interactionServiceMachine);
-const apiAction =   (api) => async (context, event) =>  await api({...event.query, ...event.requestBody, ...event});
-// const apiService = (api) => x.state(api, x.invoke(api, x.onDone(assignResponse(api)), x.onError(api)))
-const apiService = (api) => x.state(api, x.invoke(api), x.on("RESPONSE", assignResponse(api)), x.on("ERROR", assignError(api)));
-// const apiService = (api) => x.state(api,  x.on(api.toUpperCase(), x.action(api) ))
+const apiAction = (api) => async (context, event) => await api({...event.query, ...event.requestBody, ...event});
+ const apiService = (api, onResponse=assignResponse(api), onError=assignError(api)) => x.state(api, 
+    x.states(
+        x.initialState(`idle`, x.id(`${api}.request`), x.on(api.toUpperCase(), `#${api}.request`)),
+        x.state(`request`, x.id(`${api}.request`), x.invoke(api),
+            x.on("RESPONSE", `idle`,   onResponse ),
+            x.on("ERROR", `idle`,   onError )),
+    ))
 
+
+
+
+ 
 function callApi(api, callback: (event: AnyEventObject) => void) {
     api
         .catch(err => {
@@ -57,34 +65,22 @@ function callApi(api, callback: (event: AnyEventObject) => void) {
         })
 }
 
+const fetchTransition = x.on('FETCH', 'loading');
+
+ 
+
 const machineMngMachine = x.createMachine(
     x.id('machineMng'),
     x.context({
         apps: [],
-        schema: stateApp.contextSchema({})
+     }),
+ 
 
-    }),
-    // x.on("GET", x.send('REQUEST', {to: 'get'})),
-    // x.on("CREATE", x.send((context, event,meta)=>{return {type:'REQUEST', ...event}},{to:'create'})),
-    x.on("GET", 'get'),
-    x.on("CREATE", 'create'),
-    x.on("UPDATE", 'update'),
-    x.on("FORM", 'form'),
-
-
-    x.states    (
-        x.state('idle',
-            // x.states(
-            //     x.state('create', x.invoke( ),
-            //     x.state('get' ),
-            //     x.state('get' ),
-            //     x.state('get' ),
-            // )
-        ),
+    x.parallelStates( 
         apiService('get'),
         apiService('create'),
         apiService('update'),
-        apiService('form'),
+        apiService('form'   ),
     ))
     .withConfig({
         actions: {
@@ -95,25 +91,20 @@ const machineMngMachine = x.createMachine(
         },
         services: {
             create: (context, event) => (callback, onReceive) => {
-                // apiAction(ApiService.create)(context, event)
-                callApi(ApiService.create(event), callback);
+                 callApi(ApiService.create(event), callback);
             },
             get: (context, event) => (callback, onReceive) => {
-                // apiAction(ApiService.create)(context, event)
-                callApi(ApiService.get(event), callback);
+                 callApi(ApiService.get(event), callback);
             },
             update: (context, event) => (callback, onReceive) => {
-                // apiAction(ApiService.create)(context, event)
-                callApi(ApiService.update(event), callback);
+                 callApi(ApiService.update(event), callback);
             },
             form: (context, event) => (callback, onReceive) => {
-                // apiAction(ApiService.create)(context, event)
-                callApi(ApiService.form(event), callback);
-            }
+                 callApi(ApiService.form(event), callback);
+             }
             ,
-        sals: (context, event) => ApiService.create({...event.query, ...event.requestBody})
-    }
-})
-;
+            sals: (context, event) => ApiService.create({...event.query, ...event.requestBody})
+        }
+    });
 
 export default machineMngMachine;

@@ -3,7 +3,8 @@ const defaultRequest = {
     query: {},
     request: {
         body: {
-            app: 'interaction-service'
+            service: 'interaction-service',
+            app: 'sighUp'
         }
     }
 
