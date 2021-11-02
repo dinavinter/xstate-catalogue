@@ -1,6 +1,7 @@
 type: object
 properties:
   identity:
+    title: email
     type: object
     properties:
       email:

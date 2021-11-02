@@ -38,7 +38,7 @@ const assignSighUpInfo = x.assign({input: (context, event) => event.info, id: (c
 const assignBindInfo = x.assign({BindInfo: (context, event) => event.info});
 
 const annotateHref = (path) => (context, meta) => `/interactions/sighUp/v1${context?.id && `/${context?.id}`}/${path}`;
-export const machineCreator = (appName, defaultSchema) => x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
+export const machineCreator = (appName, defaultSchema= defaults) => x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
     x.id(`interaction-service#${appName}`),
     x.context({
         metadata: {
@@ -48,9 +48,11 @@ export const machineCreator = (appName, defaultSchema) => x.createMachine<Intera
         }
     }),
     x.meta({
-            interaction: 'sighUp',
+            interaction: appName,
+            schema: defaultSchema,
+
             basePath: `/interactions/${appName}/v1`,
-            href: ( id, path) =>  `/interactions/${appName}/v1${id && `/${id}`}${path && `/${path}`}`,
+            href: (id, path) => `/interactions/${appName}/v1${id && `/${id}`}${path && `/${path}`}`,
 
             links: {
                 self: `/interactions/${appName}/v1`,
@@ -69,5 +71,7 @@ export const machineCreator = (appName, defaultSchema) => x.createMachine<Intera
     )
 );
 
+const defaults = '/specs/interaction/components/schemas/SignUpSchema.yaml';
 
-export default machineCreator("sighUp", '/specs/interaction/components/schemas/SignUpSchema.yaml');
+export default machineCreator("sighUp");
+// export default machineCreator("sighUp");

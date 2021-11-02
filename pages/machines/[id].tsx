@@ -25,6 +25,7 @@ import {
 import {metadata, MetadataItem} from '../../lib/metadata';
 import {useCopyToClipboard} from '../../lib/useCopyToClipboard';
 import {FlyPaneProvider} from "../../lib/OffCanvasProvider";
+import {FormProvider} from "../../lib/forms/InteractionForm/FormService";
 
 const useGetImports = (slug: string, deps: any[]) => {
     const [imports, setImports] = useState<{
@@ -207,9 +208,11 @@ const ShowMachinePage = (props: {
     }, [fileTextRef, props.fileText]);
 
     return (
+        <FormProvider>
         <MachineHelpersContext.Provider
             value={{service, metadata: props.mdxMetadata}}
         >
+            
                 <div className="flex justify-center">
                     <div className="">
                         {!hasDismissed && (
@@ -299,7 +302,9 @@ const ShowMachinePage = (props: {
                         </div>
                     </div>
                 </div>
+        
         </MachineHelpersContext.Provider>
+        </FormProvider>
     );
 };
 
