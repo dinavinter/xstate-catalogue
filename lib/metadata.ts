@@ -7,6 +7,11 @@ export interface MetadataItem {
 }
 
 export const metadata: Record<string, MetadataItem> = {
+  "machine-mng": {
+    title: "machine-mng",
+    icon: "PlaylistAddCheckOutlined",
+    version: "0.1.0",
+  },
   "interactive-form": {
     title: "interactive-form",
     icon: "PlaylistAddCheckOutlined",
