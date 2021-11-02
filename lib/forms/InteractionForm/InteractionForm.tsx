@@ -4,7 +4,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
  import {JSONSchema7} from "json-schema";
 import Form, {IChangeEvent, ISubmitEvent} from "@rjsf/core";
 
-export interface InteractionFormProps<TemplateType extends InteractionTemplate = InteractionTemplate> {
+export interface InteractionFormProps<TemplateType  = any> {
     onSubmit: (interaction: TemplateType) => void,
     schema: JSONSchema7,
     isSubscribing?: boolean
@@ -65,7 +65,7 @@ export const InteractionForm: React.FC<InteractionFormProps> = ({
                         {/*<Grid container spacing={3}>*/}
                         { <Form
                                 schema={schema}
-                                onSubmit={i=> onSubmit(i.formData as InteractionTemplate)}/>}
+                                onSubmit={i=> onSubmit(i.formData  )}/>}
                         {/*</Grid>*/}
 
                     </Box>

@@ -32,8 +32,7 @@ const pushApp = x.assign({
     ]
 });
 
-let id = 0;
-var stateApp = createStateApp(() => interactionServiceMachine);
+ var stateApp = createStateApp(() => interactionServiceMachine);
 const apiAction = (api) => async (context, event) => await api({...event.query, ...event.requestBody, ...event});
  const apiService = (api, onResponse=assignResponse(api), onError=assignError(api)) => x.state(api, 
     x.states(

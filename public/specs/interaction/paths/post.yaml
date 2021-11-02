@@ -54,7 +54,9 @@ post:
     '400':
       $ref: ..\..\shared\errors\bad_request.yaml
     '401':
-      description: Requires authentication
+      description: Requires Authentication
+      headers:
+        WWW-Authenticate auth/otp-sms 
       content:
         application/json:
           schema:
@@ -79,7 +81,7 @@ post:
                     type: application/json
                     method: GET
                   - rel: confirm
-                    href: /{interactionId}/confirm/
+                    href: /{interactionId}/bind/
                     type: application/json
                     method: POST
       links:
