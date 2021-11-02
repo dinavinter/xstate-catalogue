@@ -19,10 +19,10 @@ We start in the <State>draft</State> state. this state represents a template of 
 When the user submits the form via <Event >SUBMIT</Event>, we enter the <State>created</State> state and the signup info is saved to context: <Context stringify>input</Context>.
  
 ## Interaction Confirmation
-#### API: POST /signup/interactionId/confirm
+#### API: POST /signup/interactionId/bind
 
 In the <State>intent</State> state, we are waiting for additional confirmation from the client before projecting the data to the account attributes.
-When the user confirms the interaction VIA <Event>CONFIRM</Event> we are entering the <State>verified</State> state . 
+When the user confirms the interaction VIA <Event>BIND</Event> we are entering the <State>verified</State> state . 
  
 ## Account Projection
 

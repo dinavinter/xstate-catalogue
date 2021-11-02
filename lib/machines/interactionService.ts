@@ -9,7 +9,7 @@ const stateService = {
         console.log(state)
     }
 };
-export interface ConfirmInfo {
+export interface BindInfo {
     [key: string]: any;
 
 }
@@ -25,8 +25,8 @@ export const interactionService =   (stateService ) => {
         submit: async (input: SighUpInfo): Promise<any> => {
             return toSiren(await transition({type: "SUBMIT", info: input}), requestAnnotator('/interactions/sighup'));
         },
-        confirm: async (input: ConfirmInfo): Promise<any> => {
-            return toSiren(await transition({type: "CONFIRM", info: input}), requestAnnotator('/interactions/sighup'));
+        bind: async (input: BindInfo): Promise<any> => {
+            return toSiren(await transition({type: "BIND", info: input}), requestAnnotator('/interactions/sighup'));
 
          }
     }

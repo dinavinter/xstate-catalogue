@@ -37,11 +37,11 @@ post:
               value:
                 properties:
                   template: signup
-                  state: created
+                  status: verified
                   interactionId: 7800232
                 links:
-                  - rel: confirm
-                    href: /{interactionId}/confirm/
+                  - rel: bind
+                    href: /{interactionId}/bind/
                     type: application/json
                     method: POST
 
@@ -55,8 +55,6 @@ post:
       $ref: ..\..\shared\errors\bad_request.yaml
     '401':
       description: Requires Authentication
-      headers:
-        WWW-Authenticate auth/otp-sms 
       content:
         application/json:
           schema:
@@ -74,19 +72,19 @@ post:
                   callId: #dsdfafsdsa
                   code*: 401
                   template: signup
-                  state: created
+                  status: intent
                 links:
                   - rel: self
                     href: /{interactionId}
                     type: application/json
                     method: GET
-                  - rel: confirm
+                  - rel: bind
                     href: /{interactionId}/bind/
                     type: application/json
                     method: POST
       links:
-        ConfirmInteraction:
-          operationId: ConfirmInteraction
+        BindInteraction:
+          operationId: BindInteraction
           parameters:
             interactionId: $response.body#/interactionId
           description: Get interaction state.

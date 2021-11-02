@@ -12,7 +12,7 @@ const InteractionRefs:InteractionRefs = {
               interactionId: "###testId",
               state: "pending_confirmation",
               event: {
-                  type: "CONFIRM",
+                  type: "BIND",
                   info: {
                       preferredData: "auto"
                   }
@@ -62,7 +62,7 @@ export type SighUpFormMachineEvent =
     type: 'AUTHORIZE';
 }
     | InteractionStateEvent
-    | CONFIRM
+    | BIND
     |FinalizedEvent
     | {
     type: 'SUBMIT';
@@ -70,12 +70,12 @@ export type SighUpFormMachineEvent =
 
 };
 
-type CONFIRM =
+type BIND =
     {
-        type: 'CONFIRM';
+        type: 'BIND';
         info: DateInfo;
     }
-type InteractionSubmitEvents =    CONFIRM
+type InteractionSubmitEvents =    BIND
 type InteractionStateEvent =
     {
         type: 'INTERACTION_STATE';
@@ -129,36 +129,18 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
             pending_confirmation: {
                 id: 'pending_confirmation',
                 on: {
-                    AUTHORIZE: {actions: "authorize"},
-                   SUBMIT:
-
+                    '': [
                         {
-                            target: "submiting"
+                            target: "otp_verify",
+                            cond: "not_authorized"
+                        },
+                        {
+                            target: "#binding",
+                            cond: "authorized"
                         }
-
-
+                    ]
                 },
-                type: "compound",
-
-                states: {
-                    idle: {},
-                    submiting: {
-
-                        on: {
-                            '': [
-                                {
-                                    target: "otp_verify",
-                                    cond: "not_authorized"
-                                },
-                                {
-                                    target: "submit",
-                                    cond: "authorized"
-                                }
-                            ]
-                        }
-
-                    },
-
+                states: { 
                     otp_verify: {
                         invoke: [{src: "otp_verify"}],
                         onDone:  'confirming'
@@ -170,6 +152,7 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
             }
             },
             confirming: {
+                id:'binding',
                 invoke: {
                     src: 'confirmInteraction',
                     onDone: {
@@ -189,7 +172,7 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
     {
         services: {
             confirmInteraction:  (context,event ,_) => async (send: Sender<SighUpFormMachineEvent>) => {
-                if (event.type !== 'CONFIRM') return {};
+                if (event.type !== 'BIND') return {};
                 const state = await context.refs.submitInteractionConfirm(event.info);
                 send(state.event)
 
@@ -208,7 +191,7 @@ const SighUpFormMachine = createMachine<SighUpFormMachineContext,
         },
         actions: {
             assignDateToContext: assign((context, event) => {
-                if (event.type !== 'CONFIRM') return {};
+                if (event.type !== 'BIND') return {};
                 return {
                     confirmInfo: event.info
                 };

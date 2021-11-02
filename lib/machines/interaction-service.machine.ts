@@ -1,6 +1,6 @@
 import * as x from "xsfp";
 import {SighUpInfo} from "./signup-xfp.machine";
-import {ConfirmInfo} from "./interactionService";
+import {BindInfo} from "./interactionService";
 
 
 const templateStore = {
@@ -13,19 +13,19 @@ const templateStore = {
 export interface InteractionServiceMachineContext {
     metadata: any,
     input?: SighUpInfo;
-    confirmInfo?: ConfirmInfo;
+    BindInfo?: BindInfo;
     id?: string;
 }
 
 
 export type InteractionServiceMachineEvent =
-    | CONFIRM
+    | BIND
     | SUBMIT;
 
-type CONFIRM =
+type BIND =
     {
-        type: 'CONFIRM';
-        info: ConfirmInfo;
+        type: 'BIND';
+        info: BindInfo;
     }
 type SUBMIT =
     {
@@ -35,7 +35,7 @@ type SUBMIT =
 
 
 const assignSighUpInfo = x.assign({input: (context, event) => event.info, id: (context, event) => Math.random()});
-const assignConfirmInfo = x.assign({confirmInfo: (context, event) => event.info});
+const assignBindInfo = x.assign({BindInfo: (context, event) => event.info});
 
 const annotateHref = (path) => (context, meta) => `/interactions/sighUp/v1${context?.id && `/${context?.id}`}/${path}`;
 export const machineCreator = (appName, defaultSchema) => x.createMachine<InteractionServiceMachineContext, InteractionServiceMachineEvent>(
@@ -56,14 +56,14 @@ export const machineCreator = (appName, defaultSchema) => x.createMachine<Intera
                 self: `/interactions/${appName}/v1`,
                 template: annotateHref('template'),
                 submit: annotateHref('submit'),
-                confirm: annotateHref('confirm'),
+                bind: annotateHref('bind'),
                 authorization: '/oauth/authorize'
             }
         }
     ),
     x.states(
         x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
-        x.state('intent', x.on("CONFIRM", "verified", assignConfirmInfo)),
+        x.state('intent', x.on("BIND", "verified", assignBindInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
     )

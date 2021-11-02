@@ -43,7 +43,7 @@ export default {
                     self: '/metadata',
                     schema: '/schema',
                     submit: '/submit',
-                    confirm: '/confirm',
+                    bind: '/bind',
                     authorization: '/oauth/authorize',
                     token: '/oauth/token'
                 }
@@ -51,7 +51,7 @@ export default {
             },
 
         },
-        CONFIRM: {
+        BIND: {
             info: {
                 auth: "OTP",
             },

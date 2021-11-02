@@ -17,7 +17,7 @@ We start in the <State>draft</State> state. When the user submits the form via <
 
 When we're in <State>submitting</State> state, we need to make an async call to the interaction API to update our resource with the client intention to subscribe .
 
-If the interaction is successfully submitted, the <Service>submitInteraction</Service> service sends back the <Event>CONFIRM</Event> event. That then gets saved into context under <Context stringify>confirmInfo</Context>, and we're ready to go to <State>confirming</State>.
+If the interaction is successfully submitted, the <Service>submitInteraction</Service> service sends back the <Event>BIND</Event> event. That then gets saved into context under <Context stringify>confirmInfo</Context>, and we're ready to go to <State>confirming</State>.
 
 If the API fails, the service sends back <Event>error.platform.submitInteraction</Event>, which saves an <Context>errorMessage</Context> into context. The user can then <Event>RETRY</Event> if they like.
  
@@ -27,7 +27,7 @@ In <State>confirming</State>, we show all the information they've entered in one
 
 ## Submitting
 
-If they're happy, they can <Event>CONFIRM</Event> and we enter the <State>confirming.submitting</State> state. This fires off the <Service>confirmInteraction</Service> service.
+If they're happy, they can <Event>BIND</Event> and we enter the <State>confirming.submitting</State> state. This fires off the <Service>confirmInteraction</Service> service.
 
 On <Event>error.platform.confirmInteraction</Event>, we head back to <State>confirming.idle</State> with the error message captured in context: <Context>errorMessage</Context>.
 

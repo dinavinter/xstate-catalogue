@@ -100,10 +100,10 @@ components:
         implicit:
           authorizationUrl: /oauth2/authorize
           scopes:
-            interaction:confirm:  confirm interaction
+            interaction:bind:  bind interaction
 security:
   - oAuth2Confirm:
-      - interaction:confirm
+      - interaction:bind
 
 
 paths:
@@ -156,18 +156,18 @@ paths:
                 $ref: '#/components/schemas/Interaction'
           links:
             InteractionLink:
-              operationId: ConfirmInteraction
+              operationId: BindInteraction
               parameters:
                 interactionId: '$response.body#/interactionId'
-              description: A uuid to confirm the intraction and update the account
+              description: A uuid to bind the intraction and update the account
 
-  /{interactionId}/confirm:
+  /{interactionId}/bind:
     put:
       security:
         - oAuth2Confirm:
-            - interaction:confirm
+            - interaction:bind
       summary: Transition interaction state to confirmed.
-      operationId: ConfirmInteraction
+      operationId: BindInteraction
       description: Commit the interaction and update the account.
       parameters:
         - in: path

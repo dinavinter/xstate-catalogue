@@ -48,7 +48,7 @@ const assignAuthorizationDetails = x.assign(
 
 const authorizationService = (next, onError) => x.states(
     x.state('authorization',
-        x.on("CONFIRM", next),
+        x.on("BIND", next),
         x.on("AUTHENTICATE", 'authentication', assignAuthorizationDetails),
         x.on("TOKEN", 'token', assignAuthorizationDetails),
     ),
@@ -86,7 +86,7 @@ const submittingService = (next, error) =>
         x.state('lookup', lookupService(`#submit.intent`, error)),
         x.state('intent', x.id(`submit.intent`), intentService(`#submit.authorization`, error)),
         x.state('authorization', x.id(`submit.authorization`), authorizationService('#submit.execution', `#submit.intent`)),
-        x.state('execution', x.id(`submit.execution`), x.invoke('confirm', x.onDone(next), x.onError(error))),
+        x.state('execution', x.id(`submit.execution`), x.invoke('bind', x.onDone(next), x.onError(error))),
     );
 //add follow actions machine
 // rest machine
@@ -123,7 +123,7 @@ const interactionFormMachine = x.createMachine(
                 console.error(e)
             }
         },
-        confirm: async (event, context) => await service.confirm(context.auth),
+        bind: async (event, context) => await service.bind(context.auth),
         token: (context, event) => {
             console.log(context.authorization_details)
             return Promise.resolve({

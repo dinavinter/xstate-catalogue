@@ -26,10 +26,10 @@ components:
         implicit:
           authorizationUrl: /oauth2/authorize
           scopes:
-            interaction:confirm: confirm interaction
+            interaction:bind: bind interaction
 security:
   - oAuth2Confirm:
-      - interaction:confirm
+      - interaction:bind
 paths:
   /metadata:
     $ref: paths\metadata.yaml 
@@ -38,7 +38,7 @@ paths:
   /:
     $ref: paths\post.yaml    
   /{interactionId}/bind:
-    $ref: paths\{interactionId}@confirm.yaml
+    $ref: paths\bind.yaml
   /oauth/authorize/{request_uri}:
     $ref: paths\oauth@authorize@{request_uri}.yaml
     

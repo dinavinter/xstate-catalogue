@@ -24,8 +24,8 @@ get:
                       href: /signup
                       method: POST
                       targetSchema: { $ref: ..\components\schemas\SignUpSchema.yaml }
-                    - rel: confirm
-                      href: /signup/{interactionId}/confirm
+                    - rel: bind
+                      href: /signup/{interactionId}/bind
                       method: POST
                       templateRequired:
                         - interactionId

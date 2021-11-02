@@ -1,9 +1,9 @@
 post:
   security:
     - oAuth2Confirm:
-        - interaction:confirm
-  summary: Transition interaction state to confirmed.
-  operationId: ConfirmInteraction
+        - interaction:bind
+  summary: Transition interaction state to binded.
+  operationId: BindInteraction
   description: Confirm the interaction and update the account.
   parameters:
     - in: path

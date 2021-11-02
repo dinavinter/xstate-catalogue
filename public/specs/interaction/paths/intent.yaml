@@ -25,8 +25,8 @@ post:
                 lookup_token: aToken               
               newsletter: true
     links:
-      ConfirmInteraction:
-        operationId: ConfirmInteraction
+      BindInteraction:
+        operationId: BindInteraction
         parameters:
           interactionId: $response.body#/interactionId
         description: Confirm Interaction State.
@@ -47,14 +47,14 @@ post:
                   state: verified
                   interactionId: 7800232
                 links:
-                  - rel: confirm
-                    href: /{interactionId}/confirm/
+                  - rel: bind
+                    href: /{interactionId}/bind/
                     type: application/json
                     method: POST
 
       links:
         InteractionLink:
-          operationId: ConfirmInteraction
+          operationId: BindInteraction
           parameters:
             interactionId: $response.body#/interactionId
           description: Confirm interaction.

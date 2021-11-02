@@ -11,7 +11,7 @@ export default  {
                 "newsletter": true
             },
         },
-        CONFIRM: {
+        BIND: {
             info: {
                 auth: "OTP",
             },
