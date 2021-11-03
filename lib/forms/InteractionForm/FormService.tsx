@@ -184,7 +184,7 @@ export function FormProvider({children}) {
         const form =selectForm(state);
         form && show(form)
 
-    },[state])
+    },[state?.value])
 
     // const {service} = useContext(MachineHelpersContext);
     // const [state, send] = useActor(interactionFormService);

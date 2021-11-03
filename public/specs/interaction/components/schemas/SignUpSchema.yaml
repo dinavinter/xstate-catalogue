@@ -1,15 +1,32 @@
-properties:
-  channel:
-    type: string
+type: object
 discriminator:
   propertyName: channel
   mapping:
     email: .\EmailSchema.yaml
     sms: .\SmsSchema.yaml
+  properties:
+    channel:
+      eunm: ['email' ,'sms']
+      default: 'email'  
 allOf:
-  - anyOf:
-      - $ref: .\EmailSchema.yaml
-      - $ref: .\SmsSchema.yaml
+#  - properties:
+#      channel:
+#        type: string
+  - oneOf:
+      - allOf:
+          - title: email
+            properties:
+              channel:
+                const: 'email'
+                default: 'email'
+          - $ref: .\EmailSchema.yaml
+      - allOf:
+          - title: sms
+            properties:
+              channel:
+                const: 'sms'
+                default: 'sms'
+          - $ref: .\SmsSchema.yaml
 x-examples:
   email-channel:
     channel: email
