@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Offcanvas} from "react-bootstrap";
+import {Button, Modal, Offcanvas} from "react-bootstrap";
 import {FlyPaneContext} from "../../OffCanvasProvider";
 import {InteractionForm, InteractionFormProps} from "./InteractionForm";
 import {OverlayContainer} from "@react-aria/overlays";
@@ -14,6 +14,15 @@ import {filter} from "rxjs/operators";
 const {log} =actions;
 import * as yaml from 'js-yaml'        ;
 import * as JsonRefs from 'json-refs';
+ import dynamic from "next/dynamic";
+ 
+const Form = dynamic(
+    () => {
+        return import("./InteractionFormGen").then(x=>x.Form);
+    },
+    { ssr: false }
+);
+
 
 const show: (props: InteractionFormProps) => void = () => {
 };
@@ -158,20 +167,13 @@ const FormOverlay=({form})=>{
     console.log('open form');
     console.log(form);
 
-    return <OverlayContainer>
-        <ModalDialog
-            isOpen
-            onClose={() => formService.close()}
-            isDismissable
-            title="Search the Catalogue"
-        >
-            <InteractionForm schema={form.schema } onSubmit={e => formService.submit(e)}/>
-        </ModalDialog>
-    </OverlayContainer>
-}
+    return       
+
+        <Form schema={form.schema } onSubmit={e => formService.submit(e)}/>
+ }
 export function FormProvider({children}) {
     const [open, setOpen] = useState(false);
-    const [props, setProps] = useState({});
+    const [props, setProps] = useState({schema: {}});
     const handleClose = () => setOpen(false);
     const show = (props: InteractionFormProps) => {
         setProps(props);
@@ -196,7 +198,26 @@ console.log(props);
 // console.log(form.properties.schema);
     return (
         <FormContext.Provider value={{show: show}}>
-            { open && <FormOverlay form={props}  /> }
+            <Modal show={open} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{state?.context?.form?.properties?.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form schema={props?.schema} onSubmit={e=>formService.submit(e)} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="secondary" onClick={()=> interactionFormService.send({type: "LOAD", form: state.context.form})
+                    }>
+                        Reload Schema
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             {children}
         </FormContext.Provider>
 

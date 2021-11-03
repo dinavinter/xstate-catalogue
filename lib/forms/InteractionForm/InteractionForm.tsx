@@ -1,10 +1,10 @@
 import * as React from 'react'
 import {Box, Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
- import {JSONSchema7} from "json-schema";
+import {JSONSchema7} from "json-schema";
 import Form, {IChangeEvent, ISubmitEvent} from "@rjsf/core";
 
-export interface InteractionFormProps<TemplateType  = any> {
+export interface InteractionFormProps<TemplateType = any> {
     onSubmit: (interaction: TemplateType) => void,
     schema: JSONSchema7,
     isSubscribing?: boolean
@@ -29,11 +29,11 @@ export interface InteractionFormProps<TemplateType  = any> {
 // }
 
 export const InteractionForm: React.FC<InteractionFormProps> = ({
-                                                                                                                                    onSubmit,
-                                                                                                                                    schema,
-                                                                                                                                    isSubscribing,
-                                                                                                                                    hasError
-                                                                                                                                }) => {
+                                                                    onSubmit,
+                                                                    schema,
+                                                                    isSubscribing,
+                                                                    hasError
+                                                                }) => {
     // type MyForm = Form<InteractionTemplate>;
 
     return (
@@ -63,9 +63,9 @@ export const InteractionForm: React.FC<InteractionFormProps> = ({
                         )}
 
                         {/*<Grid container spacing={3}>*/}
-                        { <Form
-                                schema={schema}
-                                onSubmit={i=> onSubmit(i.formData  )}/>}
+                        {<Form
+                            schema={schema}
+                            onSubmit={i => onSubmit(i.formData)}/>}
                         {/*</Grid>*/}
 
                     </Box>

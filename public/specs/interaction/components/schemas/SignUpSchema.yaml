@@ -1,41 +1,100 @@
+title: Sign-Up
 type: object
 discriminator:
   propertyName: channel
   mapping:
-    email: .\EmailSchema.yaml
-    sms: .\SmsSchema.yaml
-  properties:
-    channel:
-      eunm: ['email' ,'sms']
-      default: 'email'  
+    email: "#/definitions/EmailSchema"
+    sms: "#/definitions/SmsSchema"
+$schema: https://spec.openapis.org/oas/3.1/dialect/base
+definitions:
+  EmailSchema:
+    descreption: when channel is email
+    properties:
+      identity:
+        type: object
+        properties:
+          email:
+            type: string
+        required:
+          - email
+      newsletter:
+        type: boolean
+        title: Newsletter
+      deals:
+        type: boolean
+        title: Deals
+  SmsSchema:
+    descreption: when channel is sms
+    properties:
+      identity:
+        type: object
+        properties:
+          email:
+            type: string
+        required:
+          - email
+      newsletter:
+        type: boolean
+        title: Newsletter
+      deals:
+        type: boolean
+        title: Deals      
+  EmailChannel:
+    if:
+     properties:
+        channel:
+          type: string
+          const: email
+    then:
+      properties:
+        identity:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+            - email
+        newsletter:
+          type: boolean
+          title: Newsletter
+        deals:
+          type: boolean
+          title: Deals
+  SmsChannel:
+    type: object
+    if:
+      properties:
+        channel:
+          type: string
+          enum:
+            - sms
+    then:
+      properties:
+        identity:
+          type: object
+          properties:
+            phonrnumber:
+              type: string
+          required:
+            - phonrnumber
+        newsletter:
+          type: boolean
+          title: Newsletter
+    
+properties:
+  channel:
+    type: string
+    widget: Select
+    enum:
+      - email
+      - sms
+    default: email
+required:
+  - channel
 allOf:
-#  - properties:
-#      channel:
-#        type: string
-  - oneOf:
-      - allOf:
-          - title: email
-            properties:
-              channel:
-                const: 'email'
-                default: 'email'
-          - $ref: .\EmailSchema.yaml
-      - allOf:
-          - title: sms
-            properties:
-              channel:
-                const: 'sms'
-                default: 'sms'
-          - $ref: .\SmsSchema.yaml
-x-examples:
-  email-channel:
-    channel: email
-    identity:
-      email: a@mail.com
-    newsletter: true
-    deals: true
-  phone-channel:
-    channel: phone
-    identity:
-      phonenumber: '056999999'
-    newsletter: true
+  - $ref: "#/definitions/EmailChannel"
+  - $ref: "#/definitions/SmsChannel"
+oneOf:
+  - $ref: "#/definitions/EmailSchema"
+  - $ref: "#/definitions/SmsSchema"
+  

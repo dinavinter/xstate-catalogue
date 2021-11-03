@@ -50,7 +50,7 @@ export const machineCreator = (appName, defaultSchema= defaults) => x.createMach
     x.meta({
             interaction: appName,
             schema: defaultSchema,
-
+            title:appName,
             basePath: `/interactions/${appName}/v1`,
             href: (id, path) => `/interactions/${appName}/v1${id && `/${id}`}${path && `/${path}`}`,
 
@@ -64,7 +64,7 @@ export const machineCreator = (appName, defaultSchema= defaults) => x.createMach
         }
     ),
     x.states(
-        x.state('draft', x.context({template: templateStore.get('sighUp')}), x.on("SUBMIT", "intent", assignSighUpInfo)),
+        x.state('draft', x.on("SUBMIT", "intent", assignSighUpInfo)),
         x.state('intent', x.on("BIND", "verified", assignBindInfo)),
         x.state('verified', x.invoke('projection', x.id('project-interaction'), x.onDone('completed'))),
         x.finalState('completed')
@@ -73,5 +73,5 @@ export const machineCreator = (appName, defaultSchema= defaults) => x.createMach
 
 const defaults = '/specs/interaction/components/schemas/SignUpSchema.yaml';
 
-export default machineCreator("sighUp");
+export default machineCreator("Sigh-Up");
 // export default machineCreator("sighUp");

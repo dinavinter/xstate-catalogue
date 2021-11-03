@@ -4,7 +4,7 @@ const defaultRequest = {
     request: {
         body: {
             service: 'interaction-service',
-            app: 'sighUp'
+            app: 'Sigh-Up'
         }
     }
 
