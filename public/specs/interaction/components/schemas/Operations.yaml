@@ -1,0 +1,104 @@
+$schema: https://json-schema.org/draft/2020-12/schema 
+#$id: /Operations
+descreption: Operations are inspired by the [JSON Patch](http://tools.ietf.org/html/rfc6902) specification, allow expressing a sequence of operations to apply to
+  a target entity path, supports partial operations;
+$comment: originated 'https://json.schemastore.org/json-patch' and 'https://github.com/fge/sample-json-schemas/tree/master/json-patch'
+type: array
+items:
+  type: object
+  $ref: "#/$defs/Operation" 
+$defs:
+  Operation:
+    type: object
+    description: One JSON Patch operation
+    allOf:
+      - description: Members common to all operations
+        type: object
+        required:
+          - op
+          - path
+        properties:
+          path:
+            "$ref": "#/$defs/targetPointer"
+          op:
+            type: string
+      - "$ref": "#/$defs/oneOperation"
+  jsonPointer:
+    type: string
+    pattern: "^(/accounts/$subject/[^/~]*(~[01][^/~]*)*)*$"
+  accountPointer:
+    allOf:
+      - $ref: "#/$defs/jsonPointer"
+      - pattern: "^(/accounts/$subject/[^/~]*(~[01][^/~]*)*)*$"
+  inputPointer:
+    allOf:
+      - $ref: "#/$defs/jsonPointer"
+      - pattern: "^(/accounts/$subject/[^/~]*(~[01][^/~]*)*)*$"
+  targetPointer:
+    oneOf:
+      - $ref: "#/$defs/accountPointer"
+
+  sourcePointer:
+    oneOf:
+      - $ref: "#/$defs/accountPointer"
+      - $ref: "#/$defs/inputPointer"
+
+  add:
+    description: add operation. Value can be any JSON value.
+    properties:
+      op:
+        type: string
+        const: add 
+    required:
+      - value
+  remove:
+    description: remove operation. Only a path is specified.
+    properties:
+      op:
+        type: string
+        const: remove 
+  replace:
+    description: replace operation. Value can be any JSON value.
+    properties:
+      op:
+        type: string
+        const: replace 
+    required:
+      - value
+  move:
+    description: move operation. "from" is a JSON Pointer.
+    properties:
+      op:
+        type: string
+        const: move
+      from:
+        "$ref": "#/$defs/sourcePointer"
+    required:
+      - from
+  copy:
+    description: copy operation. "from" is a JSON Pointer.
+    properties:
+      op:
+        type: string
+        const: copy
+      from:
+        "$ref": "#/$defs/sourcePointer"
+    required:
+      - from
+  test:
+    description: test operation. Value can be any JSON value.
+    properties:
+      op:
+        const: test 
+    required:
+      - value
+  oneOperation:
+    oneOf:
+      - "$ref": "#/$defs/add"
+      - "$ref": "#/$defs/remove" 
+      - "$ref": "#/$defs/copy"
+  
+    
+  
+  
+  

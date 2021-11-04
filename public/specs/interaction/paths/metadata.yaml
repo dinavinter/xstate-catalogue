@@ -33,36 +33,4 @@ get:
                       href: /auth/lookup/{channel}/token
                       templateRequired:
                         - channel 
-
-
-
-        'application/vnd.siren+json':
-          schema:
-            $ref: ..\components\schemas\Siren.schema.yaml            
-          examples:
-            signup-interaction-siren:
-              summary: Represents a signup to a newsletter flow entry point.
-              value:
-                class:
-                  - form-view
-                properties:
-                  template: signup
-                  status: draft
-                actions:
-                  - name: submit
-                    title: Submit
-                    method: POST
-                    href: /interaction/signup
-                    type: application/json
-                links:
-                  - rel: self
-                    href: /interaction/signup 
-                  - rel: lookup
-                    href: /auth/lookup/{channel}/token
-  
-                    
-                
-
-                  
-
-          
+ 

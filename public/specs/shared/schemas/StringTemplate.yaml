@@ -3,5 +3,5 @@ allOf:
   - properties:
       type:
         type: string
-        const: boolean
-
+        enum:
+          - string

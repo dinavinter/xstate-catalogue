@@ -1,0 +1,59 @@
+Link:
+  title: "Hypermedia Link Relationship"
+  description: "The target URL indicated in the `href` property is related to\
+        \ the current\nresource according to the defined semantics of the link relationship\
+        \ name.\n\nA link relationship may consist of one or more links, with varying\
+        \ titles and\ntypes."
+  oneOf:
+    - type: "object"
+      title: "Single Link"
+      properties:
+        href:
+          description: "The hypertext reference to a related resource."
+          type: "string"
+          format: "uri"
+        title:
+          description: "A descriptive title for the link."
+          type: "string"
+        type:
+          description: "A media type hint for the resource identified by the href.\
+              \ This can be\nuseful to indicate alternate representations of a resource,\
+              \ such as a PDF\n(`application/pdf`), CSV (`text/csv`), or JPEG (`image/jpeg`)\
+              \ file.\n\nIf this property is missing, the assumed media type of the\
+              \ target URL is\nthe default API media type of `application/json`."
+          type: "string"
+          default: "application/vnd+shootproof.json"
+        templated:
+          description: "Whether the given href is a templated URL using [RFC\n6570](https://tools.ietf.org/html/rfc6570)\
+              \ format."
+          type: "boolean"
+          default: false
+    - type: "array"
+      title: "Array of Links"
+      items:
+        $ref: "#/components/schemas/Link/oneOf/0"
+Links:
+  title: "Link Relationships"
+  description: "Each property defines a hypertext link relationship as indicated\
+        \ by a link\nobject or array of link objects. The target URL of each hypertext\
+        \ link\nrelationship is related to the current resource according to the defined\n\
+        semantics of the link relationship property name."
+  readOnly: true
+  required:
+    - "self"
+  type: "object"
+  properties:
+    lookup:
+      allOf:
+        - title: "Identifier Lookup Token"
+          description: "The target URL is a token for identifier lookup"
+          type: "application/json"
+          templated: true
+          targetSchema:
+            properties:
+              identifier: "#/properties/identity/{channel}"
+              identifier_type: { channel }
+          href: /auth/lookup/{channel}/token
+            templateRequired:
+              - channel
+        - $ref: "#/components/schemas/Link"

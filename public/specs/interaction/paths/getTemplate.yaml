@@ -1,0 +1,41 @@
+
+get:
+  operationId: GetInteractionTemplate
+
+  parameters:
+    - in: path
+      name: template
+      required: true
+      description: Specifies the interaction template to return.
+      schema:
+        type: string
+
+  summary: Interaction options config
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: ..\components\schemas\form.yaml
+          examples:
+            signup-interaction-json:
+              summary: Represents a signup to a newsletter flow entry point.
+              value:
+                properties:
+                  template: signup
+                  state: draft
+                links:
+                  - rel: intent
+                    href: /{interactions}
+                    method: POST
+                    targetSchema: { $ref: ..\components\schemas\SignUpSchema.yaml }
+                  - rel: bind
+                    href: /signup/{interactionId}/bind
+                    method: POST
+                    templateRequired:
+                      - interactionId
+                  - rel: lookup
+                    href: /auth/lookup/{channel}/token
+                    templateRequired:
+                      - channel

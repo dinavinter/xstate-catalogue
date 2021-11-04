@@ -4,4 +4,3 @@ allOf:
       type:
         type: string
         const: boolean
-

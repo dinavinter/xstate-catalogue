@@ -1,0 +1,27 @@
+Link:
+  title: Hypermedia Link Relationship
+  description:  The target URL indicated in the `href` property is related to 
+         the current\nresource according to the defined semantics of the link relationship 
+         name. 
+  oneOf:
+    - type:  object 
+      title:  Single Link  
+      properties:
+        href:
+          description:  The hypertext reference to a related resource. 
+          type:  string 
+          format:  uri 
+        title:
+          description: A descriptive title for the link. 
+          type:  string 
+        type:
+          description:  A media type hint for the resource identified by the href.  
+          type:  string 
+          default: application/json
+        templated:
+          description: Whether the given href is a templated URL using [RFC\n6570](https://tools.ietf.org/html/rfc6570) format. 
+          default: false
+    - type:  array 
+      title: Array of Links
+      items:
+        $ref: '#/components/schemas/Link/oneOf/0'

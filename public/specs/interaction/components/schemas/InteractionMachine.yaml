@@ -1,0 +1,57 @@
+$schema: "http://json-schema.org/draft-07/hyper-schema#"
+type: object
+descreption: >- 
+  An interaction machine object encapsulates the complete set of objects that define an interaction ->
+  Triggers, Outcomes, Schema, and metadata.
+properties:
+  name:
+    description: A human readable label for the intraction to be used in interfaces.
+    type: string
+    example:
+      - sigh-up
+      - order-checkout
+  class:
+    description: Describes the nature of an intreaction content based on the current representation.
+    type: array
+    items:
+      type: string
+      example:
+        - sigh-up-form
+        - checkout-api
+        - subscribtion-collection
+        - lite-sign-up
+        - progressive-profiling
+  states:
+    type: object
+    properties:
+      intent:
+        type: object
+        properties:
+          operations:
+            type: array
+            $ref: .\Operations.yaml
+      binded:
+        type: object
+        properties:
+          operations:
+            $ref: .\Operations.yaml 
+        
+  input:
+    description: A set of key-value pairs that describe the input of an intraction.
+    type: object
+    allOf:
+      - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+      - properties:
+          channel:
+            $ref: ..\..\..\shared\schemas\ChannelTemplate.yaml
+          subscribtions:
+            type: array
+            items:
+              $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
+    additionalProperties:
+      $ref: ..\..\..\shared\schemas\FieldTemplate.yaml
+    maxProperties: 5
+  
+
+  
+  

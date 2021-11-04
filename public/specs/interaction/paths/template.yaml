@@ -1,0 +1,22 @@
+summary: Communications Interaction
+post:
+  summary: Interaction Template
+  operationId: CreateInteractionTemplate
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          $ref: ..\components\schemas\InteractionMachine.yaml
+
+    links:
+      GetInteractionTemplate:
+        operationId: GetInteractionTemplate
+        parameters:
+          template: $request.body#/name
+        description: Get interaction template. 
+      PostInteractionDetails:
+        operationId: PostInteractionDetails
+        parameters:
+          template: $request.body#/name
+        description: Post interaction details.   

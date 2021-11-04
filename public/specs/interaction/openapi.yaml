@@ -4,7 +4,7 @@ info:
   description: Api specification for manges customer interactions.
   version: '1.0'
 servers:
-  - url: https://{gigya-domain}/interactions/v1/sign-up
+  - url: https://{gigya-domain}
     variables:
       gigya-domain:
         default: accounts.gigya.com
@@ -27,19 +27,14 @@ components:
           authorizationUrl: /oauth2/authorize
           scopes:
             interaction:bind: bind interaction
-security:
-  - oAuth2Confirm:
-      - interaction:bind
 paths:
-  /metadata:
-    $ref: paths\metadata.yaml 
-  /intent:
-    $ref: paths\intent.yaml
-  /:
-    $ref: paths\post.yaml    
-  /{interactionId}/bind:
+  /interactions/templates/:
+    $ref: paths\template.yaml
+  /interactions/templates/{template}:
+    $ref: paths\getTemplate.yaml
+  /interactions/{template}/:
+    $ref: paths\post.yaml  
+  /interactions/{template}/{interaction}/bind:
     $ref: paths\bind.yaml
-  /oauth/authorize/{request_uri}:
-    $ref: paths\oauth@authorize@{request_uri}.yaml
     
 tags: []

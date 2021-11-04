@@ -1,0 +1,507 @@
+Link:
+  title: "Hypermedia Link Relationship"
+  description: "The target URL indicated in the `href` property is related to\
+        \ the current\nresource according to the defined semantics of the link relationship\
+        \ name.\n\nA link relationship may consist of one or more links, with varying\
+        \ titles and\ntypes."
+  oneOf:
+    - type: "object"
+      title: "Single Link"
+      properties:
+        href:
+          description: "The hypertext reference to a related resource."
+          type: "string"
+          format: "uri"
+        title:
+          description: "A descriptive title for the link."
+          type: "string"
+        type:
+          description: "A media type hint for the resource identified by the href.\
+              \ This can be\nuseful to indicate alternate representations of a resource,\
+              \ such as a PDF\n(`application/pdf`), CSV (`text/csv`), or JPEG (`image/jpeg`)\
+              \ file.\n\nIf this property is missing, the assumed media type of the\
+              \ target URL is\nthe default API media type of `application/vnd+shootproof.json`."
+          type: "string"
+          default: "application/vnd+shootproof.json"
+        templated:
+          description: "Whether the given href is a templated URL using [RFC\n6570](https://tools.ietf.org/html/rfc6570)\
+              \ format."
+          type: "boolean"
+          default: false
+    - type: "array"
+      title: "Array of Links"
+      items:
+        $ref: "#/components/schemas/Link/oneOf/0"
+Links:
+  title: "Link Relationships"
+  description: "Each property defines a hypertext link relationship as indicated\
+        \ by a link\nobject or array of link objects. The target URL of each hypertext\
+        \ link\nrelationship is related to the current resource according to the defined\n\
+        semantics of the link relationship property name."
+  readOnly: true
+  required:
+    - "self"
+  type: "object"
+  example:
+    self:
+      href: "https://example.com/2bba030"
+      title: "Example Link Relationship"
+      type: "application/vnd+shootproof.json"
+      templated: false
+  properties:
+    alternate:
+      allOf:
+        - title: "Alternate Representation"
+          description: "The target URL is an alternate representation of the current\
+              \ resource.\nUsually, this will include a `type` property to indicate\
+              \ the media type\nof the alternate representation."
+        - $ref: "#/components/schemas/Link"
+    brand-context:
+      allOf:
+        - title: "Brand Context"
+          description: "The target URL indicates the brand authorized for the current\
+              \ context,\nbased on the access token.\n\n*This relationship is deprecated\
+              \ and should not be relied on. Access\ntokens obtained through the OAuth\
+              \ flow are not tied to a specific brand.*"
+          deprecated: true
+        - $ref: "#/components/schemas/Link"
+    brand-homepage:
+      allOf:
+        - title: "Gallery Homepage"
+          description: "The target URL is Client Gallery homepage for the brand\
+              \ related to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"
+    brand-theme:
+      allOf:
+        - title: "Brand Theme"
+          description: "The target URL is a brand theme or collection of brand themes\
+              \ related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    brand:
+      allOf:
+        - title: "Brand"
+          description: "The target URL is a brand or collection of brands related\
+              \ to the current\nresource."
+        - $ref: "#/components/schemas/Link"
+    canonical:
+      allOf:
+        - title: "Canonical URL"
+          description: "The target URL is the primary location of the current resource\
+              \ (i.e. the\ncurrent resource may be subordinate to another resource,\
+              \ and the target\nURL indicates its permanent location)."
+        - $ref: "#/components/schemas/Link"
+    children:
+      allOf:
+        - title: "Children"
+          description: "The target URL is a collection of resources that is subordinate\
+              \ to the\ncurrent resource. That is, the current resource is a parent\
+              \ of the\nchildren, and the children belong to this resource."
+        - $ref: "#/components/schemas/Link"
+    client-admin:
+      allOf:
+        - title: "Client Galleries Customer Admin URL"
+          description: "The target URL is the location of the studio client admin\
+              \ for the current\nresource in the Client Galleries website. The media\
+              \ type of the target URL\nis assumed to be `text/html` unless otherwise\
+              \ indicated."
+        - $ref: "#/components/schemas/Link"
+    client:
+      allOf:
+        - title: "Client Galleries URL"
+          description: "The target URL is the location of the current resource in\
+              \ the Client\nGalleries website. The media type of the target URL is\
+              \ assumed to be\n`text/html` unless otherwise indicated."
+        - $ref: "#/components/schemas/Link"
+    collection:
+      allOf:
+        - title: "Containing Collection"
+          description: "The target URL is the location of a collection of similar\
+              \ resources of\nwhich the current resource is a member."
+        - $ref: "#/components/schemas/Link"
+    contact-referee:
+      allOf:
+        - title: "Contact Referee"
+          description: "The target URL is a list of available contacts that may\
+              \ be selected as\nreferred by the current resource."
+        - $ref: "#/components/schemas/Link"
+    contact-referred-by:
+      allOf:
+        - title: "Contact Referred By"
+          description: "The target URL is a list of available contacts that may\
+              \ be selected as\nhaving referred the current resource."
+        - $ref: "#/components/schemas/Link"
+    contact-tag:
+      allOf:
+        - title: "Contact Tag"
+          description: "The target URL is a list of contact tags available to apply\
+              \ to the current\nresource."
+        - $ref: "#/components/schemas/Link"
+    contact:
+      allOf:
+        - title: "Contact"
+          description: "The target URL is a contact or collection of contacts related\
+              \ to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"
+    contract-signature:
+      allOf:
+        - title: "Contract Signature"
+          description: "The target URL is a contract signature or collection of\
+              \ contract\nsignatures related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    contract-template:
+      allOf:
+        - title: "Contract Template"
+          description: "The target URL is a contract template or collection of contract\
+              \ templates\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    contract:
+      allOf:
+        - title: "Contract"
+          description: "The target URL is a contract or collection of contracts\
+              \ related to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"
+    derivedfrom:
+      allOf:
+        - title: "Derived From"
+          description: "The target URL is the location of a resource from which\
+              \ the current\nresource is derived (or a subset of)."
+        - $ref: "#/components/schemas/Link"
+    email-automation-group:
+      allOf:
+        - title: "Email Automation Group"
+          description: "The target URL is an email automation group or collection\
+              \ of email\nautomation groups related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    email-template-type:
+      allOf:
+        - title: "Email Template Type"
+          description: "The target URL is an email template type or collection of\
+              \ email template\ntypes related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    email-template:
+      allOf:
+        - title: "Email Template"
+          description: "The target URL is an email template or collection of email\
+              \ templates\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    email:
+      allOf:
+        - title: "Email"
+          description: "The target URL may be an email message or collection of\
+              \ email messages\nrelated to the current resource. It may also be used\
+              \ to create an email\nmessage related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    event-album-passwords:
+      allOf:
+        - title: "Event Album Passwords"
+          description: "The target URL is a listing of all passwords for all event\
+              \ albums related\nto the current resource. If the `type` indicates a\
+              \ different format (i.e.\n`text/csv`), then the URL is a link to a downloadable\
+              \ version of the\ntarget resource."
+        - $ref: "#/components/schemas/Link"
+    event-album:
+      allOf:
+        - title: "Event Album"
+          description: "The target URL is an event album or collection of event\
+              \ albums related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    event-album-photo:
+      allOf:
+        - title: "Event Album Photo"
+          description: "The target URL is an event album photo or collection of\
+              \ event album photos\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    event-archive-cost:
+      allOf:
+        - title: "Event Archive Cost"
+          description: "The target URL is an event archive cost related to the current\
+              \ resource."
+        - $ref: "#/components/schemas/Link"
+    event-category:
+      allOf:
+        - title: "Event Category"
+          description: "The target URL is an event category or collection of event\
+              \ categories\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    event-contact-photo-favorite:
+      allOf:
+        - title: "Event Contact Favorited Photo"
+          description: "The target URL is a photo or collection of photos related\
+              \ to the current\nresource and favorited by the context event contact."
+        - $ref: "#/components/schemas/Link"
+    event-contact-photo-hidden:
+      allOf:
+        - title: "Event Contact Hidden Photo"
+          description: "The target URL is a photo or collection of photos related\
+              \ to the current\nresource and hidden by the context event contact."
+        - $ref: "#/components/schemas/Link"
+    event-contact-photo-share:
+      allOf:
+        - title: "Event Contact Shared Photo"
+          description: "The target URL is a photo or collection of photos related\
+              \ to the current\nresource and shared by the context event contact."
+        - $ref: "#/components/schemas/Link"
+    event-contact-photo-tag:
+      allOf:
+        - title: "Event Contact Tagged Photo"
+          description: "The target URL is a photo or collection of photos related\
+              \ to the current\nresource and tagged by the context event contact.\n\
+              \nWhen `templated` is `true`, this is a [templated\nURL](https://tools.ietf.org/html/rfc6570).\
+              \ The template parameter\n`filterPhotoTag` may be used with the tag\
+              \ name or a comma-separated list\nof tag names to filter tagged photo\
+              \ results."
+        - $ref: "#/components/schemas/Link"
+    event-contact:
+      allOf:
+        - title: "Event Contact"
+          description: "The target URL is an event contact or collection of event\
+              \ contacts related\nto the current resource."
+        - $ref: "#/components/schemas/Link"
+    event-defaults:
+      allOf:
+        - title: "Event Defaults"
+          description: "The target URL is a set of event defaults settings or collection\
+              \ of more\nthan one set of event defaults settings related to the current\
+              \ resource."
+        - $ref: "#/components/schemas/Link"
+    event-photo-original:
+      allOf:
+        - title: "Event Photo Original"
+          description: "The target URL is the original uploaded photo related to\
+              \ the current\nresource."
+        - $ref: "#/components/schemas/Link"
+    event-photo-upload-policy:
+      allOf:
+        - title: "Event Photo Upload Policy"
+          description: "The target URL may be used to generate an event photo upload\
+              \ policy\nrelated to the current resource. This is the first step in\
+              \ the process to\nupload new event photos to an event resource."
+        - $ref: "#/components/schemas/Link"
+    event-photo:
+      allOf:
+        - title: "Event Photo"
+          description: "The target URL is an event photo or collection of event\
+              \ photos related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    event-visitor:
+      allOf:
+        - title: "Event Visitor"
+          description: "The target URL is an event visitor or collection of event\
+              \ visitors related\nto the current resource."
+        - $ref: "#/components/schemas/Link"
+    event:
+      allOf:
+        - title: "Event"
+          description: "The target URL is an event or collection of events related\
+              \ to the current\nresource."
+        - $ref: "#/components/schemas/Link"
+    invoice-credit-card:
+      allOf:
+        - title: "Invoice Credit Card"
+          description: "The target URL may be used to manipulate the invoice credit\
+              \ card related\nto the current resource. The current resource may be\
+              \ an invoice or may\nhave an invoice related to it, for which the target\
+              \ URL may be used."
+        - $ref: "#/components/schemas/Link"
+    invoice-item-template:
+      allOf:
+        - title: "Invoice Item Template"
+          description: "The target URL is an invoice item template or collection\
+              \ of invoice item\ntemplates related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    invoice-payment:
+      allOf:
+        - title: "Invoice Payment"
+          description: "The target URL may be used to make an invoice payment related\
+              \ to the\ncurrent resource. The current resource may be an invoice or\
+              \ may have an\ninvoice related to it, for which the target URL may be\
+              \ used."
+        - $ref: "#/components/schemas/Link"
+    invoice-refund:
+      allOf:
+        - title: "Invoice Refund"
+          description: "The target URL may be used to make an invoice refund related\
+              \ to the\ncurrent resource. The current resource may be an invoice or\
+              \ may have an\ninvoice related to it, for which the target URL may be\
+              \ used."
+        - $ref: "#/components/schemas/Link"
+    invoice-template:
+      allOf:
+        - title: "Invoice Template"
+          description: "The target URL is an invoice template or collection of invoice\
+              \ templates\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    invoice:
+      allOf:
+        - title: "Invoice"
+          description: "The target URL is an invoice or collection of invoices related\
+              \ to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"
+    lab:
+      allOf:
+        - title: "Lab"
+          description: "The target URL is a lab related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    lab-catalog-self-fulfilled:
+      allOf:
+        - title: "Self-fulfilled Lab Catalog"
+          description: "The target URL is a self-fulfilled lab catalog or collection\
+              \ of\nself-fulfilled lab catalogs related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    lab-catalog:
+      allOf:
+        - title: "Lab Catalog"
+          description: "The target URL is a lab catalog or collection of lab catalogs\
+              \ related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    lab-catalog-shipping-option:
+      allOf:
+        - title: "Lab Catalog Shipping Option"
+          description: "The target URL is a lab catalog shipping option or collection\
+              \ of\nlab catalog shipping options related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    market-department:
+      allOf:
+        - title: "Market Department"
+          description: "The target URL is a market department or collection of market\
+              \ departments\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    market-product:
+      allOf:
+        - title: "Market Product"
+          description: "The target URL is a market product or collection of market\
+              \ products\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    market-vendor:
+      allOf:
+        - title: "Market Vendor"
+          description: "The target URL is a market vendor or collection of market\
+              \ vendors related\nto the current resource."
+        - $ref: "#/components/schemas/Link"
+    me:
+      allOf:
+        - title: "Me"
+          description: "The target URL is the profile for the authenticated access\
+              \ token.\n\nUsually this is the Studio Panel user who has granted authorization\
+              \ and\nan access token."
+        - $ref: "#/components/schemas/Link"
+    mobile-app:
+      allOf:
+        - title: "Mobile App"
+          description: "The target URL is a mobile app or collection of mobile apps\
+              \ related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    order-payment:
+      allOf:
+        - title: "Order Payment"
+          description: "The target URL is an order payment or collection of order\
+              \ payments related\nto the current resource."
+        - $ref: "#/components/schemas/Link"
+    order:
+      allOf:
+        - title: "Order"
+          description: "The target URL is an order or collection of orders related\
+              \ to the current\nresource."
+        - $ref: "#/components/schemas/Link"
+    parent:
+      allOf:
+        - title: "Parent"
+          description: "The target URL identifies a parent resource for the current\
+              \ resource.\nIt is often used on subordinate resources or collections\
+              \ to identify\nthe resource to which they belong."
+        - $ref: "#/components/schemas/Link"
+    playlist:
+      allOf:
+        - title: "Music Playlist"
+          description: "The target URL is a music playlist or collection of music\
+              \ playlists\nrelated to the current resource."
+        - $ref: "#/components/schemas/Link"
+    portal:
+      allOf:
+        - title: "Studio-Client Portal URL"
+          description: "The target URL is the location of the current resource in\
+              \ the\nStudio-Client Portal website. The media type of the target URL\
+              \ is assumed\nto be `text/html` unless otherwise indicated."
+        - $ref: "#/components/schemas/Link"
+    price-sheet-discount:
+      allOf:
+        - title: "Price Sheet Discount"
+          description: "The target URL is a price sheet discount or collection of\
+              \ price sheet\ndiscounts related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    price-sheet-event:
+      allOf:
+        - title: "Price Sheet Event"
+          description: "The target URL is an event associated to a price sheet or\
+              \ a collection of\nevents associated to a price sheet related to the\
+              \ current resource."
+        - $ref: "#/components/schemas/Link"
+    price-sheet-item:
+      allOf:
+        - title: "Price Sheet Item"
+          description: "The target URL is a collection of price sheet items related\
+              \ to the current resource."
+        - $ref: "#/components/schemas/Link"
+    price-sheet-item-image:
+      allOf:
+        - title: "Price Sheet Item Image"
+          description: "The target URL is a collection of images associated to a\
+              \ price sheet item related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    price-sheet:
+      allOf:
+        - title: "Price Sheet"
+          description: "The target URL is a price sheet or collection of price sheets\
+              \ related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    price-sheet-shipping-option:
+      allOf:
+        - title: "Price Sheet Shipping Option"
+          description: "The target URL is a price sheet shipping option or collection\
+              \ of price sheet\nshipping options related to the current resource."
+        - $ref: "#/components/schemas/Link"
+    search:
+      allOf:
+        - title: "Search"
+          description: "The target URL is a location that may be used to search\
+              \ or filter results\nfor the current resource."
+        - $ref: "#/components/schemas/Link"
+    self:
+      allOf:
+        - title: "Self"
+          description: "The target URL is the current resource's own location. It\
+              \ may not be the\ncanonical location of the resource; if this is the\
+              \ case, the `canonical`\nrelationship might be present to indicate the\
+              \ resource's canonical URL."
+        - $ref: "#/components/schemas/Link"
+    shorturl:
+      allOf:
+        - title: "Shortened URL"
+          description: "The target URL may be used to create a shortened URL for\
+              \ use with social\nsharing."
+        - $ref: "#/components/schemas/Link"
+    signature:
+      allOf:
+        - title: "Signature"
+          description: "The target URL is a signature or collection of signatures\
+              \ related to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"
+    tax-profile:
+      allOf:
+        - title: "Tax Profile"
+          description: "The target URL is a tax profile or collection of tax profiles\
+              \ related to\nthe current resource."
+        - $ref: "#/components/schemas/Link"
+    token-replacement:
+      allOf:
+        - title: "Token Replacement"
+          description: "The target URL may be used to replace tokens in the current\
+              \ resource.\nTokens available to pass for replacement are indicated\
+              \ by the [URI\ntemplate](https://tools.ietf.org/html/rfc6570) parameters."
+        - $ref: "#/components/schemas/Link"
+    watermark:
+      allOf:
+        - title: "Watermark"
+          description: "The target URL is a watermark or collection of watermarks\
+              \ related to the\ncurrent resource."
+        - $ref: "#/components/schemas/Link"

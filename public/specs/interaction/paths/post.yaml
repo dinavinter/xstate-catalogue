@@ -1,8 +1,7 @@
-summary: Post Communications Interaction
 post:
-  summary: Submit interaction details.
-  operationId: SubmitInteraction
-  description: Submit interaction form.
+  summary: Post interaction details.
+  operationId: PostInteractionDetails
+  description: Post interaction details.
   requestBody:
     content:
       application/json:
@@ -26,7 +25,7 @@ post:
               newsletter: true
   responses:
     '201':
-      description: Customer intent submitted successfully.
+      description: Customer intention submitted successfully.
       content:
         application/json:
           schema:
@@ -39,22 +38,49 @@ post:
                   template: signup
                   status: verified
                   interactionId: 7800232
-                links:
-                  - rel: bind
-                    href: /{interactionId}/bind/
-                    type: application/json
-                    method: POST
-
+    '206':
+      description: Interactions submitted but requires account binding.
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\form.yaml
+          examples:
+            signup-interaction-pending-bind:
+              summary: Customer intent submitted successfully.
+              value:
+                properties:
+                  template: signup
+                  status: intention
+                  interactionId: 7800232
+                  links:
+                    - rel: bind
+                      href: /intractions/v1/{interaction}/{interactionId}/bind/
+                      type: application/json
+                      method: POST    
+                    - rel: lookup
+                      description: The target URL is a token for identifier lookup
+                      type: application/json
+                      href: /auth/lookup/{channel}/token
+                      method: post  
       links:
         GetInteraction:
           operationId: GetInteraction
           parameters:
             interactionId: $response.body#/interactionId
           description: Get Interaction State.
-    '400':
-      $ref: ..\..\shared\errors\bad_request.yaml
-    '401':
-      description: Requires Authentication
+        BindInteraction:
+          operationId: BindInteraction
+          parameters:
+            interactionId: $response.body#/interactionId
+          description: Bind interaction to account.  
+        Lookup:
+          operationId: LookupInteraction
+          parameters:
+            channel: $request.body#/channel
+          description: Lookup account by identifier.
+
+    '207':
+      description: Interactions submitted but requires authentication.
       content:
         application/json:
           schema:
@@ -88,6 +114,8 @@ post:
           parameters:
             interactionId: $response.body#/interactionId
           description: Get interaction state.
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
     '403':
       $ref: ..\..\shared\errors\forbidden.yaml
     '503':

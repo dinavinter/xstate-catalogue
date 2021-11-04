@@ -1,0 +1,4 @@
+properties:
+  fieldId:
+    type: string
+    example: channel
