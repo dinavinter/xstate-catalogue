@@ -16,42 +16,101 @@ properties:
     items:
       type: string
       example:
-        - sigh-up-form
+        - screen-set
         - checkout-api
-        - subscribtion-collection
+        - subscribtion-collection-form
         - lite-sign-up
-        - progressive-profiling
-  states:
-    type: object
-    properties:
-      intent:
-        type: object
-        properties:
-          operations:
-            type: array
-            $ref: .\Operations.yaml
-      binded:
-        type: object
-        properties:
-          operations:
-            $ref: .\Operations.yaml 
-        
+
+    
   input:
     description: A set of key-value pairs that describe the input of an intraction.
     type: object
-    allOf:
-      - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
-      - properties:
-          channel:
-            $ref: ..\..\..\shared\schemas\ChannelTemplate.yaml
-          subscribtions:
-            type: array
-            items:
-              $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
-    additionalProperties:
-      $ref: ..\..\..\shared\schemas\FieldTemplate.yaml
-    maxProperties: 5
-  
+    properties:
+      identity:
+        type: object
+        $ref: .\IdentityTemplate.yaml
 
-  
-  
+      profile:
+        title: profile fields
+        description: Profile fields to collect during interaction.
+        type: object
+        allOf:
+          - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+            
+      data:
+        title: profile fields
+        description: Custom data fields to collect during interaction.
+        type: object
+        allOf:
+          - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+
+      subscriptions:
+        title: subscriptions fields
+        description: Subscribtions fields to collect during interaction.
+        type: object
+        allOf:
+          - $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml    
+            
+      consents:
+        title: consents fields
+        description: Consents fields to collect during interaction.
+        type: object
+        allOf:
+          - $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
+
+      interaction:
+        title: interaction fields
+        description: Interaction scoped fields.
+        type: object
+        allOf:
+          - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+
+
+  outcomes:
+    type: object
+    description: A set of key-value pairs that describe the possible outcomes of the intraction.
+    properties:
+
+      require_auth:
+        type: object
+        properties:
+          output:
+            type: object
+            properties:
+              type:
+                type: string
+                readOnly: true
+                default: auth
+              identity:
+                type: string
+                readOnly: true 
+                default:  "#/properties/identity"
+
+
+      authorized:
+        type: object
+        properties:
+          output:
+            type: object
+            readOnly: true
+            properties:
+              type:
+                type: string
+                readOnly: true
+                default: projection
+              identity:
+                type: string
+                readOnly: true
+                default: "#/properties/identity"   
+              profile:
+                type: string
+                readOnly: true
+                default: "#/properties/profile"
+              subscriptions:
+                type: string
+                readOnly: true
+                default: "#/properties/subscriptions"
+              consents:
+                type: string
+                readOnly: true
+                default: "#/properties/consents"  

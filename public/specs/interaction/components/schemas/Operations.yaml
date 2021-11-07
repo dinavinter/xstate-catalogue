@@ -33,7 +33,7 @@ $defs:
   inputPointer:
     allOf:
       - $ref: "#/$defs/jsonPointer"
-      - pattern: "^(/accounts/$subject/[^/~]*(~[01][^/~]*)*)*$"
+      - pattern: "^(/input/properties/[^/~]*(~[01][^/~]*)*)*$"
   targetPointer:
     oneOf:
       - $ref: "#/$defs/accountPointer"
@@ -44,6 +44,7 @@ $defs:
       - $ref: "#/$defs/inputPointer"
 
   add:
+    title: 'add operation'
     description: add operation. Value can be any JSON value.
     properties:
       op:
@@ -52,12 +53,14 @@ $defs:
     required:
       - value
   remove:
+    title: 'remove operation'
     description: remove operation. Only a path is specified.
     properties:
       op:
         type: string
         const: remove 
   replace:
+    title: 'replace operation'
     description: replace operation. Value can be any JSON value.
     properties:
       op:
@@ -66,6 +69,8 @@ $defs:
     required:
       - value
   move:
+    title: 'move operation'
+
     description: move operation. "from" is a JSON Pointer.
     properties:
       op:
@@ -76,6 +81,7 @@ $defs:
     required:
       - from
   copy:
+    title: 'copy operation' 
     description: copy operation. "from" is a JSON Pointer.
     properties:
       op:
@@ -86,6 +92,8 @@ $defs:
     required:
       - from
   test:
+    title: 'test operation'
+
     description: test operation. Value can be any JSON value.
     properties:
       op:

@@ -1,0 +1,12 @@
+"patternProperties": {
+  "^profile._": { "type": "string" },
+  "^I_": { "type": "integer" }
+},
+type: object
+allOf:
+  - $ref: .\FieldTemplate.yaml
+  - properties: 
+      
+additionalProperties:
+  $ref: .\FieldTemplate.yaml
+maxProperties: 5

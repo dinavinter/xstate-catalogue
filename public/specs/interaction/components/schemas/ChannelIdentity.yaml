@@ -1,0 +1,51 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+descreption: 
+type: array
+items:
+  type: object
+  oneOf:
+    - $ref: "#/$defs/EmailChannel"
+    - $ref: "#/$defs/SmsChannel"
+$defs: 
+ EmailChannel:
+  if:
+    properties:
+      channel:
+        type: string
+        const: email
+  then:
+    properties:
+      identity:
+        type: object
+        properties:
+          email:
+            type: string
+        required:
+          - email
+      newsletter:
+        type: boolean
+        title: Newsletter
+      deals:
+        type: boolean
+        title: Deals
+ SmsChannel:
+  type: object
+  if:
+    properties:
+      channel:
+        type: string
+        enum:
+          - sms
+  then:
+    properties:
+      identity:
+        type: object
+        properties:
+          phonrnumber:
+            type: string
+        required:
+          - phonrnumber
+      newsletter:
+        type: boolean
+        title: Newsletter
+  

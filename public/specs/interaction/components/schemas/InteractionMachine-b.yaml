@@ -1,6 +1,6 @@
 $schema: "http://json-schema.org/draft-07/hyper-schema#"
 type: object
-descreption: >- 
+descreption: >-
   An interaction machine object encapsulates the complete set of objects that define an interaction ->
   Triggers, Outcomes, Schema, and metadata.
 properties:
@@ -14,41 +14,68 @@ properties:
     description: Describes the nature of an intreaction content based on the current representation.
     type: array
     items:
-      type: array
+      type: string
       example:
-        - sigh-up
-        - checkout
-        - subscribtion-collection
+        - screen-set
+        - checkout-api
+        - subscribtion-collection-form
         - lite-sign-up
-  states:
+
+  identity:
     type: object
-    properties:
-      intent:
-        type: object
-        properties:
-          operations:
-            $ref: .\Operations.yaml
-      binded:
-        type: object
-        properties:
-          operations:
-            $ref: .\Operations.yaml      
+    $ref: .\IdentityTemplate.yaml
+
   input:
     description: A set of key-value pairs that describe the input of an intraction.
     type: object
     allOf:
       - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
-      - properties:
-          channel:
-            $ref: ..\..\..\shared\schemas\ChannelTemplate.yaml
-          subscribtions:
-            type: array
-            items:  
-              $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
-    additionalProperties:
-      $ref: ..\..\..\shared\schemas\FieldTemplate.yaml
-    maxProperties: 5
-  
 
-  
+
+
+  outcomes:
+    type: object
+    description: A set of key-value pairs that describe the possible outcomes of the intraction.
+    properties:
+
+      require_auth:
+        type: object
+        properties:
+          output:
+            type: object
+            properties:
+              type:
+                type: string
+                readOnly: true
+                default: auth
+              identity:
+                type: string
+                readOnly: true
+                default:  "#/properties/identity"
+
+
+      authorized:
+        type: object
+        properties:
+          output:
+            type: object
+            properties:
+              type:
+                type: string
+                readOnly: true
+                default: projection
+              ops:
+                type: array
+                $ref: .\Operations.yaml
+                default:
+                  - title: 'populate input to account'
+                    description: copy operation. "from" is a JSON Pointer.
+                    properties:
+                      op:
+                        type: string
+                        const: copy
+                      from:
+                        const: "#/properties/input"
+                      path:
+                        const: "/accounts/{$subject}"
   
