@@ -31,36 +31,28 @@ properties:
         $ref: .\IdentityTemplate.yaml
 
       profile:
-        title: profile fields
-        description: Profile fields to collect during interaction.
-        type: object
-        allOf:
-          - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+        $ref: ..\..\..\shared\schemas\ProfileTemplate.yaml
             
       data:
-        title: profile fields
-        description: Custom data fields to collect during interaction.
-        type: object
-        allOf:
-          - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+        $ref: ..\..\..\shared\schemas\DataTemplate.yaml
 
       subscriptions:
-        title: subscriptions fields
+        title: Subscriptions Fields
         description: Subscribtions fields to collect during interaction.
         type: object
-        allOf:
-          - $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml    
+        additionalProperties:
+          $ref:  ..\..\..\shared\schemas\BooleanTemplate.yaml
             
             
       consents:
-        title: consents fields
+        title: Consents Fields
         description: Consents fields to collect during interaction.
         type: object
-        allOf:
-          - $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
+        additionalProperties:
+          $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
 
       interaction:
-        title: interaction fields
+        title: Interaction Fields
         description: Interaction scoped fields.
         type: object
         allOf:

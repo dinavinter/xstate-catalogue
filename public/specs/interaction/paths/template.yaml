@@ -29,3 +29,9 @@ post:
             template: $request.body#/name
             schema: $request.body#/input
           description: Post interaction details.   
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+      '403':
+        $ref: ..\..\shared\errors\forbidden.yaml
+      '503':
+        $ref: ..\..\shared\errors\service_unavailable.yaml  

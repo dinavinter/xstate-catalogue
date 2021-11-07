@@ -1,12 +1,6 @@
-"patternProperties": {
-  "^profile._": { "type": "string" },
-  "^I_": { "type": "integer" }
-},
+title: profile fields
+description: Profile fields to collect during interaction.
 type: object
-allOf:
-  - $ref: .\FieldTemplate.yaml
-  - properties: 
-      
 additionalProperties:
   $ref: .\FieldTemplate.yaml
-maxProperties: 5
+  

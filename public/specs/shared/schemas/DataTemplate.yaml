@@ -1,0 +1,5 @@
+title: Custom data fields
+description: Custom data fields to collect during interaction.
+type: object
+additionalProperties:
+  $ref: .\FieldTemplate.yaml
