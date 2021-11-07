@@ -1,5 +1,5 @@
-title:  Subscriptions Fields
-description: Subscribtions fields to collect during interaction.
+title:  Consents Fields
+description: Consents to collect during interaction.
 type: object
 properties:
   properties:

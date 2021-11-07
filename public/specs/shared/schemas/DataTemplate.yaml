@@ -1,5 +1,13 @@
+$schema: "http://json-schema.org/draft-07/hyper-schema#"
 title: Custom data fields
 description: Custom data fields to collect during interaction.
 type: object
-additionalProperties:
-  $ref: .\FieldTemplate.yaml
+properties:
+  properties:
+    type: object
+    additionalProperties:
+      $ref: .\FieldTemplate.yaml 
+  required:
+    type: array
+    items:
+      type: string

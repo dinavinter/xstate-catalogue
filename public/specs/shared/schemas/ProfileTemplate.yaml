@@ -1,6 +1,55 @@
-title: profile fields
+$defs:
+  Fields:
+    firstName:
+      type: object
+      properties:
+        firstName:
+          $ref: .\StringTemplate.yaml
+          
+    lastName:
+      properties:
+        firstName:
+          $ref: .\StringTemplate.yaml 
+          
+    nickname:
+      properties:
+        firstName:
+          $ref: .\StringTemplate.yaml     
+
+title: Profile Fields
 description: Profile fields to collect during interaction.
 type: object
-additionalProperties:
-  $ref: .\FieldTemplate.yaml
-  
+properties:
+  properties:
+    anyOf: 
+      - $ref: "#/$defs/Fields/firstName"
+      - $ref: "#/$defs/Fields/lastName"
+    additionalProperties:
+      $ref: .\FieldTemplate.yaml
+      propertyNames:
+        - firstName
+        - lastName
+        - nickname  
+        - birthDay
+        - birthMonth
+        - birthYear
+        - country
+        - city
+        - interests   
+    
+  required:
+    type: array
+    items:
+      type: string
+      enum:
+        - firstName
+        - lastName
+        - nickname 
+        - birthDay
+        - birthMonth
+        - birthYear
+        - country
+        - city
+        - interests
+        
+    

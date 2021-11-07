@@ -34,23 +34,14 @@ properties:
         $ref: ..\..\..\shared\schemas\ProfileTemplate.yaml
             
       data:
-        $ref: ..\..\..\shared\schemas\DataTemplate.yaml
-
-      subscriptions:
-        title: Subscriptions Fields
-        description: Subscribtions fields to collect during interaction.
-        type: object
-        additionalProperties:
-          $ref:  ..\..\..\shared\schemas\BooleanTemplate.yaml
-            
-            
+        $ref: ..\..\..\shared\schemas\DataTemplate.yaml 
+      
+      subscribtions:
+        $ref: ..\..\..\shared\schemas\SubscriptionsTemplate.yaml
+        
       consents:
-        title: Consents Fields
-        description: Consents fields to collect during interaction.
-        type: object
-        additionalProperties:
-          $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml
-
+        $ref: ..\..\..\shared\schemas\ConsentsTemplate.yaml
+        
       interaction:
         title: Interaction Fields
         description: Interaction scoped fields.

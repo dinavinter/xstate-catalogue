@@ -71,12 +71,7 @@ post:
                     $ref: $request.body#/identity
                   state:
                     type: string
-                    default: require_auth
-                    
-                      
-                    
-
-
+                    default: require_auth 
           examples:
             signup-interaction-401:
               summary: Represents a signup to a newsletter pending to authentication.
@@ -89,9 +84,7 @@ post:
                   status: require_auth
                   interaction_token: <reference to interaction details, to be used in backchannel authentication>
                   identity:
-                    phonenumber: 543332123 
-                
-
+                    phonenumber: 543332123  
       links:
         GetInteraction:
           operationId: GetInteraction
@@ -109,9 +102,12 @@ post:
             channel: $request.body#/channel
             identity: $request.body#/identity
           description: Lookup account by identifier.
+          
     '400':
-      $ref: ..\..\shared\errors\bad_request.yaml
+      $ref: ..\..\shared\errors\bad_request.yaml 
+      
     '403':
       $ref: ..\..\shared\errors\forbidden.yaml
+      
     '503':
       $ref: ..\..\shared\errors\service_unavailable.yaml
