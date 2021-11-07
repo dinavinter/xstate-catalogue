@@ -8,16 +8,24 @@ post:
         schema:
           type: object
           $ref: ..\components\schemas\InteractionMachine.yaml
-
-    links:
-      GetInteractionTemplate:
-        operationId: GetInteractionTemplate
-        parameters:
-          template: $request.body#/name
-        description: Get interaction template. 
-      PostInteractionDetails:
-        operationId: PostInteractionDetails
-        parameters:
-          template: $request.body#/name
-          schema: $request.body#/input
-        description: Post interaction details.   
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              template: 
+                $ref: $request.body#/name 
+      links:
+        GetInteractionTemplate:
+          operationId: GetInteractionTemplate
+          parameters:
+            template: $request.body#/name
+          description: Get interaction template. 
+        PostInteractionDetails:
+          operationId: PostInteractionDetails
+          parameters:
+            template: $request.body#/name
+            schema: $request.body#/input
+          description: Post interaction details.   

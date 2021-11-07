@@ -7,7 +7,7 @@ properties:
   name:
     description: A human readable label for the intraction to be used in interfaces.
     type: string
-    example:
+    examples:
       - sigh-up
       - order-checkout
   class:
@@ -15,7 +15,7 @@ properties:
     type: array
     items:
       type: string
-      example:
+      examples:
         - screen-set
         - checkout-api
         - subscribtion-collection-form
@@ -50,6 +50,7 @@ properties:
         type: object
         allOf:
           - $ref: ..\..\..\shared\schemas\BooleanTemplate.yaml    
+            
             
       consents:
         title: consents fields

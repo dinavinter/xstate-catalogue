@@ -32,7 +32,7 @@ paths:
     $ref: paths\template.yaml
   /interactions/templates/{template}:
     $ref: paths\getTemplate.yaml
-  /interactions/{template}/:
+  /interactions/{template}:
     $ref: paths\post.yaml  
 
     

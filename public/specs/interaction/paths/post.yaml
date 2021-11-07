@@ -54,8 +54,7 @@ post:
           operationId: GetInteraction
           parameters:
             interactionId: $response.body#/interactionId
-          description: Get Interaction State. 
-  
+          description: Get Interaction State.   
 
     '401':
       description: Authentication Required.
@@ -64,23 +63,31 @@ post:
           schema:
             allOf:
               - $ref: ..\..\shared\errors\basic-error.yaml
-              - $ref: ..\components\schemas\form.yaml
               - properties:
-                  identity: 
+                  interaction_token:
+                    type: string
+                    descreption: reference to interaction details, to be used in backchannel authentication.
+                  identity:
                     $ref: $request.body#/identity
                   state:
-                    const: require_auth
+                    type: string
+                    default: require_auth
+                    
+                      
+                    
+
+
           examples:
             signup-interaction-401:
               summary: Represents a signup to a newsletter pending to authentication.
               value:
                 properties:
-                  interactionId: 0023232
                   message*:  Authentication Required  
                   callId: dsdfafsdsa
                   code*: 401
                   template: signup
                   status: require_auth
+                  interaction_token: <reference to interaction details, to be used in backchannel authentication>
                   identity:
                     phonenumber: 543332123 
                 
