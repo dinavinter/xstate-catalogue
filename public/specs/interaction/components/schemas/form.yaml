@@ -11,12 +11,9 @@ properties:
     type: string
     enum: 
      - draft
-     - intent
-     - verified
+     - require_auth
+     - authorized
      - complete
-  links:
-    type: array
-    items: { $ref: .\Link.yaml }        
 type: object
 
  

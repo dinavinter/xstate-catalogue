@@ -24,33 +24,22 @@ post:
               value:
                 properties:
                   template: signup
-                  state: verified
+                  state: authorized
                   interactionId: {interactionId}
-                links:
-                  - rel: self
-                    href: /{interactionId}
-                    type: application/json
-                    method: GET
+              
     '401':
       $ref: ..\..\shared\errors\requires_authentication.yaml
       description: Access token is missing or invalid.
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              request_uri:
-                type: string
-                example: urn:transaction:bwc4JK-ESC0w8acc191e-Y1LTC2
-              expires_in:
-                type: integer
-                example: 60
-      links:
-        AuthorizationRequest:
-          operationId: AuthorizationRequest
-          parameters:
-            request_uri: $response.body#/request_uri
-          description: A uuid to commit the transaction and update the account
+            allOf:
+              - $ref: ..\components\schemas\Interaction.yaml
+              - $ref: ..\..\shared\errors\basic-error.yaml
+              - $ref: ..\components\schemas\form.yaml
+              - properties:
+                  identity:
+                    $ref: $request.body#/identity 
     '400':
       $ref: ..\..\shared\errors\bad_request.yaml
     '403':

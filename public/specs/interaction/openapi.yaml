@@ -34,7 +34,6 @@ paths:
     $ref: paths\getTemplate.yaml
   /interactions/{template}/:
     $ref: paths\post.yaml  
-  /interactions/{template}/{interaction}/bind:
-    $ref: paths\bind.yaml
+
     
 tags: []

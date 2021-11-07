@@ -1,9 +1,27 @@
 type: object
-properties:
-  identity:
+$schema: "http://json-schema.org/draft-07/hyper-schema#"
+$ref: "#/$defs/mobile-identity"
+$defs:
+  mobile:
     type: object
     properties:
-      phonrnumber:
-        type: string
+      phonenumber:
+        $ref: ..\..\..\shared\schemas\StringTemplate.yaml
     required:
-      - phonrnumber
+      - phonrnumber   
+  
+  mobile-identity:
+    type: object
+    title: mobile identity
+    properties:
+      properties:
+        $ref: "#/$defs/mobile"
+      identifier-type:
+        type: string
+        default: phonenumber
+        readOnly: true
+
+      provider:
+        type: string
+        enum:
+          - otp

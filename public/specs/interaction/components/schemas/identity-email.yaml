@@ -1,10 +1,30 @@
 type: object
-properties:
-  identity:
-    title: email
+$schema: "http://json-schema.org/draft-07/hyper-schema#"
+$ref: "#/$defs/email-identity"
+$defs:
+  email:
     type: object
+    x-identifier: email
     properties:
       email:
+        $ref: ..\..\..\shared\schemas\StringTemplate.yaml
+
+  email-identity:
+    type: object
+    title: email identity
+    properties:
+      properties:
+        $ref: "#/$defs/email"
+
+      identifier-type:
         type: string
-    required:
-      - email
+        default: email
+        readOnly: true
+
+      provider:
+        type: string
+        enum:
+          - otp
+          - lite
+          - link
+

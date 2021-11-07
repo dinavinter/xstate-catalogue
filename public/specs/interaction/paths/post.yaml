@@ -2,27 +2,38 @@ post:
   summary: Post interaction details.
   operationId: PostInteractionDetails
   description: Post interaction details.
+  parameters:
+    - in: path
+      name: template
+      required: true
+      description: Specifies the interaction template.
+    
   requestBody:
     content:
       application/json:
         schema:
-          $ref: ..\components\schemas\SignUpSchema.yaml
+          description: input should be of the specified template schema
+          $ref: ..\components\schemas\InputSchema.yaml
         examples:
           email-channel:
             value:
               channel: email
               identity:
                 email: email@mail.com
-                lookup_token: aToken
-              newsletter: true
-              deals: true
+              subscribtions:                
+                newsletter: true
+                deals: true
+              profile:
+                firstName: jakob
           phone-channel:
             value:
               channel: sms
               identity:
                 phonenumber: 543332123
-                lookup_token: aToken               
-              newsletter: true
+              subscribtions:
+                newsletter: true
+              profile:
+                firstName: jakob  
   responses:
     '201':
       description: Customer intention submitted successfully.
@@ -36,32 +47,44 @@ post:
               value:
                 properties:
                   template: signup
-                  status: verified
+                  status: authorized
                   interactionId: 7800232
-    '206':
-      description: Interactions submitted but requires account binding.
+      links:
+        GetInteraction:
+          operationId: GetInteraction
+          parameters:
+            interactionId: $response.body#/interactionId
+          description: Get Interaction State. 
+  
+
+    '401':
+      description: Authentication Required.
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\form.yaml
+            allOf:
+              - $ref: ..\..\shared\errors\basic-error.yaml
+              - $ref: ..\components\schemas\form.yaml
+              - properties:
+                  identity: 
+                    $ref: $request.body#/identity
+                  state:
+                    const: require_auth
           examples:
-            signup-interaction-pending-bind:
-              summary: Customer intent submitted successfully.
+            signup-interaction-401:
+              summary: Represents a signup to a newsletter pending to authentication.
               value:
                 properties:
+                  interactionId: 0023232
+                  message*:  Authentication Required  
+                  callId: dsdfafsdsa
+                  code*: 401
                   template: signup
-                  status: intention
-                  interactionId: 7800232
-                  links:
-                    - rel: bind
-                      href: /intractions/v1/{interaction}/{interactionId}/bind/
-                      type: application/json
-                      method: POST    
-                    - rel: lookup
-                      description: The target URL is a token for identifier lookup
-                      type: application/json
-                      href: /auth/lookup/{channel}/token
-                      method: post  
+                  status: require_auth
+                  identity:
+                    phonenumber: 543332123 
+                
+
       links:
         GetInteraction:
           operationId: GetInteraction
@@ -72,48 +95,13 @@ post:
           operationId: BindInteraction
           parameters:
             interactionId: $response.body#/interactionId
-          description: Bind interaction to account.  
+          description: Bind interaction to account.
         Lookup:
           operationId: LookupInteraction
           parameters:
             channel: $request.body#/channel
+            identity: $request.body#/identity
           description: Lookup account by identifier.
-
-    '207':
-      description: Interactions submitted but requires authentication.
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: ..\components\schemas\Interaction.yaml
-              - $ref: ..\..\shared\errors\basic-error.yaml
-              - $ref: ..\components\schemas\form.yaml
-          examples:
-            signup-interaction-401:
-              summary: Represents a signup to a newsletter pending to authentication.
-              value:
-                properties:
-                  interactionId: #0023232
-                  message*:  Authentication Required  
-                  callId: #dsdfafsdsa
-                  code*: 401
-                  template: signup
-                  status: intent
-                links:
-                  - rel: self
-                    href: /{interactionId}
-                    type: application/json
-                    method: GET
-                  - rel: bind
-                    href: /{interactionId}/bind/
-                    type: application/json
-                    method: POST
-      links:
-        BindInteraction:
-          operationId: BindInteraction
-          parameters:
-            interactionId: $response.body#/interactionId
-          description: Get interaction state.
     '400':
       $ref: ..\..\shared\errors\bad_request.yaml
     '403':

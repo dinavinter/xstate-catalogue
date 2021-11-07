@@ -19,4 +19,5 @@ post:
         operationId: PostInteractionDetails
         parameters:
           template: $request.body#/name
+          schema: $request.body#/input
         description: Post interaction details.   
