@@ -9,6 +9,9 @@ value:
           type: string
         channel:
           type: string
+          enum:
+            email
+            sms
         data.property2:
           type: string
         profile.lastName:
