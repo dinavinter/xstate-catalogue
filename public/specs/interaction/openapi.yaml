@@ -9,31 +9,13 @@ servers:
       gigya-domain:
         default: accounts.gigya.com
         enum:
+          - accounts.gigya.com
           - accounts.eu1.gigya.com
           - accounts.au1.gigya.com
-        description: giya domains
-      interaction:
-        default: sign-up
-        enum:
-          - sign-up
-          - order
-components:
-  securitySchemes:
-    oAuth2Confirm:
-      type: oauth2
-      description: This API uses OAuth with the implicit grant flow.
-      flows:
-        implicit:
-          authorizationUrl: /oauth2/authorize
-          scopes:
-            interaction:bind: bind interaction
-paths:
-  /interactions/templates/:
-    $ref: paths\template.yaml
-  /interactions/templates/{template}:
-    $ref: paths\getTemplate.yaml
+        description: gigya domains 
+paths: 
   /interactions/{template}:
-    $ref: paths\post.yaml  
+    $ref: 'paths/post.yaml'
 
-    
+
 tags: []

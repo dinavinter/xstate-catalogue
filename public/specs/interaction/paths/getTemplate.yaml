@@ -13,6 +13,7 @@ get:
   summary: Interaction options config
   responses:
     '200':
+      description: Interaction Template Found
       content:
         application/json:
           schema:

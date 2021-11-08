@@ -13,7 +13,7 @@ post:
       application/json:
         schema:
           description: input should be of the specified template schema
-          $ref: ..\components\schemas\InputSchema.yaml
+          $ref: ..\components\schemas\InputSchema.yaml 
         examples:
           email-channel:
             value:

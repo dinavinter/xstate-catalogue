@@ -1,0 +1,33 @@
+description: A set of key-value pairs that describe the input of an intraction.
+type: object
+$schema: "https://json-schema.org/draft/2020-12/schema"
+#$id: https://example.com/specs/interaction/components/schemas/input
+properties:
+  interaction:
+    title: Interaction Fields
+    description: Interaction scoped fields.
+    type: object
+    allOf:
+      - $ref: ..\..\..\shared\schemas\CustomTemplate.yaml
+        
+  identity:
+    type: object
+    $ref: .\IdentityTemplate.yaml
+
+  profile:
+    $ref: ..\..\..\shared\schemas\ProfileTemplate.yaml
+
+  data:
+    $ref: ..\..\..\shared\schemas\DataTemplate.yaml
+
+  subscribtions:
+    $ref: ..\..\..\shared\schemas\SubscriptionsTemplate.yaml
+
+  consents:
+    $ref: ..\..\..\shared\schemas\ConsentsTemplate.yaml
+  
+required:
+  - identity
+  
+
+  

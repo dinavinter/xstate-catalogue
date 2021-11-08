@@ -4,9 +4,10 @@ description: >-
 properties:
   template:
     type: string
-    const: { interaction }
+    const: $request.path#/template
   interactionId:
     type: string
+    const: $request.query#/interactionId
   state:
     type: string
     enum: 
