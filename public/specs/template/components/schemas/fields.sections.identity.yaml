@@ -1,0 +1,15 @@
+type: array
+items:
+  type: object
+  oneOf:
+    - anyOf:
+        - title: if-channel-sms
+          allOf:
+            - $ref: .\identity.mobile.yaml
+            - $ref: .\channel.sms.yaml
+        - title: if-channel-email
+          allOf:
+            - $ref: .\identity.email.yaml
+            - $ref: .\channel.email.yaml
+    - $ref: .\identity.mobile.yaml
+    - $ref: .\identity.email.yaml

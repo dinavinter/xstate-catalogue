@@ -1,0 +1,15 @@
+title: Consents Fields
+description: Consents to collect during interaction.
+type: object
+properties:
+  properties:
+    type: object
+    additionalProperties:
+      type: object
+      pattern: ^(consents.*)
+      properties:
+        properties:
+          $ref: .\fields.template.boolean.yaml
+      example:
+        consents.tos:
+          type: boolean

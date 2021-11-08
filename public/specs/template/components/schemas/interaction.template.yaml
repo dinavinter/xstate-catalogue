@@ -1,0 +1,32 @@
+type: object
+description: >-
+  An interaction machine object encapsulates a complete set of objects-> that
+  define an interaction  Triggers, Outcomes, Schema, and metadata.  
+properties:
+  name:
+    description: A human readable label for the intraction to be used in interfaces.
+    type: string
+    x-examples:
+      - sigh-up
+      - order-checkout
+  class:
+    description: >-
+      Describes the nature of an intreaction content based on the current
+      representation.
+    type: array
+    items:
+      type: string
+      x-examples:
+        - screen-set
+        - checkout-api
+        - subscribtion-collection-form
+        - lite-sign-up
+  schema:
+    $ref: .\template.schema.yaml
+  outcomes:
+    $ref: .\template.outcomes.yaml
+  links:
+    type: array
+    readOnly: true
+    items:
+      $ref: .\Link.yaml

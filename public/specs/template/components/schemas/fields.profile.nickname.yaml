@@ -1,0 +1,3 @@
+properties:
+  profile.profile.:
+    $ref: .\fields.template.string.yaml

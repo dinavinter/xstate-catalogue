@@ -1,0 +1,44 @@
+summary: Communications Interaction
+post:
+  summary: Create Interaction Template
+  operationId: CreateInteractionTemplate
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\interaction.template.yaml
+  responses:
+    '201':
+      description: Template Created
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\interaction.template.yaml
+          examples:
+            signup-interaction-email-lite:
+              $ref: ..\components\examples\signup-interaction-email-lite.yaml
+            signup-interaction-mobile-otp:
+              $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+      links:
+        GetInteractionTemplate:
+          operationId: GetInteractionTemplate
+          parameters:
+            template: $request.body#/name
+          description: Get interaction template.
+        UpdateInteractionTemplate:
+          operationId: UpdateInteractionTemplate
+          parameters:
+            template: $request.body#/name
+          description: Update interaction template.
+        PostInteractionDetails:
+          operationId: PostInteractionDetails
+          parameters:
+            template: $request.body#/name
+            schema: $request.body#/input
+          description: Post interaction details.
+    '400':
+      $ref: ..\components\responses\errors.bad_request.yaml
+    '403':
+      $ref: ..\components\responses\errors.forbidden.yaml
+    '503':
+      $ref: ..\components\responses\errors.service_unavailable.yaml

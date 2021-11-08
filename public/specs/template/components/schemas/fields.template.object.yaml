@@ -1,0 +1,13 @@
+title: Object Schema Template
+description: Describes schema's properties for a section.
+type: object
+properties:
+  properties:
+    type: object
+    additionalProperties:
+      $ref: .\fields.template.basic.yaml
+  required:
+    type: array
+    items:
+      type: string
+maxProperties: 5

@@ -1,0 +1,17 @@
+title: Profile Fields
+description: Profile fields to collect during interaction.
+type: object
+properties:
+  properties:
+    anyOf:
+      - $ref: .\fields.profile.lastName.yaml
+      - $ref: .\fields.profile.lastName.yaml
+      - additionalProperties:
+          type: object
+          pattern: ^(profile.*)
+          properties:
+            properties:
+              $ref: .\fields.template.basic.yaml
+          example:
+            profile.zip:
+              type: string

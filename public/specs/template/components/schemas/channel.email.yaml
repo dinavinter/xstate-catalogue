@@ -1,0 +1,9 @@
+title: if-channel.email
+properties:
+  selector:
+    type: object
+    properties:
+      channel:
+        type: string
+        enum:
+          - email

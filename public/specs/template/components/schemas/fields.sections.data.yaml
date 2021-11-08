@@ -1,0 +1,17 @@
+title: Custom data fields
+description: Custom data fields to collect during interaction.
+type: object
+properties:
+  properties:
+    type: object
+    additionalProperties:
+      type: object
+      pattern: ^(data.*)
+      properties:
+        properties:
+          $ref: .\fields.template.basic.yaml
+    example:
+      data.zip:
+        type: string
+      data.it-dep:
+        type: boolean

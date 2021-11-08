@@ -1,0 +1,9 @@
+title: if-channel.sms
+properties:
+  selector:
+    type: object
+    properties:
+      channel:
+        type: string
+        enum:
+          - sms

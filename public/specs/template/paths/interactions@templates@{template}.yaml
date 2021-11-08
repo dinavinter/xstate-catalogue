@@ -1,0 +1,43 @@
+put:
+  operationId: UpdateInteractionTemplate
+  summary: Update Interaction Template
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\interaction.template.yaml
+  responses:
+    '200':
+      description: Template Updated
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\interaction.template.yaml
+          examples:
+            signup-interaction-email-lite:
+              $ref: ..\components\examples\signup-interaction-email-lite.yaml
+            signup-interaction-mobile-otp:
+              $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+get:
+  operationId: GetInteractionTemplate
+  parameters:
+    - in: path
+      name: template
+      required: true
+      description: Specifies the interaction template to return.
+      schema:
+        type: string
+  summary: Get Interaction Template
+  responses:
+    '200':
+      description: Interaction Template Found
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\interaction.template.yaml
+          examples:
+            signup-interaction-email-lite:
+              $ref: ..\components\examples\signup-interaction-email-lite.yaml
+            signup-interaction-mobile-otp:
+              $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+      links: null

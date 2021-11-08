@@ -1,0 +1,21 @@
+openapi: 3.1.0
+info:
+  title: Communication Interaction
+  description: Api specification for manges customer interactions.
+  version: '1.0'
+servers:
+  - url: https://{gigya-domain}
+    variables:
+      gigya-domain:
+        default: accounts.gigya.com
+        enum:
+          - accounts.gigya.com
+          - accounts.eu1.gigya.com
+          - accounts.au1.gigya.com
+        description: giya domains
+paths:
+  /interactions/templates:
+    $ref: paths\interactions@templates.yaml
+  /interactions/templates/{template}:
+    $ref: paths\interactions@templates@{template}.yaml
+tags: []

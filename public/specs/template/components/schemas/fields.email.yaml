@@ -1,0 +1,5 @@
+type: object
+x-identifier: email
+properties:
+  email:
+    $ref: .\fields.template.string.yaml

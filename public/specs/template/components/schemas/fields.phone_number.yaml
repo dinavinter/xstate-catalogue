@@ -1,0 +1,7 @@
+type: object
+x-identifier: phonenumber
+properties:
+  phonenumber:
+    allOf:
+      - $ref: .\fields.template.string.yaml
+      - format: email

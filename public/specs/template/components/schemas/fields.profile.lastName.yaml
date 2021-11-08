@@ -1,0 +1,6 @@
+properties:
+  profile.lastName:
+    properties:
+      type:
+        enum:
+          - string

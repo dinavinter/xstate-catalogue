@@ -1,0 +1,13 @@
+type: object
+title: mobile identity
+properties:
+  properties:
+    $ref: .\fields.phone_number.yaml
+  type:
+    type: string
+    default: phonenumber
+    readOnly: true
+  provider:
+    type: string
+    enum:
+      - otp

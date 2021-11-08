@@ -1,0 +1,15 @@
+title: Subscriptions Fields
+description: Subscribtions fields to collect during interaction.
+type: object
+properties:
+  properties:
+    type: object
+    additionalProperties:
+      type: object
+      pattern: ^(subscriptions.*)
+      properties:
+        properties:
+          $ref: .\fields.template.boolean.yaml
+      example:
+        subscriptions.newslatter:
+          type: boolean

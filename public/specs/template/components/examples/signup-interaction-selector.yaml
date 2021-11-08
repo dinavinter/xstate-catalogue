@@ -1,0 +1,58 @@
+summary: Represents a signup to a newsletter flow entry point.
+value:
+  properties:
+    name: signup
+    class: screen-set
+    schema:
+      properties:
+        property1:
+          type: string
+        channel:
+          type: string
+        data.property2:
+          type: string
+        profile.lastName:
+          type: string
+      required:
+        - channel
+      identity-sms:
+        - properties:
+            phonenumber:
+              type: string
+          type: phonenumber
+          provider: otp
+          selector:
+            channel: sms
+      identity-email:
+        - properties:
+            email:
+              type: string
+              format: email
+            type: email
+            provider: lite
+            selector:
+              channel: email
+    outcomes:
+      authentication:
+        output:
+          type: authN
+          identity: '#/properties/identity'
+          callback: /bind
+      authorized:
+        output:
+          type: projection
+          identity: '#/properties/identity'
+          profile: '#/properties/profile'
+          subscriptions: '#/properties/subscriptions'
+          consents: '#/properties/consents'
+    links:
+      - rel: self
+        title: string
+        type: application/json
+        templated: true
+        href: /templates/signup
+      - rel: post
+        title: string
+        type: application/json
+        templated: true
+        href: /signup

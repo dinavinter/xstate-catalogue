@@ -1,0 +1,10 @@
+properties:
+  type:
+    type: string
+    enum:
+      - string
+      - boolean
+      - integer
+      - number
+x-tags:
+  - field-template

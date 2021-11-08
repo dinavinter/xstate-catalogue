@@ -1,0 +1,42 @@
+summary: Lite email identity.
+value:
+  properties:
+    name: signup
+    class: screen-set
+    schema:
+      properties:
+        property1:
+          type: string
+        data.property2:
+          type: string
+        profile.lastName:
+          type: string
+      identity:
+        - properties:
+            email:
+              type: string
+              format: email
+            type: email
+            provider: lite
+            selector:
+              channel: email
+    outcomes:
+      authentication:
+        output:
+          type: auth
+          identity: '#/properties/identity'
+      authorized:
+        output:
+          type: projection
+          identity: '#/properties/identity'
+    links:
+      - rel: self
+        title: string
+        type: application/json
+        templated: true
+        href: /templates/signup
+      - rel: post
+        title: string
+        type: application/json
+        templated: true
+        href: /signup

@@ -1,0 +1,11 @@
+description: Service unavailable
+content:
+  application/json:
+    schema:
+      allOf:
+        - $ref: ..\schemas\basic-error.yaml
+        - type: object
+          properties:
+            code:
+              enum:
+                - 503
