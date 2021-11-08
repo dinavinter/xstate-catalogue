@@ -12,14 +12,12 @@ value:
         profile.lastName:
           type: string
       identity:
-        - properties:
+         properties:
             email:
               type: string
               format: email
-            type: email
-            provider: lite
-            selector:
-              channel: email
+         type: email
+         provider: lite 
     outcomes:
       authentication:
         output:

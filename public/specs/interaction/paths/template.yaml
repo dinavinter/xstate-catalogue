@@ -1,0 +1,41 @@
+summary: Communications Interaction
+
+post:
+  summary: Interaction Template
+  operationId: CreateInteractionTemplate
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          $ref: ..\components\schemas\InteractionMachine.yaml
+  responses:
+    '201':
+      description: Template Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              template: 
+                type: string
+                const: $request.body#/name
+                
+      links:
+        GetInteractionTemplate:
+          operationId: GetInteractionTemplate
+          parameters:
+            template: $request.body#/name
+          description: Get interaction template. 
+        PostInteractionDetails:
+          operationId: PostInteractionDetails
+          parameters:
+            template: $request.body#/name
+            schema: $request.body#/input
+          description: Post interaction details.   
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml  

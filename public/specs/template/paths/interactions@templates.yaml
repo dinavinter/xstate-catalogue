@@ -19,6 +19,8 @@ post:
               $ref: ..\components\examples\signup-interaction-email-lite.yaml
             signup-interaction-mobile-otp:
               $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+            signup-interaction-selector:
+              $ref: ..\components\examples\signup-interaction-mobile-selector.yaml  
       links:
         GetInteractionTemplate:
           operationId: GetInteractionTemplate

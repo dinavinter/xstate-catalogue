@@ -12,13 +12,11 @@ value:
         profile.lastName:
           type: string
       identity:
-        - properties:
-            phonenumber:
-              type: string
-            type: phonenumber
-            provider: otp
-            selector:
-              channel: sms
+        properties:
+          phonenumber:
+            type: string
+        type: phonenumber
+        provider: otp 
     outcomes:
       authentication:
         output:

@@ -15,23 +15,24 @@ value:
           type: string
       required:
         - channel
-      identity-sms:
-        - properties:
-            phonenumber:
-              type: string
-          type: phonenumber
-          provider: otp
-          selector:
-            channel: sms
-      identity-email:
-        - properties:
-            email:
-              type: string
-              format: email
+      identity:
+        $comment: should be changed to real json schema
+        oneOf:
+          - properties:
+              email:
+                type: string
+                format: email
             type: email
             provider: lite
             selector:
-              channel: email
+              channel: email 
+          - properties:
+              phonenumber:
+                type: string
+            type: phonenumber
+            provider: otp
+            selector:
+              channel: sms   
     outcomes:
       authentication:
         output:

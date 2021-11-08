@@ -2,11 +2,14 @@ description: A set of key-value pairs that describe the schema input of an intra
 type: object
 allOf:
   - $ref: .\fields.template.object.yaml
-  - anyOf:
-      - $ref: .\fields.sections.profile.yaml
-      - $ref: .\fields.sections.data.yaml
-      - $ref: .\fields.sections.subscriptions.yaml
-      - $ref: .\fields.sections.consents.yaml
   - properties:
       identity:
         $ref: .\fields.sections.identity.yaml
+      data:
+        $ref: .\fields.sections.data.yaml 
+      profile :
+        $ref: .\fields.sections.profile.yaml
+      subscriptions :
+        $ref: .\fields.sections.subscriptions.yaml
+      consents :
+        $ref: .\fields.sections.consents.yaml

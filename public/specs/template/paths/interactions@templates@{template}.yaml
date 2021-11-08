@@ -18,6 +18,8 @@ put:
               $ref: ..\components\examples\signup-interaction-email-lite.yaml
             signup-interaction-mobile-otp:
               $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+            signup-interaction-selector:
+              $ref: ..\components\examples\signup-interaction-selector.yaml
 get:
   operationId: GetInteractionTemplate
   parameters:
@@ -40,4 +42,7 @@ get:
               $ref: ..\components\examples\signup-interaction-email-lite.yaml
             signup-interaction-mobile-otp:
               $ref: ..\components\examples\signup-interaction-mobile-otp.yaml
+            signup-interaction-selector:
+              $ref: ..\components\examples\signup-interaction-selector.yaml
+
       links: null
