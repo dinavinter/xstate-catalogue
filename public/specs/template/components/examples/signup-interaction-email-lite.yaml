@@ -34,7 +34,12 @@ value:
         templated: true
         href: /templates/signup
       - rel: post
+        class: form 
         title: string
         type: application/json
         templated: true
         href: /signup
+      - rel: lookup
+        class: auth
+        href: /auth/lookup/token
+        templated: true 
