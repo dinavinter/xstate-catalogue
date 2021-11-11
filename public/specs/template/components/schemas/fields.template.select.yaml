@@ -1,0 +1,15 @@
+allOf:
+  - $ref: .\fields.template.basic.yaml
+  - properties:
+      widget:
+        enum: 
+          - select
+        
+      enum:
+        type: array
+        items:
+          type: "#/properties/type" 
+
+x-tags:
+  - field-template
+ 

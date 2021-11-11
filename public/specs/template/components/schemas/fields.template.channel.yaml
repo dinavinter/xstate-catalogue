@@ -1,0 +1,102 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: array
+items:
+  type: object
+  oneOf:
+    - title: 'channel selector'
+      $ref: "#/$defs/selector"
+    - title: 'only mobile'
+      $ref: .\identity.mobile.yaml
+    - title: 'only email'
+      $ref: .\identity.email.yaml 
+
+
+$defs:
+  ss:
+    anyOf:
+      - title: 'if-channel-sms'
+        allOf:
+          - $ref: .\identity.mobile.yaml
+          - $ref: "#/$defs/selector/channel-sms"
+
+      - title: 'if-channel-email'
+        allOf:
+          - $ref: .\identity.email.yaml
+          - $ref: "#/$defs/selector/channel-email"
+            
+  channel:
+    allOf:
+      - $ref: .\fields.template.select.yaml
+      - properties:
+          enum:
+            type: array
+            items:
+              type: string
+              enum:
+                - email
+                - sms
+            default:
+              - email
+              - sms
+  selector:
+    properties:
+      properties:
+        type: object
+        properties:
+          channel:
+            $ref:  "#/$defs/channel"
+          
+      anyOf:
+        type: array
+        items:
+          anyOf:
+            - title: 'if-channel-sms'
+              properties:
+                if:
+                  type: object
+                  $ref: "#/$defs/channel-sms"
+                then:
+                  type: object
+                  $ref: .\identity.mobile.yaml             
+            - title: 'if-channel-email'  
+              properties:
+                if: 
+                  type: object
+                  $ref: "#/$defs/channel-email"
+                then:
+                  type: object
+                  $ref: .\identity.email.yaml
+             
+
+         
+  channel-email:
+    title: 'if-channel-email'
+    properties:
+      properties:
+        type: object
+        properties:
+          channel:
+            properties:
+              enum:
+                const:
+                  - email
+
+  channel-sms:
+    title: 'if-channel-sms'
+    properties:
+      properties:
+        type: object
+        properties:
+          channel:
+            properties:
+              enum:
+                type: string
+                const:
+                  - sms
+                  
+  
+
+  
+      
+

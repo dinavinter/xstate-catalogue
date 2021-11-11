@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Communication Interaction
+  title: Template Mng
   description: Api specification for manges customer interactions.
   version: '1.0'
 servers:
@@ -18,4 +18,6 @@ paths:
     $ref: paths\interactions@templates.yaml
   /interactions/templates/{template}:
     $ref: paths\interactions@templates@{template}.yaml
+  /subscribtions/{subscriptionId}/fields/channel:
+    $ref: paths\template@{subscriptionId}@fields@channel.yaml
 tags: []

@@ -6,60 +6,21 @@ discriminator:
   mapping:
     email: "#/definitions/EmailSchema"
     sms: "#/definitions/SmsSchema"
-definitions:
-  EmailSchema:
-    descreption: when channel is email
-    properties:
-      identity:
-        type: object
-        properties:
-          email:
-            type: string
-        required:
-          - email
-      newsletter:
-        type: boolean
-        title: Newsletter
-      deals:
-        type: boolean
-        title: Deals
-  SmsSchema:
-    descreption: when channel is sms
-    properties:
-      identity:
-        type: object
-        properties:
-          email:
-            type: string
-        required:
-          - email
-      newsletter:
-        type: boolean
-        title: Newsletter
-      deals:
-        type: boolean
-        title: Deals      
-  EmailChannel:
+definitions: 
+  EmailChannel: 
     if:
-     properties:
+      properties:
         channel:
           type: string
-          const: email
+          const: email 
     then:
       properties:
-        identity:
-          type: object
-          properties:
-            email:
-              type: string
-          required:
-            - email
-        newsletter:
-          type: boolean
-          title: Newsletter
-        deals:
-          type: boolean
-          title: Deals
+        email:
+          type: string
+      required:
+        - email
+        
+  
   SmsChannel:
     type: object
     if:
@@ -70,18 +31,90 @@ definitions:
             - sms
     then:
       properties:
-        identity:
-          type: object
+        phonenumber:
+          type: string
+      required:
+        - phonenumber
+        
+
+  Newsletter:
+    descreption: newsletter subscribtion list
+
+    allOf:
+      - if:
           properties:
-            phonrnumber:
+            channel:
               type: string
-          required:
-            - phonrnumber
-        newsletter:
-          type: boolean
-          title: Newsletter
-    
+              enum:
+                - sms
+        then:
+          properties:
+            newsletter.sms:
+              type: boolean
+               
+
+      - if:
+          properties:
+            channel:
+              type: string
+              enum:
+                - email
+        then:
+          properties:
+            newsletter.email:
+              type: boolean
+      - if:
+          properties:
+            newsletter.email:
+              enum:
+                - true                 
+        then:
+          properties: 
+            newsletter.email.weekly:
+              type: boolean
+  
+  Deals:
+    descreption: deals subscribtion list, availble only for email channel 
+    allOf: 
+      - if:
+          properties:
+            channel:
+              type: string
+              enum:
+                - email
+        then:
+          properties:
+            deals.email:
+              type: boolean
+
+  Order-Status:
+    descreption: order status subscribtion list, availbale for both email and sms
+
+    allOf:
+      - if:
+          properties:
+            channel:
+              type: string
+              enum:
+                - sms
+        then:
+          properties:
+            order-status.sms:
+              type: boolean
+
+      - if:
+          properties:
+            channel:
+              type: string
+              enum:
+                - email
+        then:
+          properties:
+            order-status.email:
+              type: boolean
+              
 properties:
+   
   channel:
     type: string
     widget: Select
@@ -89,11 +122,20 @@ properties:
       - email
       - sms
     default: email
+    
+#  phonenumber:
+#    type: string  
+#  
+#  email: 
+#    type: string
+       
+
 required:
   - channel
 allOf:
   - $ref: "#/definitions/EmailChannel"
   - $ref: "#/definitions/SmsChannel"
-oneOf:
-  - $ref: "#/definitions/EmailSchema"
-  - $ref: "#/definitions/SmsSchema" 
+  - $ref: "#/definitions/Newsletter"
+  - $ref: "#/definitions/Deals"
+  - $ref: "#/definitions/Order-Status"
+   

@@ -26,6 +26,7 @@ components:
           description: refresh token
         token_type:
           type: string
+          description: A case-insensitive value specifying the method of using the access token issued
           enum:
             - Bearer 
         expires_in:  
@@ -45,7 +46,7 @@ components:
 
     anonymous_oauth:
       type: oauth2
-      flows:
+      flows: 
         implicit:
           authorizationUrl: oauth/anonymous/authorize 
           scopes:
@@ -84,16 +85,81 @@ paths:
               operationId: LiteAuthorization
               parameters: 
                 lookup_token: "$response.body#/aToken"
-                
-                
+                 
+  /oauth/authorize:
+    summary: Create a token for an an anonymous interactions.
+    post:
+      security:
+        - id_token_hint: [ ]
+
+      requestBody:
+        content:
+          application/oauth-authz-req+jwt:
+            schema: 
+              properties:
+                authorization_details:
+                  description: |
+                  The request parameter authorization_details
+                    contains, in JSON notation, an array of objects.  Each JSON object
+                    contains the data to specify the authorization requirements for a
+                    certain type of resource.
+                  type: array
+                  items:
+                    anyOf:
+                      -
+               
+          - in: query
+            name: prompt
+            schema:
+              type: string
+              const: none
+              - in: query
+                name: audience
+                schema:
+                  type: string
+                  description: interaction template
+                  example:
+                    - signup
+                    - order-checkout
+                    - in: query
+                      name: assertion
+                      schema:
+                        type: string
+                        description: A JWT that represents an end user.
+                        example:
+                          - signup
+                          - order-checkout
+              - in: query
+                name: scopes
+                schema:
+                  type: array
+                  items:
+
+                    -
+                scopes:
+                  - anonymus:write
+   
+      responses:
+        200:
+          description: ok.
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/oauthTokenResponse'
+
+
+
+
   /oauth/anonymous/authorize:
     summary:  Create a token for an an anonymous interactions. 
     post:
       security:
         - id_token_hint: [ ] 
+          
       parameters:
         - in: query
           name: prompt
+          description: Specifies whether the authoriation flow should prompts the End-User for reauthentication. 
           schema:
             type: string
             const: none
@@ -105,7 +171,15 @@ paths:
             example:
               - signup
               - order-checkout
-                   
+          - in: query
+            name: assertion
+            schema:
+              type: string
+              description: A JWT that represents an end user. 
+              example:
+                - signup
+                - order-checkout
+         
       responses: 
         200:
           description: ok.

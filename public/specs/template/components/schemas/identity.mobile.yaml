@@ -3,11 +3,11 @@ title: mobile identity
 properties:
   properties:
     $ref: .\fields.phone_number.yaml
-  type:
-    type: string
-    default: phonenumber
-    readOnly: true
-  provider:
-    type: string
+  x-identifier:
+    enum:
+      - phonenumber
+    readonly: true
+  x-verification-method:
     enum:
       - otp
+      - auto-bind

@@ -1,15 +1,17 @@
 type: object
-title: email identity
+title: email identity      
 properties:
   properties:
     $ref: .\fields.email.yaml
-  identifier-type:
-    type: string
-    default: email
-    readOnly: true
-  provider:
-    type: string
+    
+  x-identifier:
+    readonly: true
+    enum:
+      - email
+      
+  x-verification-method:
     enum:
       - otp
-      - lite
       - link
+      - auto-bind
+ 

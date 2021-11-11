@@ -84,7 +84,7 @@ const interactionFormMachine = x.createMachine(
                 }
             });
         
-             console.log(jsonRefs);
+             console.log(jsonRefs.resolved);
  
             return jsonRefs.resolved;
         }, x.onDone('open', x.assign({
