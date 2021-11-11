@@ -18,6 +18,12 @@ paths:
     $ref: paths\interactions@templates.yaml
   /interactions/templates/{template}:
     $ref: paths\interactions@templates@{template}.yaml
+
+
+  /subscribtions:
+    $ref: paths\subscribtions\template.yaml
   /subscribtions/{subscriptionId}/fields/channel:
-    $ref: paths\template@{subscriptionId}@fields@channel.yaml
+    $ref: paths\subscribtions@{subscriptionId}@fields@channel.yaml
+    
+    
 tags: []

@@ -1,0 +1,42 @@
+post:
+  operationId: CreateSubscriptionField
+  summary: Create Subscription Field
+  parameters:
+    - in: path
+      name: subscriptionId
+      example: newslatter
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\FieldTemplate.yaml
+  responses:
+    '201':
+      description: Add subscription field
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\FieldReference.yaml
+      links:
+        updateSubscriptionField:
+          operationId: UpdateSubscriptionField
+          parameters:
+            fieldId: $response.body#/fieldId
+            subscriptionId: $request.path#/subscriptionId
+          description: Updates the specifys subscription field.
+        getSubscriptionField:
+          operationId: UpdateSubscriptionField
+          parameters:
+            fieldId: $response.body#/fieldId
+            subscriptionId: $request.path#/subscriptionId
+          description: Updates the specifys subscription field.
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '404':
+      $ref: ..\..\shared\errors\not_found.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml

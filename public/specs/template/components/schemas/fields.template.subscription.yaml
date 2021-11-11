@@ -1,42 +1,28 @@
-$schema: https://json-schema.org/draft/2020-12/schema
-
-type: array
-items:
-  type: object
-  oneOf:
-    - title: 'channel selector'
-      $ref: "#/$defs/selector"
-    - title: 'only mobile'
-      $ref: .\identity.mobile.yaml
-    - title: 'only email'
-      $ref: .\identity.email.yaml 
-
+properties:
+  name:
+    type: string
+    example: newslatter
+  fields:
+    type: object
+    allOf:
+      - $ref: .\fields.template.object.yaml
+      - $ref: .\fields.template.channel.yaml
+      - properties:
+          subscribed:
+            $ref: .\field.template.boolean.yaml
+          channel:
+            $ref: .\field.template.channel.yaml
+        maxProperties: 5
 
 $defs:
- 
-            
-  channel:
-    allOf:
-      - $ref: .\fields.template.select.yaml
-      - properties:
-          enum:
-            type: array
-            items:
-              type: string
-              enum:
-                - email
-                - sms
-            default:
-              - email
-              - sms
   selector:
     properties:
       properties:
         type: object
         properties:
           channel:
-            $ref:  "#/$defs/channel"
-          
+            $ref: "#/$defs/channel"
+
       anyOf:
         type: array
         items:
@@ -48,18 +34,15 @@ $defs:
                   $ref: "#/$defs/channel-sms"
                 then:
                   type: object
-                  $ref: .\identity.mobile.yaml             
-            - title: 'if-channel-email'  
+                  $ref: .\identity.mobile.yaml
+            - title: 'if-channel-email'
               properties:
-                if: 
+                if:
                   type: object
                   $ref: "#/$defs/channel-email"
                 then:
                   type: object
                   $ref: .\identity.email.yaml
-             
-
-         
   channel-email:
     title: 'if-channel-email'
     properties:
@@ -79,14 +62,5 @@ $defs:
         type: object
         properties:
           channel:
-            properties:
-              enum:
-                type: string
-                const:
-                  - sms
-                  
-  
-
-  
-      
-
+            $ref: .\field.template.channel.yaml
+        maxProperties: 5

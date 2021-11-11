@@ -1,0 +1,36 @@
+summary: Create Subscription Template
+post:
+  summary: Create subscription template.
+  operationId: CreateSubscription
+  description: Create subscription template
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\SubscriptionTemplate.yaml
+  responses:
+    '201':
+      description: Subscription template was created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\SubscriptionReference.yaml
+      links:
+        get:
+          operationId: GetSubscriptionTemplate
+          parameters:
+            subscriptionId: $response.body#/subscriptionId
+          description: Gets subscription definition.
+        update:
+          operationId: UpdateSubscription
+          parameters:
+            subscriptionId: $response.body#/subscriptionId
+          description: Updates subscription definition.
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml
