@@ -1,66 +1,25 @@
-properties:
-  name:
-    type: string
-    example: newslatter
-  fields:
-    type: object
-    allOf:
-      - $ref: .\fields.template.object.yaml
-      - $ref: .\fields.template.channel.yaml
-      - properties:
+
+type: object
+allOf:
+  - properties:
+      properties:
+        type: object 
+        properties:
           subscribed:
-            $ref: .\field.template.boolean.yaml
-          channel:
-            $ref: .\field.template.channel.yaml
-        maxProperties: 5
-
-$defs:
-  selector:
-    properties:
-      properties:
-        type: object
+            $ref: .\fields.template.boolean.yaml 
+  - anyOf:
+      - title: channel properties
+        $ref: .\fields.template.channel.yaml 
+      - title: custom data
+        $ref: .\fields.template.object.yaml
+      - title: opt-in
         properties:
-          channel:
-            $ref: "#/$defs/channel"
-
-      anyOf:
-        type: array
-        items:
-          anyOf:
-            - title: 'if-channel-sms'
-              properties:
-                if:
-                  type: object
-                  $ref: "#/$defs/channel-sms"
-                then:
-                  type: object
-                  $ref: .\identity.mobile.yaml
-            - title: 'if-channel-email'
-              properties:
-                if:
-                  type: object
-                  $ref: "#/$defs/channel-email"
-                then:
-                  type: object
-                  $ref: .\identity.email.yaml
-  channel-email:
-    title: 'if-channel-email'
-    properties:
-      properties:
-        type: object
-        properties:
-          channel:
+          properties:
             properties:
-              enum:
-                const:
-                  - email
-
-  channel-sms:
-    title: 'if-channel-sms'
-    properties:
-      properties:
-        type: object
-        properties:
-          channel:
-            $ref: .\field.template.channel.yaml
-        maxProperties: 5
+              subscribed:
+                $ref: .\fields.template.boolean.yaml
+            additionalProperties:
+              $ref: .\fields.template.boolean.yaml 
+    maxProperties: 5
+required: subscribed
+ 

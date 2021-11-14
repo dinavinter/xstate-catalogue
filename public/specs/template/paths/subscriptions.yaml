@@ -1,5 +1,7 @@
 summary: Create Subscription Template
 post:
+  tags:
+    - Subscription
   summary: Create subscription template.
   operationId: CreateSubscription
   description: Create subscription template
@@ -7,24 +9,31 @@ post:
     content:
       application/json:
         schema:
-          $ref: ..\components\schemas\SubscriptionTemplate.yaml
+          allOf:
+            - properties:
+                name: 
+                  type: string
+                  example: newslatter
+                fields:
+                  $ref: ..\components\schemas\fields.template.subscription.yaml 
+          
   responses:
     '201':
       description: Subscription template was created successfully
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\SubscriptionReference.yaml
+            $ref: ..\components\schemas\fields.template.subscription.yaml
       links:
         get:
           operationId: GetSubscriptionTemplate
           parameters:
-            subscriptionId: $response.body#/subscriptionId
+            subscriptionId: request.body#/name
           description: Gets subscription definition.
         update:
           operationId: UpdateSubscription
           parameters:
-            subscriptionId: $response.body#/subscriptionId
+            subscriptionId: $response.body#/name
           description: Updates subscription definition.
     '400':
       $ref: ..\..\shared\errors\bad_request.yaml

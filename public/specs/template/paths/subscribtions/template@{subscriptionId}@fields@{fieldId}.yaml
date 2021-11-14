@@ -1,7 +1,7 @@
 put:
   operationId: UpdateSubscriptionField
   description: Updates the specifys subscription field.
-  summary: Updates the specifys subscription field.
+  summary: Updates the a subscription field.
   parameters:
     - in: path
       name: subscriptionId
@@ -13,14 +13,14 @@ put:
     content:
       application/json:
         schema:
-          $ref: ..\components\schemas\FieldTemplate.yaml
+          $ref: ..\..\components\schemas\fields.template.basic.yaml
   responses:
     '200':
       description: Add subscription field
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\FieldReference.yaml
+            $ref: ..\components\schemas\fields.template.basic.yaml
     '401':
       $ref: ..\..\shared\errors\requires_authentication.yaml
     '403':
@@ -46,4 +46,4 @@ get:
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\FieldTemplate.yaml
+            $ref: ..\components\schemas\fields.template.basic.yaml

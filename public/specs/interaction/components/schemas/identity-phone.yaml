@@ -13,15 +13,13 @@ $defs:
   mobile-identity:
     type: object
     title: mobile identity
-    properties:
+    properties: 
       properties:
         $ref: "#/$defs/mobile"
-      identifier-type:
-        type: string
-        default: phonenumber
-        readOnly: true
-
-      provider:
-        type: string
+      x-identifier:
+        enum:
+          - phonenumber
+      x-verification-method:
         enum:
           - otp
+          - auto-bind

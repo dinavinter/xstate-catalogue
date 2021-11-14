@@ -1,0 +1,10 @@
+oneOf:
+  
+    "if": {
+      "properties": { "channel": { "const": "sms" } },
+      "required": [ "channel" ]
+    },
+    "then": {
+      "properties": { "postal_code": { "pattern": "[0-9]{4} [A-Z]{2}" } }
+    }
+  }

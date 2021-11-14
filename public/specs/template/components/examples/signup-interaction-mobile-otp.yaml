@@ -1,8 +1,16 @@
 summary: Mobile otp identity
 value:
   properties:
+    name: anonymus/signup
     name: signup
     class: screen-set
+    
+    secuirtyRequirment:
+      - anonymus:write
+      - me:write
+   
+    type: anonymus
+       
     schema:
       properties:
         property1:
@@ -11,29 +19,12 @@ value:
           type: string
         profile.lastName:
           type: string
-      identity:
-        properties:
-          phonenumber:
-            type: string
-        type: phonenumber
-        provider: otp 
-    outcomes:
-      authentication:
-        output:
-          type: auth
-          identity: '#/properties/identity'
-      authorized:
-        output:
-          type: projection
-          identity: '#/properties/identity'
-    links:
-      - rel: self
-        title: string
-        type: application/json
-        templated: true
-        href: /templates/signup
-      - rel: post
-        title: string
-        type: application/json
-        templated: true
-        href: /signup
+        identity:
+          type: object
+          x-auth-methods:    
+          properties:
+             phonenumber:
+              type: string
+              x-verification-method: otp
+              x-identifier-type: mobile 
+  

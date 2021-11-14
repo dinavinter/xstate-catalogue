@@ -1,4 +1,6 @@
 post:
+  tags:
+    - Subscription
   operationId: UpdateSubscriptionChannel
   description: Updates the subscription channel.
   summary: Updates the subscription channel.
@@ -30,6 +32,8 @@ post:
     '503':
       $ref: ..\..\shared\errors\service_unavailable.yaml
 get:
+  tags:
+    - Subscription
   operationId: GetSubscriptionChannel
   description: Gets the subscribtion channel.
   summary: Gets the subscribtion channel.

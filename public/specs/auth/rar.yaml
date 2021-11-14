@@ -1,0 +1,203 @@
+openapi: 3.1.0
+info:
+  title: Communication Interaction
+  description: Api specification for manges customer interactions.
+  version: '1.0'
+servers:
+  - url: https://{gigya-domain}
+    variables:
+      gigya-domain:
+        default: auth.gigya.com
+        enum:
+          - auth.gigya.com
+          - auth.eu1.gigya.com
+          - auth.au1.gigya.com
+        description: giya domains
+
+components:
+  schemas:
+    oauthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          description: The access token issued by the authorization endpoint.
+        refresh_token:
+          type: string
+          description: refresh token
+        token_type:
+          type: string
+          description: A case-insensitive value specifying the method of using the access token issued
+          enum:
+            - Bearer
+        expires_in:
+          type: integer
+          description: The lifetime of the access token (in seconds).
+    
+    oauthAuthorizationDetils:
+      properties:
+        type:
+          description: |
+          The type of authorization data as a string. This field defines which other elements are allowed in the request.
+          [ RFC ](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-rar-08#section-2.1)
+          type: string
+            
+
+
+
+  securitySchemes:
+    id_token_hint:
+      type: http
+      scheme: bearer
+      bearerFormat: JWS
+      name: X-Id-Token-Hint
+      in: header
+      description: identifier reperentive token, can be retrived by lookup API
+
+    anonymous_oauth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: oauth/anonymous/authorize
+          scopes:
+            write:anonymous: append data during anonymous interactions
+
+
+
+paths:
+  /auth/lookup/token:
+    post:
+      summary: Lookup Token
+      operationId: LookupToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                identifier:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                    - email
+                    - sms
+      responses:
+        '200':
+          description: LookupToken
+          content:
+            application/json:
+              schema:
+                properties:
+                  aToken:
+                    type: string
+          links:
+            LiteAuth:
+              operationId: LiteAuthorization
+              parameters:
+                lookup_token: "$response.body#/aToken"
+
+  /oauth/authorize:
+    summary: Create a token for an an anonymous interactions.
+    post:
+      security:
+        - id_token_hint: [ ]
+
+      requestBody:
+        content:
+          application/oauth-authz-req+jwt:
+            schema:
+              properties:
+                authorization_details:
+                  description: |
+                  The request parameter authorization_details
+                  contains, in JSON notation, an array of objects.  Each JSON object
+                  contains the data to specify the authorization requirements for a
+                  certain type of resource.
+                  type: array
+                  items:
+                    anyOf:
+                      -
+
+            - in: query
+              name: prompt
+              schema:
+                type: string
+                const: none
+                  - in: query
+                    name: audience
+                    schema:
+                      type: string
+                      description: interaction template
+                      example:
+                        - signup
+                        - order-checkout
+                        - in: query
+                          name: assertion
+                          schema:
+                            type: string
+                            description: A JWT that represents an end user.
+                            example:
+                              - signup
+                              - order-checkout
+                  - in: query
+                    name: scopes
+                    schema:
+                      type: array
+                      items:
+
+                        -
+                    scopes:
+                      - anonymus:write
+
+      responses:
+        200:
+          description: ok.
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/oauthTokenResponse'
+
+
+
+
+  /oauth/anonymous/authorize:
+    summary:  Create a token for an an anonymous interactions.
+    post:
+      security:
+        - id_token_hint: [ ]
+
+      parameters:
+        - in: query
+          name: prompt
+          description: Specifies whether the authoriation flow should prompts the End-User for reauthentication.
+          schema:
+            type: string
+            const: none
+        - in: query
+          name: audience
+          schema:
+            type: string
+            description: interaction template
+            example:
+              - signup
+              - order-checkout
+            - in: query
+              name: assertion
+              schema:
+                type: string
+                description: A JWT that represents an end user.
+                example:
+                  - signup
+                  - order-checkout
+
+      responses:
+        200:
+          description: ok.
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/oauthTokenResponse'
+
+
+
+
+tags: []

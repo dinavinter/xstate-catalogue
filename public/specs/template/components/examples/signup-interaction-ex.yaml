@@ -1,0 +1,82 @@
+summary: Represents a signup to a newsletter flow entry point.
+value:
+   meta:
+      name: signup
+      class: screen-set
+        
+    payload:
+      properties:
+        favorite_subject:
+          type: string
+          x-bind: data.favorites
+        channel:
+          oneOf:
+            - type: object
+              title: email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  x-bind: profile.email
+                  x-verification-method: otp
+            - type: object
+              title: sms
+              properties:
+                phonenumber:
+                  type: string
+                  format: email
+                  x-bind: phonenumber
+                  x-verification-method: otp      
+        zip:
+          type: string
+          x-bind: data.zip
+          
+        lastName:
+          type: string
+          x-bind: profile.lastName
+          
+      identity:
+        $comment: should be changed to real json schema
+        oneOf:
+          - properties:
+              email:
+                type: string
+                format: email
+            type: email
+            provider: lite
+            selector:
+              channel: email 
+          - properties:
+              phonenumber:
+                type: string
+            type: phonenumber
+            provider: otp
+            selector:
+              channel: sms   
+      required:
+        - channel
+
+      outcomes:
+      authentication:
+        output:
+          type: authN
+          identity: '#/properties/identity'
+          callback: /bind
+      authorized:
+        output:
+          type: projection
+          identity: '#/properties/identity'
+          profile: '#/properties/profile'
+          subscriptions: '#/properties/subscriptions'
+          consents: '#/properties/consents'
+    links:
+      - rel: self
+        title: string
+        type: application/json
+        templated: true
+        href: /templates/signup
+      - rel: post
+        title: string
+        type: application/json
+        templated: true
+        href: /signup

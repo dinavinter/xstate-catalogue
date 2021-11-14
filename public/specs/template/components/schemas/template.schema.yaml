@@ -1,7 +1,13 @@
 description: A set of key-value pairs that describe the schema input of an intraction.
 type: object
-allOf:
-  - $ref: .\fields.template.object.yaml
+anyOf:
+  - title: subscribtions fields
+    $ref: .\fields.template.subscription.yaml
+  - title: profile fields
+    $ref: .\fields.sections.profile.yaml
+  - title: any field
+    $ref: .\fields.template.object.yaml 
+  
   - properties:
       identity:
         $ref: .\fields.sections.identity.yaml
@@ -13,3 +19,4 @@ allOf:
         $ref: .\fields.sections.subscriptions.yaml
       consents :
         $ref: .\fields.sections.consents.yaml
+required: identity        

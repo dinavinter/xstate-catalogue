@@ -42,6 +42,7 @@ export const Form:React.FC<InteractionFormProps> = ({
 
     const [store, setStore] = React.useState(() => createEmptyStore(schemaMap.get('type')));
     const [showValidity, setShowValidity] = React.useState(false);
+    
     React.useEffect(() => {
         let schemaMap = createOrderedMap(schema);
         setSchemaMap(() => schemaMap);

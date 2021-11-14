@@ -50,44 +50,49 @@
         "email",
         "sms"
       ],
-      "default" : "email"
+      "default": "email"
     }
-  } ,
-  "dependencies": {
-    "channel": {
-      "oneOf": [
-        {
-          "properties": {
-            "channel": {
-              "type": "string",
-              "enum": [           "email"
-              ]
-            },
-            "email" :{
-              "$ref":"#/definitions/email"
-            },
-            "deals": {
-              "type": "boolean"
-            }
-          }
-        },
-        {
-          "properties": {
-            "channel": {
-              "type": "string",
-              "enum": [
-                "sms"
-              ]
-            },
-            "phonenumber" :{
-              "$ref":"#/definitions/phone"
-            },
-            "newsletter": {
-              "type": "boolean"
-            }
+  },
+  "oneOf": [
+    {
+      "if": {
+        "properties": {
+          "channel": {
+            "const": "sms"
           }
         }
-      ]
+      },
+      "then": {
+        "properties": {
+          "phonenumber": {
+            "$ref": "#/definitions/phone"
+          },
+          "newsletter": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "channel": {
+            "const": "email"
+          }
+        }
+         
+      },
+      "then": {
+        "properties": {
+          "email": {
+            "$ref": "#/definitions/email"
+          },
+          "deals": {
+            "type": "boolean"
+          }
+        }
+      } 
     }
-  }
-}
+     
+  ]
+ }

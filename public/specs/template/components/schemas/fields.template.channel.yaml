@@ -1,15 +1,13 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 
-type: array
-items:
-  type: object
-  oneOf:
-    - title: 'channel selector'
-      $ref: "#/$defs/selector"
-    - title: 'only mobile'
-      $ref: .\identity.mobile.yaml
-    - title: 'only email'
-      $ref: .\identity.email.yaml 
+type: object
+oneOf:
+  - title: 'channel selector'
+    $ref: "#/$defs/selector"
+  - title: 'only mobile'
+    $ref: .\identity.mobile.yaml
+  - title: 'only email'
+    $ref: .\identity.email.yaml 
 
 
 $defs:

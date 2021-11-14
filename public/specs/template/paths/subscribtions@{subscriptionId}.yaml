@@ -1,4 +1,6 @@
 get:
+  tags:
+    - Subscription
   operationId: GetSubscriptionTemplate
   summary: Gets subscription definition
   parameters:
@@ -11,16 +13,18 @@ get:
       content:
         application/json:
           schema:
-            $ref: ..\..\components\schemas\fields.template.subscription.yaml
+            $ref: ..\components\schemas\fields.template.subscription.yaml
     '401':
-      $ref: ..\..\..\shared\errors\requires_authentication.yaml
+      $ref: ..\..\shared\errors\requires_authentication.yaml
     '403':
-      $ref: ..\..\..\shared\errors\forbidden.yaml
+      $ref: ..\..\shared\errors\forbidden.yaml
     '404':
-      $ref: ..\..\..\shared\errors\not_found.yaml
+      $ref: ..\..\shared\errors\not_found.yaml
     '503':
-      $ref: ..\..\..\shared\errors\service_unavailable.yaml
+      $ref: ..\..\shared\errors\service_unavailable.yaml
 put:
+  tags:
+    - Subscription
   summary: Updates subscription template.
   operationId: UpdateSubscription
   description: Update subscription template
@@ -32,14 +36,14 @@ put:
     content:
       application/json:
         schema:
-          $ref: ..\..\components\schemas\fields.template.subscription.yaml
+          $ref: ..\components\schemas\fields.template.subscription.yaml
   responses:
     '200':
       description: Subscription template was updated successfully
       content:
         application/json:
           schema:
-            $ref: ..\..\components\schemas\fields.template.subscription.yaml
+            $ref: ..\components\schemas\fields.template.subscription.yaml
       links:
         subscriptionLinks:
           operationId: GetSubscriptionTemplate
@@ -47,10 +51,10 @@ put:
             subscriptionId: $response.body#/subscriptionId
           description: A refrence to the specific subscription template.
     '400':
-      $ref: ..\..\..\shared\errors\bad_request.yaml
+      $ref: ..\..\shared\errors\bad_request.yaml
     '401':
-      $ref: ..\..\..\shared\errors\requires_authentication.yaml
+      $ref: ..\..\shared\errors\requires_authentication.yaml
     '403':
-      $ref: ..\..\..\shared\errors\forbidden.yaml
+      $ref: ..\..\shared\errors\forbidden.yaml
     '503':
-      $ref: ..\..\..\shared\errors\service_unavailable.yaml
+      $ref: ..\..\shared\errors\service_unavailable.yaml

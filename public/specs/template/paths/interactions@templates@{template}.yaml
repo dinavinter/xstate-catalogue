@@ -1,4 +1,6 @@
 put:
+  tags:
+    - Interaction
   operationId: UpdateInteractionTemplate
   summary: Update Interaction Template
   requestBody:
@@ -21,6 +23,8 @@ put:
             signup-interaction-selector:
               $ref: ..\components\examples\signup-interaction-selector.yaml
 get:
+  tags:
+    - Interaction
   operationId: GetInteractionTemplate
   parameters:
     - in: path

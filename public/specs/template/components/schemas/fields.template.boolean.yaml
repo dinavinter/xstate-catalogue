@@ -3,5 +3,7 @@ allOf:
   - properties:
       type:
         type: string
-        enum:
-          - boolean
+        const: boolean
+      default:
+        type: boolean
+           

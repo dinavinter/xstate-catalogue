@@ -1,5 +1,7 @@
 summary: Communications Interaction
 post:
+  tags:
+    - Interaction
   summary: Create Interaction Template
   operationId: CreateInteractionTemplate
   requestBody:

@@ -1,7 +1,9 @@
-post:
-  operationId: UpdateSubscriptionChannel
-  description: Updates the subscription channel.
-  summary: Updates the specifys subscription channel.
+put:
+  tags:
+    - Subscription
+  operationId: UpdateSubscriptionField
+  description: Updates the specifys subscription field.
+  summary: Updates the a subscription field.
   parameters:
     - in: path
       name: subscriptionId
@@ -13,14 +15,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: ..\components\schemas\fields.template.channel.yaml
+          $ref: ..\components\schemas\fields.template.basic.yaml
   responses:
     '200':
-      description: channel updated
+      description: Add subscription field
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\fields.template.channel.yaml
+            $ref: ..\components\schemas\fields.template.basic.yaml
     '401':
       $ref: ..\..\shared\errors\requires_authentication.yaml
     '403':
@@ -30,9 +32,11 @@ post:
     '503':
       $ref: ..\..\shared\errors\service_unavailable.yaml
 get:
-  operationId: GetSubscriptionChannel
-  description: Gets the subscribtion channel.
-  summary: Gets the subscribtion channel.
+  tags:
+    - Subscription
+  operationId: GetSubscriptionField
+  description: Gets the specified subscription field.
+  summary: Gets the specified subscription field.
   parameters:
     - in: path
       name: subscriptionId
@@ -42,8 +46,8 @@ get:
       example: frequency
   responses:
     '200':
-      description: Subscription channel
+      description: Subscription field template
       content:
         application/json:
           schema:
-            $ref: ..\..\components\schemas\fields.template.channel.yaml
+            $ref: ..\components\schemas\fields.template.basic.yaml

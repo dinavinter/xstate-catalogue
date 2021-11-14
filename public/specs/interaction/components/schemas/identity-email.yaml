@@ -4,7 +4,6 @@ $ref: "#/$defs/email-identity"
 $defs:
   email:
     type: object
-    x-identifier: email
     properties:
       email:
         $ref: ..\..\..\shared\schemas\StringTemplate.yaml
@@ -13,18 +12,18 @@ $defs:
     type: object
     title: email identity
     properties:
+      x-identifier: 
+        enum:
+          - email
+      x-verification-method:
+        enum:
+          - otp
+          - link
+          - auto-bind
       properties:
         $ref: "#/$defs/email"
 
-      identifier-type:
-        type: string
-        default: email
-        readOnly: true
+      
 
-      provider:
-        type: string
-        enum:
-          - otp
-          - lite
-          - link
+       
 

@@ -9,7 +9,7 @@ properties:
       pattern: ^(subscriptions.*)
       properties:
         properties:
-          $ref: .\fields.template.boolean.yaml
+          $ref: .\fields.template.subscription.yaml
       example:
         subscriptions.newslatter:
           type: boolean

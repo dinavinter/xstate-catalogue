@@ -1,4 +1,6 @@
 post:
+  tags:
+    - Subscription
   operationId: CreateSubscriptionField
   summary: Create Subscription Field
   parameters:

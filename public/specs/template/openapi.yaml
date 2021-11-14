@@ -21,7 +21,17 @@ paths:
 
 
   /subscribtions:
-    $ref: paths\subscribtions\template.yaml
+    $ref: paths\subscriptions.yaml 
+    
+  /subscribtions/{subscriptionId}:
+    $ref: paths\subscribtions@{subscriptionId}.yaml
+
+  /subscribtions/{subscriptionId}/fields:
+    $ref: paths\subscribtions@{subscriptionId}@fields.yaml
+
+  /template/{subscriptionId}/fields/{fieldId}:
+    $ref: paths\subscribtions@{subscriptionId}@fields@{fieldId}.yaml
+    
   /subscribtions/{subscriptionId}/fields/channel:
     $ref: paths\subscribtions@{subscriptionId}@fields@channel.yaml
     
