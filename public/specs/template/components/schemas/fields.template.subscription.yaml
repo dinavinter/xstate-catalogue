@@ -1,25 +1,117 @@
 
 type: object
 allOf:
-  - properties:
-      properties:
-        type: object 
-        properties:
-          subscribed:
-            $ref: .\fields.template.boolean.yaml 
   - anyOf:
       - title: channel properties
         $ref: .\fields.template.channel.yaml 
       - title: custom data
         $ref: .\fields.template.object.yaml
       - title: opt-in
-        properties:
-          properties:
-            properties:
-              subscribed:
-                $ref: .\fields.template.boolean.yaml
-            additionalProperties:
-              $ref: .\fields.template.boolean.yaml 
+        $ref: "#/$defs/opt-in"
     maxProperties: 5
 required: subscribed
  
+$defs:
+
+  opt-in:
+    type: object
+    oneOf:
+      - title: 'by channel'
+        $ref: "#/$defs/selector"
+      - title: 'const'
+        $ref: "#/$defs/opt-in-field" 
+     
+  opt-in-field:
+    properties:
+      properties:
+        additionalProperties:
+          $ref: .\fields.template.boolean.yaml
+          pattern: ^(subscriptions.*)
+          
+  opt-in-sms:
+    properties:
+      properties:
+        additionalProperties:
+          $ref: .\fields.template.boolean.yaml
+          pattern: ^(subscriptions.sms.*)
+
+  opt-in-email:
+    properties:
+      properties:
+        additionalProperties:
+          $ref: .\fields.template.boolean.yaml
+          pattern: ^(subscriptions.email.*)
+
+  channel:
+    allOf:
+      - $ref: .\fields.template.select.yaml
+      - properties:
+          enum:
+            type: array
+            items:
+              type: string
+              enum:
+                - email
+                - sms
+            default:
+              - email
+              - sms
+  selector:
+    properties:
+      properties:
+        type: object
+        properties:
+          required: 
+            const: channel
+      anyOf:
+        type: array
+        items:
+          anyOf:
+            - title: 'if-channel-sms'
+              properties:
+                if:
+                  type: object
+                  $ref: "#/$defs/channel-sms"
+                then:
+                  type: object
+                  $ref: "#/$defs/opt-in-sms"
+            - title: 'if-channel-email'
+              properties:
+                if:
+                  type: object
+                  $ref: "#/$defs/channel-email"
+                then:
+                  type: object
+                  $ref: "#/$defs/opt-in-email"
+
+
+
+  channel-email:
+    title: 'if-channel-email'
+    properties:
+      properties:
+        type: object
+        properties:
+          channel:
+            properties:
+              enum:
+                const:
+                  - email
+
+  channel-sms:
+    title: 'if-channel-sms'
+    properties:
+      properties:
+        type: object
+        properties:
+          channel:
+            properties:
+              enum:
+                type: string
+                const:
+                  - sms
+                  
+  
+
+  
+      
