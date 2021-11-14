@@ -1,10 +1,10 @@
-summary: Create Subscription Template
+summary: Create Subscription Schema
 post:
   tags:
     - Subscription
-  summary: Create subscription template.
+  summary: Create subscription schema.
   operationId: CreateSubscription
-  description: Create subscription template
+  description: Create subscription schema
   requestBody:
     content:
       application/json:
@@ -14,7 +14,7 @@ post:
                 name: 
                   type: string
                   example: newslatter
-                fields:
+                schema:
                   $ref: ..\components\schemas\fields.template.subscription.yaml 
           
   responses:
