@@ -1,21 +1,15 @@
-summary: Create Subscription Schema
+summary:  Update account subscriptions.
 post:
   tags:
     - Subscription
-  summary: Create subscription schema.
-  operationId: CreateSubscription
-  description: Create subscription schema
+  summary: Update account subscriptions.
+  operationId: Subscribtion 
+  description: Update account subscriptions
   requestBody:
     content:
       application/json:
         schema:
-          allOf:
-            - properties:
-                name: 
-                  type: string
-                  example: newslatter
-                schema:
-                  $ref: ..\components\schemas\fields.template.subscription.yaml 
+          $ref: ..\components\schemas\fields.schema.subscription.yaml/#/$defs/selector
           
   responses:
     '201':

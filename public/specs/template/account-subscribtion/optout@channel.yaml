@@ -1,0 +1,23 @@
+summary: OptOut subscribtion channel
+get:
+  parameters:
+    - in: path
+      name: channel
+      example: sms 
+     
+  tags:
+    - Channel
+  summary: Opt-Out all subscribtions in channel
+  operationId: OptOutChannel
+  description: Opt-Out account from all subscribtion lists in a specific channel
+  responses:
+    '200':
+      description: Account subscribed
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml

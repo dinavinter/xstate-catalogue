@@ -1,0 +1,25 @@
+summary: OptIn subscribtion channel
+get:
+  parameters:
+    - in: path
+      name: channel
+      enum:
+        - sms
+        - email
+      example: sms
+  tags:
+    - Channel
+  summary: Opt-In all subscribtion channel
+  operationId: OptInChannel
+  description: Opt-In account to a specific channel, general subscribtions
+  responses:
+    '200':
+      description: Account subscribed
+    '400':
+      $ref: ..\..\shared\errors\bad_request.yaml
+    '401':
+      $ref: ..\..\shared\errors\requires_authentication.yaml
+    '403':
+      $ref: ..\..\shared\errors\forbidden.yaml
+    '503':
+      $ref: ..\..\shared\errors\service_unavailable.yaml

@@ -50,6 +50,8 @@ $defs:
   selector:
     type: object
     properties:
+      channel: 
+        $ref: .\fields.template.channel.yaml/#/$defs/channel
       oneOf:
         type: array
         items:

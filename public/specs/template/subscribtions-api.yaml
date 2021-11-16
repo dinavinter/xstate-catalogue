@@ -14,8 +14,19 @@ servers:
           - admin.au1.gigya.com
         description: giya domains
 paths:
-  /subscribtions/templates:
-    $ref: account-subscribtion\subscribtions.yaml
- 
+
+  /{channel}/lists/{list}/opt-in:
+    $ref: account-subscribtion\optin@list.yaml
+
+  /{channel}/lists/{list}/opt-out:
+    $ref: account-subscribtion\optout@list.yaml
+
+  /{channel}/opt-in:
+    $ref: account-subscribtion\optin@channel.yaml
     
-tags: []
+  /{channel}/opt-out:
+    $ref: account-subscribtion\optout@channel.yaml
+
+
+
+tags: [ ]
