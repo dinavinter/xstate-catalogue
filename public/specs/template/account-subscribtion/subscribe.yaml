@@ -23,15 +23,26 @@ post:
       content:
         application/json:
           schema:
-            $ref: ..\components\schemas\fields.template.subscription.yaml
+            properties:
+              name:
+                type: string
+                example: newslatter
+              schema:
+                $ref: ..\components\schemas\fields.template.subscription.yaml
+
       links:
         get:
           operationId: GetSubscriptionTemplate
           parameters:
-            subscriptionId: request.body#/name
+            subscriptionId: response.body#/name
           description: Gets subscription definition.
         update:
           operationId: UpdateSubscription
+          parameters:
+            subscriptionId: $response.body#/name
+          description: Updates subscription definition. 
+        channel:
+          operationId: SetSubscriptionChannel
           parameters:
             subscriptionId: $response.body#/name
           description: Updates subscription definition.

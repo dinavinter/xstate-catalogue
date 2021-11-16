@@ -1,7 +1,9 @@
 post:
-  operationId: UpdateSubscriptionChannel
-  description: Updates the subscription channel.
-  summary: Updates the specifys subscription channel.
+  tags:
+    - Subscription
+  operationId: SetSubscriptionChannel
+  description: Set the subscription channel.
+  summary: Set the subscription channel.
   parameters:
     - in: path
       name: subscriptionId
@@ -30,6 +32,8 @@ post:
     '503':
       $ref: ..\..\shared\errors\service_unavailable.yaml
 get:
+  tags:
+    - Subscription
   operationId: GetSubscriptionChannel
   description: Gets the subscribtion channel.
   summary: Gets the subscribtion channel.
@@ -46,4 +50,4 @@ get:
       content:
         application/json:
           schema:
-            $ref: ..\..\components\schemas\fields.template.channel.yaml
+            $ref: ..\components\schemas\fields.template.channel.yaml

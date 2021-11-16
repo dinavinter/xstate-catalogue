@@ -35,29 +35,32 @@ $defs:
           channel:
             $ref:  "#/$defs/channel"
           
-      anyOf:
+      oneOf:
         type: array
         items:
           anyOf:
             - title: 'if-channel-sms'
-              properties:
-                if:
-                  type: object
-                  $ref: "#/$defs/channel-sms"
-                then:
-                  type: object
-                  $ref: .\identity.mobile.yaml             
-            - title: 'if-channel-email'  
-              properties:
-                if: 
-                  type: object
-                  $ref: "#/$defs/channel-email"
-                then:
-                  type: object
-                  $ref: .\identity.email.yaml
-             
+              $ref: "#/$defs/if-channel-sms" 
+            - title: 'if-channel-email'
+              $ref: "#/$defs/if-channel-email" 
 
-         
+  if-channel-email:
+    properties:
+      if:
+        type: object
+        $ref: "#/$defs/channel-email"
+      then:
+        type: object
+        $ref: .\identity.email.yaml
+        
+  if-channel-sms:
+    properties:
+      if:
+        type: object
+        $ref: "#/$defs/channel-sms"
+      then:
+        type: object
+        $ref: .\identity.mobile.yaml      
   channel-email:
     title: 'if-channel-email'
     properties:

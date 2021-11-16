@@ -1,0 +1,21 @@
+openapi: 3.1.0
+info:
+  title: Account Subscribtions Api
+  description: Api specification for manges customer interactions.
+  version: '1.0'
+servers:
+  - url: https://{gigya-domain}/me/subscribtions
+    variables:
+      gigya-domain:
+        default: admin.gigya.com
+        enum:
+          - admin.gigya.com
+          - admin.eu1.gigya.com
+          - admin.au1.gigya.com
+        description: giya domains
+paths:
+  /subscribtions/templates:
+    $ref: account-subscribtion\subscribtions.yaml
+ 
+    
+tags: []

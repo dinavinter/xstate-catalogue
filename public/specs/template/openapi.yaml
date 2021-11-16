@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Template Mng
+  title: Management API
   description: Api specification for manges customer interactions.
   version: '1.0'
 servers:
-  - url: https://{gigya-domain}
+  - url: https://{gigya-domain}/api/mng
     variables:
       gigya-domain:
         default: admin.gigya.com
@@ -14,26 +14,26 @@ servers:
           - admin.au1.gigya.com
         description: giya domains
 paths:
-  /interactions/templates:
-    $ref: paths\interactions@templates.yaml
-  /interactions/templates/{template}:
-    $ref: paths\interactions@templates@{template}.yaml
+  /interactions:
+    $ref: mng-interaction\interactions@templates.yaml
+  /interactions/{template}:
+    $ref: mng-interaction\interactions@templates@{template}.yaml
 
 
   /subscribtions:
-    $ref: paths\subscriptions.yaml 
+    $ref: mng-subscription\subscriptions.yaml 
     
   /subscribtions/{subscriptionId}:
-    $ref: paths\subscribtions@{subscriptionId}.yaml
+    $ref: mng-subscription\subscribtions@{subscriptionId}.yaml
 
   /subscribtions/{subscriptionId}/fields:
-    $ref: paths\subscribtions@{subscriptionId}@fields.yaml
+    $ref: mng-subscription\subscribtions@{subscriptionId}@fields.yaml
 
   /template/{subscriptionId}/fields/{fieldId}:
-    $ref: paths\subscribtions@{subscriptionId}@fields@{fieldId}.yaml
+    $ref: mng-subscription\subscribtions@{subscriptionId}@fields@{fieldId}.yaml
     
   /subscribtions/{subscriptionId}/fields/channel:
-    $ref: paths\subscribtions@{subscriptionId}@fields@channel.yaml
+    $ref: mng-subscription\subscribtions@{subscriptionId}@fields@channel.yaml
     
     
 tags: []

@@ -2,7 +2,8 @@ type: object
 title: email identity      
 properties:
   properties:
-    $ref: .\fields.email.yaml
+    allOf:
+      - $ref: .\fields.email.yaml
     
   x-identifier:
     readonly: true
