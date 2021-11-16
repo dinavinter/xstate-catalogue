@@ -4,7 +4,7 @@ info:
   description: Api specification for manges customer interactions.
   version: '1.0'
 servers:
-  - url: https://{gigya-domain}/me/subscribtions
+  - url: https://{gigya-domain}/me
     variables:
       gigya-domain:
         default: admin.gigya.com
@@ -21,16 +21,16 @@ paths:
   /channels-option2:
     $ref: account-subscribtion\channels@option2.yaml
 
-  /{channel}/lists/{list}/opt-in:
+  /channels/{channel}/lists/{list}/opt-in:
     $ref: account-subscribtion\optin@list.yaml
 
-  /{channel}/lists/{list}/opt-out:
+  /channels/{channel}/lists/{list}/opt-out:
     $ref: account-subscribtion\optout@list.yaml
 
-  /{channel}/opt-in:
+  /channels/{channel}/opt-in:
     $ref: account-subscribtion\optin@channel.yaml
     
-  /{channel}/opt-out:
+  /channels/{channel}/opt-out:
     $ref: account-subscribtion\optout@channel.yaml
 
 
