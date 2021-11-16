@@ -1,7 +1,7 @@
 summary:  Update account subscriptions.
 put:
   tags:
-    - Subscription
+    - Channels
   summary: Update account's channels.
   operationId: ChannelsUpdate 
   description: Update account's channels 

@@ -1,7 +1,7 @@
 summary:  Update account channel.
 put:
   tags:
-    - Subscription
+    - Channels
   summary: Channels Option2.
   operationId: ChannelsUpdate-O2 
   description: Update account's channels 
