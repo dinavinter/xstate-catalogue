@@ -23,14 +23,6 @@ $defs:
       
   status:
     type: object
-    properties:
-      status:
-        type: string
-        enum:
-          - opt-in
-          - opt-out
-          - noticed
-      status-updated:
-        type: date
-        readonly: true
-  
+    title: opt in status
+    $ref: .\channels.schema.yaml/#/$defs/status
+ 

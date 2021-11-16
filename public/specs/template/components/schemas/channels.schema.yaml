@@ -42,3 +42,16 @@ $defs:
       status-updated:
         type: date
         readonly: true 
+      interaction-id:
+        descreption: Corrolation id to the interaction which the status was updated with , i.e. callId
+        type: string
+        readonly: true
+        examples: 
+          - <call id>
+          - <interaction - id>
+      data:
+        additionalProperties: true
+         
+      
+        
+      
