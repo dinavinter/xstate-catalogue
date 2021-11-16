@@ -15,6 +15,12 @@ servers:
         description: giya domains
 paths:
 
+  /channels:
+    $ref: account-subscribtion\channels.yaml
+
+  /channels-option2:
+    $ref: account-subscribtion\channels@option2.yaml
+
   /{channel}/lists/{list}/opt-in:
     $ref: account-subscribtion\optin@list.yaml
 

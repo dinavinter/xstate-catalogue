@@ -1,0 +1,36 @@
+properties: 
+  email:
+    $ref: "#/$defs/status"
+  sms:
+    $ref: "#/$defs/status" 
+
+  additionalProperties:
+    pattern: ^(email.*|sms.*)
+    $ref: "#/$defs/status"  
+      
+    
+   
+ 
+$defs:
+  channel:
+    properties: 
+      communication:
+        allOf:
+          - $ref: "#/$defs/status"
+          - additionalProperties:
+              $ref: "#/$defs/status"
+          
+      
+  status:
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - opt-in
+          - opt-out
+          - noticed
+      status-updated:
+        type: date
+        readonly: true
+  

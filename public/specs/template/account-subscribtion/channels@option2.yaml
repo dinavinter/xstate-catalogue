@@ -1,0 +1,27 @@
+summary:  Update account channel.
+put:
+  tags:
+    - Subscription
+  summary: Channels Option2.
+  operationId: ChannelsUpdate-O2 
+  description: Update account's channels 
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\channels.schema2.yaml
+          
+  responses:
+    '200':
+      description: Account's channel updated successfully
+      content:
+        application/json:
+          schema:
+            properties:
+              name:
+                type: string
+                example: newslatter
+              schema:
+                $ref: ..\components\schemas\channels.schema2.yaml
+
+       

@@ -1,0 +1,44 @@
+properties:
+  email:
+    allOf:
+      - $ref: "#/$defs/status"
+      - properties:
+          list:
+            type: array
+            items:
+              allOf:
+                - properties: 
+                    id: 
+                      type: string
+                - $ref: "#/$defs/status"
+  
+  sms:
+    allOf:
+      - $ref: "#/$defs/status"
+      - properties:
+          list:
+            type: array
+            items:
+              properties:
+                id:
+                  type: string
+              allOf:
+                - properties:
+                    id:
+                      type: string
+                - $ref: "#/$defs/status"
+              
+       
+ 
+$defs:
+  status:
+    properties:
+      status:
+        type: string
+        enum:
+          - opt-in
+          - opt-out
+          - noticed
+      status-updated:
+        type: date
+        readonly: true 
