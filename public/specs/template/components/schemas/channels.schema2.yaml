@@ -4,9 +4,9 @@ properties:
   sms:
     $ref: "#/$defs/status" 
 
-  additionalProperties:
-    pattern: ^(email.*|sms.*)
-    $ref: "#/$defs/status"  
+additionalProperties:
+  pattern: ^(email.*|sms.*)
+  $ref: "#/$defs/status"  
       
     
    
