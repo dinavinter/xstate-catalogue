@@ -1,7 +1,4 @@
 import {OpenApiBuilder, OpenAPIObject} from "openapi3-ts";
-import {OperationObject, PathItemObject} from "openapi3-ts/src/model/OpenApi";
-import {CommonAPIProps} from "@stoplight/elements/containers/API";
-import {$Refs} from "@stoplight/json-schema-ref-parser";
 
 // type operations={
 //     [name:string] : OperationObject

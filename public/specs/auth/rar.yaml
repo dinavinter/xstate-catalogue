@@ -37,8 +37,8 @@ components:
       properties:
         type:
           description: |
-          The type of authorization data as a string. This field defines which other elements are allowed in the request.
-          [ RFC ](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-rar-08#section-2.1)
+            The type of authorization data as a string. This field defines which other elements are allowed in the request ->
+            [RFC](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-rar-08#section-2.1).
           type: string
             
 

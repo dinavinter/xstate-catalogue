@@ -34,7 +34,7 @@
       "class": [
         "form"
       ],
-      "title": "Restart the process",
+      "title": "Cancel Email Verification",
       "href": "/authenticate/email/cancel",
       "method": "GET"
     }

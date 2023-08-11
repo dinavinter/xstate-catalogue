@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Communication Interaction
+  title: End user interaction
   description: Api specification for manges customer interactions.
   version: '1.0'
   x-logo:
@@ -122,8 +122,8 @@ paths:
                 type: object
                 example: /signup-form.json
 
-  /create:
-    summary: Communications Interaction
+  /submit:
+    summary:  Interaction
     post:
       summary: Submit customer intent details.
       operationId: SubmitInteraction

@@ -40,6 +40,7 @@ export const Form:React.FC<InteractionFormProps> = ({
                                                                               }) => {
     const [schemaMap, setSchemaMap] = React.useState(createOrderedMap(schema));
 
+    // @ts-ignore
     const [store, setStore] = React.useState(() => createEmptyStore(schemaMap.get('type')));
     const [showValidity, setShowValidity] = React.useState(false);
     
@@ -47,7 +48,9 @@ export const Form:React.FC<InteractionFormProps> = ({
         let schemaMap = createOrderedMap(schema);
         setSchemaMap(() => schemaMap);
         setStore(oldStore => {
+            // @ts-ignore
             const newStore = createEmptyStore(schemaMap.get('type'))
+            // @ts-ignore
             if(newStore.values.equals && newStore.values.equals(oldStore.values)) {
                 // only change the store, when the values have really changed - otherwise it could overwrite the already changed validity
                 return oldStore
@@ -62,6 +65,7 @@ export const Form:React.FC<InteractionFormProps> = ({
     }, [setStore])
 
     const emptyStore = React.useCallback((storeKeys, scopes, updater, deleteOnEmpty, type) => {
+        // @ts-ignore
         setStore(storeUpdater(storeKeys, "", updater, deleteOnEmpty, type))
     }, [setStore])
 
